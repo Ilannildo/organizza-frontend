@@ -5,12 +5,10 @@ export const theme = createTheme({
     primary: {
       main: "#00497A",
       light: "#0062A1",
-      dark: "#9CCAFF",
     },
     secondary: {
       main: "#F19413",
       light: "#895100",
-      dark: "#FFB86C",
     },
     background: {
       default: "#FDFCFF",
@@ -22,7 +20,12 @@ export const theme = createTheme({
     error: {
       main: "#BA1A1A",
       light: "#FF4F4F",
-      dark: "#FFB4AB",
+    },
+  },
+  typography: {
+    fontFamily: "Inter",
+    h1: {
+      color: "#42474E",
     },
   },
 });

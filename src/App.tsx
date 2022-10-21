@@ -1,18 +1,15 @@
-import { lazy } from "react";
 import { StyledEngineProvider, ThemeProvider } from "@mui/material";
-import { Loadable } from "./layout/Loadable";
-
+import { BrowserRouter } from "react-router-dom";
 import { theme } from "./theme";
-
-const OrganizerDashboard = Loadable(
-  lazy(() => import("./pages/organizer/Dashboard"))
-);
+import { AppRoutes } from "./routes";
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <StyledEngineProvider injectFirst>
-        <OrganizerDashboard />
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
       </StyledEngineProvider>
     </ThemeProvider>
   );

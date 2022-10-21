@@ -1,9 +1,10 @@
-import { Container, Typography } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
 
 const OrganizerDashboard = () => {
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Typography>Bem vindo Organizador</Typography>
+      <Button variant="contained">Criar evento</Button>
     </Container>
   );
 };
