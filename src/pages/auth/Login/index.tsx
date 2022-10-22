@@ -64,8 +64,8 @@ const Login = () => {
         }
       }
     } catch (error: any) {
-      console.log('Error', error);
-      // toast.error(error.response.data.error.message);
+      // console.log('Error', error);
+      toast.error(error.response.data.error.message);
     }
   };
 
