@@ -1,7 +1,9 @@
 import {
   Box,
   Button,
+  Checkbox,
   CircularProgress,
+  FormControlLabel,
   Grid,
   Link,
   TextField,
@@ -14,28 +16,36 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import Logo from "../../../assets/images/logo-color.svg";
-import { useAuth } from "../../../hooks/useAuth";
+import { api } from "../../../services/api";
 import { validateEmail } from "../../../utils/roles";
 
-const Login = () => {
+const Register = () => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const [searchparams] = useSearchParams();
   const navigate = useNavigate();
-  const { signIn, isLoading } = useAuth();
 
   // states
+  const [isLoading, setIsLoading] = useState(false);
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
 
   // errors
+  const [nameError, setNameError] = useState(" ");
   const [emailError, setEmailError] = useState(" ");
   const [passwordError, setPasswordError] = useState(" ");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setEmailError(" ");
+    setNameError(" ");
     setPasswordError(" ");
+    if (name === "") {
+      return setNameError("Nome é obrigatório");
+    }
     if (email === "") {
       return setEmailError("e-mail é obrigatório");
     }
@@ -48,22 +58,33 @@ const Login = () => {
       return setPasswordError("senha é obrigatório");
     }
 
-    try {
-      const result = await signIn(email, password);
+    if (passwordConfirm !== password) {
+      return setPasswordError("Senhas diferentes");
+    }
+    setIsLoading(true);
 
-      if (result) {
-        //verificar se existe parametro
-        if (searchparams.get("callback-url")) {
-          navigate(searchparams.get("callback-url") || "/", {
-            replace: true,
-          });
-        } else {
-          navigate("/dashboard", {
-            replace: true,
-          });
-        }
+    try {
+      await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      toast.success("Cadastrado realizado!");
+      //verificar se existe parametro
+      if (searchparams.get("callback-url")) {
+        setIsLoading(false);
+        navigate(searchparams.get("callback-url") || "/", {
+          replace: true,
+        });
+      } else {
+        setIsLoading(false);
+        navigate("/login", {
+          replace: true,
+        });
       }
     } catch (error: any) {
+      setIsLoading(false);
       toast.error(error.response.data.error.message);
     }
   };
@@ -150,6 +171,30 @@ const Login = () => {
               <TextField
                 margin="dense"
                 fullWidth
+                id="name"
+                label="Nome completo"
+                name="name"
+                value={name}
+                error={nameError !== " "}
+                helperText={nameError}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Grid>
+          </Grid>
+          <Grid container justifyContent="center">
+            <Grid
+              item
+              lg={6}
+              xl={4}
+              xs={12}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+            >
+              <TextField
+                margin="dense"
+                fullWidth
                 id="email"
                 label="E-mail"
                 name="email"
@@ -169,7 +214,7 @@ const Login = () => {
               xs={12}
               display="flex"
               justifyContent="center"
-              alignItems="end"
+              alignItems="center"
               flexDirection="column"
             >
               <TextField
@@ -185,14 +230,73 @@ const Login = () => {
                 error={passwordError !== " "}
                 helperText={passwordError}
               />
-              <Link
-                href="/forgot-password"
-                sx={{
-                  color: (theme) => theme.palette.primary.main,
-                }}
-              >
-                Esqueci minha senha
-              </Link>
+            </Grid>
+          </Grid>
+          <Grid container justifyContent="center">
+            <Grid
+              item
+              lg={6}
+              xl={4}
+              xs={12}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+            >
+              <TextField
+                margin="dense"
+                fullWidth
+                name="password-confirm"
+                label="Confirma a senha"
+                type="password"
+                id="password-confirm"
+                autoComplete="current-password"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+                error={passwordError !== " "}
+                helperText={passwordError}
+              />
+            </Grid>
+          </Grid>
+          <Grid container justifyContent="center">
+            <Grid
+              item
+              lg={6}
+              xl={4}
+              xs={12}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+            >
+              <FormControlLabel
+                onChange={(e, value) => setAcceptTerms(value)}
+                value={acceptTerms}
+                control={<Checkbox />}
+                label={
+                  <Typography fontSize={14} variant="h1" fontWeight="500">
+                    Aceito os{" "}
+                    <Link
+                      href="#terms"
+                      sx={{
+                        color: (theme) => theme.palette.secondary.main,
+                      }}
+                    >
+                      Termos de Uso
+                    </Link>{" "}
+                    e a{" "}
+                    <Link
+                      href="#privacy"
+                      sx={{
+                        color: (theme) => theme.palette.secondary.main,
+                      }}
+                    >
+                      Política de Privacidade
+                    </Link>{" "}
+                    da Organizza
+                  </Typography>
+                }
+              />
             </Grid>
           </Grid>
           <Grid container justifyContent="center">
@@ -209,7 +313,9 @@ const Login = () => {
               <Button
                 type="submit"
                 fullWidth
-                disabled={isLoading}
+                disabled={
+                  isLoading || !acceptTerms || !name || !email || !password
+                }
                 size="large"
                 color="primary"
                 variant="contained"
@@ -218,25 +324,31 @@ const Login = () => {
                   mb: 2,
                 }}
               >
-                {isLoading ? <CircularProgress color="inherit" size={26} /> : `Entrar`}
+                {isLoading ? <CircularProgress color="inherit" size={26} /> : `Cadastrar`}
               </Button>
-              <Typography fontSize={14} variant="h1" mt={1}>
-                Não tem uma conta?{" "}
+              <Typography fontSize={14} variant="h1" mb={2}>
+                Já tem uma conta?{" "}
                 <Link
-                  href="/register"
+                  href="/login"
                   sx={{
                     color: (theme) => theme.palette.primary.main,
                   }}
                 >
-                  Cadastre-se
+                  Entre
                 </Link>
               </Typography>
             </Grid>
           </Grid>
         </Box>
-        <Box position="absolute" left={0} bottom={0} width="100%" display={matchesSM ? "none" : "block"}>
+        <Box
+          position="absolute"
+          left={0}
+          bottom={0}
+          width="100%"
+          display={matchesSM ? "none" : "block"}
+        >
           <Grid container px={2} py={1}>
-            <Grid item lg={6} xs={false}>
+            <Grid item lg={6}>
               <Typography fontSize={16} variant="h4" color="#C2C7CF">
                 © Organizza Eventos 2022
               </Typography>
@@ -265,4 +377,4 @@ const Login = () => {
     </Grid>
   );
 };
-export default Login;
+export default Register;
