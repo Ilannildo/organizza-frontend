@@ -1,6 +1,5 @@
 import { lazy } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
 import { Loadable } from "../layout/Loadable";
 import Loader from "../layout/Loader";
 import { useAuthenticatedUser } from "../stores/user";
