@@ -1,15 +1,19 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StyledEngineProvider, ThemeProvider } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
 import { theme } from "./theme";
 import { AppRoutes } from "./routes";
 import { AuthProvider } from "./contexts/AuthContext";
 import { WithAxios } from "./contexts/WithAxios";
-import { ToastContainer } from "react-toastify";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <AuthProvider>
-      <WithAxios>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
         <ThemeProvider theme={theme}>
           <StyledEngineProvider injectFirst>
             <BrowserRouter>
@@ -25,12 +29,14 @@ const App = () => {
                 pauseOnHover={false}
                 theme="light"
               />
-              <AppRoutes />
+              <WithAxios>
+                <AppRoutes />
+              </WithAxios>
             </BrowserRouter>
           </StyledEngineProvider>
         </ThemeProvider>
-      </WithAxios>
-    </AuthProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 

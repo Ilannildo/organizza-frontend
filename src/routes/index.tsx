@@ -1,15 +1,16 @@
-import { lazy, useEffect, useState } from "react";
+import { lazy } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { Loadable } from "../layout/Loadable";
 import Loader from "../layout/Loader";
+import { useAuthenticatedUser } from "../stores/user";
 
 // import pages with lazy load
 const OrganizerDashboard = Loadable(
   lazy(() => import("../pages/organizer/Dashboard"))
-  );
-  const Login = Loadable(lazy(() => import("../pages/auth/Login")));
-  const Register = Loadable(lazy(() => import("../pages/auth/Register")));
+);
+const Login = Loadable(lazy(() => import("../pages/auth/Login")));
+const Register = Loadable(lazy(() => import("../pages/auth/Register")));
 const NotFound = Loadable(lazy(() => import("../pages/auth/NotFound")));
 
 export const AppRoutes = () => {
@@ -39,24 +40,20 @@ export const AppRoutes = () => {
 };
 
 const ProtectedRoute = ({ children }: any) => {
-  const {isAuthenticated, isLoading} = useAuth();
-  // const { isLoading, data } = useAuthenticatedUser();
-
-  const data = isAuthenticated();
+  const { isLoading, data } = useAuthenticatedUser();
   const location = useLocation();
 
-  if (!data) {
-    return (
-      <Navigate
-        to={`/login?callback-url=${location.pathname}`}
-        replace
-        state={{ from: location }}
-      />
-    );
-  }
-  return children;
-  // if (!isLoading) {
-    
-  // }
-  // return <Loader isLoading={isLoading} progressBar={true} />;
+  if (!isLoading) {
+    if (!data) {
+      return (
+        <Navigate
+          to={`/login?callback-url=${location.pathname}`}
+          replace
+          state={{ from: location }}
+        />
+      );
+    }
+    return children;
+  } 
+  return <Loader isLoading={isLoading} progressBar={true} />;
 };

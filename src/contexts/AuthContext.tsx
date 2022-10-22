@@ -46,7 +46,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         Cookies.set("__token", res.data.data.access_token, {
           expires: 1,
           secure: true,
-          domain: '/',
           sameSite: 'lax',
         });
         setIsLoading(false);
