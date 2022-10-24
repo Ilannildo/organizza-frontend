@@ -21,6 +21,10 @@ export const theme = createTheme({
       main: "#BA1A1A",
       light: "#FF4F4F",
     },
+    text: {
+      primary: "#001D35",
+      disabled: "#42474E"
+    },
   },
   typography: {
     fontFamily: "Inter",
