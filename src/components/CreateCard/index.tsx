@@ -3,6 +3,7 @@ import { Box, Chip, Typography } from "@mui/material";
 interface ICreateCard {
   label: string;
   color: "default" | "primary" | "secondary" | "tertiary";
+  onClick: () => void;
 }
 
 enum CARD_COLORS {
@@ -12,18 +13,18 @@ enum CARD_COLORS {
   "default" = "rgba(186, 26, 26, 0.4)",
 }
 
-export const CreateCard = ({ label, color }: ICreateCard) => {
+export const CreateCard = ({ label, color, onClick }: ICreateCard) => {
   return (
     <Box
       sx={{
         background: (theme) =>
           `linear-gradient(249.6deg, ${theme.palette.primary.main} 70.14%, ${CARD_COLORS[color]} 99.16%)`,
         backdropFilter: "blur(22.5px)",
-        transition: 'all .5s ease',
+        transition: "all .5s ease",
         ":hover": {
-          transform: 'scale(1.02)',
+          transform: "scale(1.02)",
           background: (theme) =>
-          `linear-gradient(249.6deg, ${theme.palette.primary.main} 65.14%, ${CARD_COLORS[color]} 99.16%)`,
+            `linear-gradient(249.6deg, ${theme.palette.primary.main} 65.14%, ${CARD_COLORS[color]} 99.16%)`,
         },
       }}
       // width="100%"
@@ -61,7 +62,7 @@ export const CreateCard = ({ label, color }: ICreateCard) => {
         cheia, acendo meu ultimo cigarro e corro pra velha janela do quarto.
       </Typography>
       <Chip
-        onClick={() => {}}
+        onClick={() => onClick()}
         color="secondary"
         sx={{
           color: (theme) => theme.palette.background.paper,

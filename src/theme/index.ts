@@ -25,6 +25,9 @@ export const theme = createTheme({
       primary: "#001D35",
       disabled: "#42474E"
     },
+    action: {
+      disabledBackground: 'rgba(25, 118,210,.12)'
+    }
   },
   typography: {
     fontFamily: "Inter",

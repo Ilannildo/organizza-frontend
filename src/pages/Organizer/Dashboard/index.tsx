@@ -1,4 +1,5 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { CreateCard } from "../../../components/CreateCard";
 import { EventCard } from "../../../components/EventCard";
 import { Navbar } from "../../../components/Navbar";
@@ -6,6 +7,8 @@ import { useAuthenticatedUser } from "../../../stores/user";
 
 const OrganizerDashboard = () => {
   const { data: user } = useAuthenticatedUser();
+  const navigate = useNavigate();
+
   return (
     <>
       <Navbar />
@@ -41,16 +44,32 @@ const OrganizerDashboard = () => {
           </Typography>
           <Grid container mt={3} spacing={2}>
             <Grid item lg={3} md={4} sm={6} xs={12}>
-              <CreateCard label="EVENTO ONLINE" color="primary" />
+              <CreateCard
+                label="Evento online"
+                color="primary"
+                onClick={() => navigate('event?venue=online')}
+              />
             </Grid>
             <Grid item lg={3} md={4} sm={6} xs={12}>
-              <CreateCard label="EVENTO ONLINE" color="secondary" />
+              <CreateCard
+                label="Eevento Presencial"
+                color="secondary"
+                onClick={() => navigate('event?venue=presential')}
+              />
             </Grid>
             <Grid item lg={3} md={4} sm={6} xs={12}>
-              <CreateCard label="EVENTO ONLINE" color="tertiary" />
+              <CreateCard
+                label="Acadêmico ou Jornada"
+                color="tertiary"
+                onClick={() => navigate('event?venue=presential&type=123')}
+              />
             </Grid>
             <Grid item lg={3} md={4} sm={6} xs={12}>
-              <CreateCard label="EVENTO ONLINE" color="default" />
+              <CreateCard
+                label="Personalizado"
+                color="default"
+                onClick={() => navigate('event')}
+              />
             </Grid>
           </Grid>
           <Typography

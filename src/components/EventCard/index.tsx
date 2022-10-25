@@ -80,6 +80,7 @@ export const EventCard = ({
         sx={{
           backgroundColor: (theme) => theme.palette.background.default,
         }}
+        height="65px"
         display="flex"
         flexDirection="row"
         justifyContent="space-between"

@@ -15,6 +15,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Logo from "../../assets/images/logo.svg";
 import { useAuthenticatedUser } from "../../stores/user";
@@ -51,11 +52,13 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export const Navbar = () => {
   const { data: user, isLoading } = useAuthenticatedUser();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <>
       <AppBar
-        position="sticky"
+        position="relative"
         elevation={0}
         sx={{
           backgroundColor: (theme) => theme.palette.background.default,
@@ -73,7 +76,10 @@ export const Navbar = () => {
                 alignItems="center"
                 display="flex"
               >
-                <Link href="/dashboard" sx={{ display: "flex", alignItems: "center" }}>
+                <Link
+                  href="/dashboard"
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
                   <img src={Logo} alt="" width="45" />
                   <Divider
                     orientation="vertical"
@@ -103,18 +109,35 @@ export const Navbar = () => {
                 alignItems="center"
                 display="flex"
               >
-                <Chip
-                  onClick={() => {}}
-                  color="secondary"
-                  sx={{
-                    display: {
-                      md: "flex",
-                      xs: "none",
-                    },
-                    color: (theme) => theme.palette.background.paper,
-                  }}
-                  label="MEUS EVENTOS"
-                />
+                {location.pathname === "/organizer" ? (
+                  <Chip
+                    onClick={() => navigate('/organizer')}
+                    variant="filled"
+                    color="secondary"
+                    sx={{
+                      display: {
+                        md: "flex",
+                        xs: "none",
+                      },
+                      color: (theme) => theme.palette.background.paper,
+                    }}
+                    label="MEUS EVENTOS"
+                  />
+                ) : (
+                  <Chip
+                    onClick={() => navigate('/organizer')}
+                    variant="outlined"
+                    color="secondary"
+                    sx={{
+                      display: {
+                        md: "flex",
+                        xs: "none",
+                      },
+                      color: (theme) => theme.palette.secondary.main,
+                    }}
+                    label="MEUS EVENTOS"
+                  />
+                )}
               </Grid>
               <Grid
                 item
