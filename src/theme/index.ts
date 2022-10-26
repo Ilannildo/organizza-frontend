@@ -26,7 +26,8 @@ export const theme = createTheme({
       disabled: "#42474E"
     },
     action: {
-      disabledBackground: 'rgba(25, 118,210,.12)'
+      disabledBackground: 'rgba(25, 118,210,.12)',
+      disabled: '#D0E4FF'
     }
   },
   typography: {

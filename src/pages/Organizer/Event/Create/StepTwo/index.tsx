@@ -1,11 +1,8 @@
 import {
   Autocomplete,
-  Box,
   Card,
   CardContent,
   Checkbox,
-  Chip,
-  FormControl,
   FormControlLabel,
   Grid,
   IconButton,
@@ -14,84 +11,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { DatePicker, TimePicker } from "@mui/x-date-pickers";
-import { addDays } from "date-fns";
-import { filesize } from "filesize";
-import { uniqueId } from "lodash";
-import {
-  Buildings,
-  GlobeHemisphereEast,
-  Laptop,
-  MusicNotes,
-  Plus,
-  Ticket as TicketIcon,
-} from "phosphor-react";
-import { useCallback, useState } from "react";
+import { Ticket as TicketIcon } from "phosphor-react";
 import { Ticket } from "../../../../../components/Ticket";
-import { UploadImage } from "../../../../../components/UploadImage";
-
-interface IUploadedCoverImage {
-  file: File;
-  id: string;
-  name: string;
-  readableSize:
-    | string
-    | number
-    | any[]
-    | {
-        value: any;
-        symbol: any;
-        exponent: number;
-        unit: string;
-      };
-  preview: string;
-  progreess: number;
-  uploaded: boolean;
-  error: boolean;
-  url: string | null;
-}
-
-const main_subjects = [
-  "Acadêmico e científico",
-  "Desenvolvimento pessoal",
-  "Design e produtos digitais",
-  "Esportes",
-  "Games e Geek",
-  "Gastronomia",
-  "Empreendedorismo, negócios e inovasão",
-  "Governo e política",
-  "Marketing e vendas",
-  "Moda e beleza",
-  "Saúde e bem-estar",
-  "Religião e espiritualidade",
-  "Sociedade e cultura",
-  "Teatro, stand-up e dança",
-];
 
 export const StepTwo = () => {
-  const [uploadedCoverImage, setUploadedCoverImage] =
-    useState<IUploadedCoverImage | null>(null);
-  const [startDate, setStartDate] = useState<Date | null>(
-    addDays(new Date(), 1)
-  );
-  const [startTime, setStartTime] = useState<Date | null>(null);
-
-  const handleUpload = useCallback(<T extends File>(files: T[]) => {
-    const uploadedImages = files.map((file) => ({
-      file,
-      id: uniqueId(),
-      name: file.name,
-      readableSize: filesize(file.size),
-      preview: URL.createObjectURL(file),
-      progreess: 0,
-      uploaded: false,
-      error: false,
-      url: null,
-    }));
-    setUploadedCoverImage(uploadedImages[0]);
-    console.log("Files", files);
-  }, []);
-
   return (
     <Grid container mt={2} spacing={2} justifyContent="center" display="flex">
       <Grid item lg={10} md={10} sm={12} xs={12}>
@@ -108,8 +31,8 @@ export const StepTwo = () => {
             >
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
@@ -133,8 +56,8 @@ export const StepTwo = () => {
               </Grid>
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
@@ -187,8 +110,8 @@ export const StepTwo = () => {
               </Grid>
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
@@ -228,8 +151,8 @@ export const StepTwo = () => {
             >
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
@@ -253,7 +176,7 @@ export const StepTwo = () => {
               </Grid>
               <Grid
                 item
-                lg={8}
+                lg={10}
                 md={10}
                 sm={12}
                 xs={12}
@@ -279,8 +202,8 @@ export const StepTwo = () => {
               <Grid
                 item
                 mt={2}
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 alignItems="center"

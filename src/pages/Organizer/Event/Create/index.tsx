@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Container,
@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
+import { addDays } from "date-fns";
 import { Navbar } from "../../../../components/Navbar";
 import { StepOne } from "./StepOne";
 import { EventFooter } from "../../../../components/EventFooter";
@@ -21,13 +22,75 @@ const steps = [
   "Informações adicionais",
 ];
 
+interface IUploadedCoverImage {
+  file: File;
+  id: string;
+  name: string;
+  readableSize:
+    | string
+    | number
+    | any[]
+    | {
+        value: any;
+        symbol: any;
+        exponent: number;
+        unit: string;
+      };
+  preview: string;
+  progreess: number;
+  uploaded: boolean;
+  error: boolean;
+  url: string | null;
+}
+
 const CreateEvent = () => {
   const [searchParams] = useSearchParams();
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState<{ [k: number]: boolean }>({});
   const [skipped, setSkipped] = useState(new Set<number>());
+
+  const [title, setTitle] = useState<string>("");
+  const [eventTypeId, setEventTypeId] = useState<string>("");
+  const [mainSubject, setMainSubject] = useState<string>("");
+  const [shortDescription, setShortDescription] = useState<string>("");
+  const [venueType, setVenueType] = useState<"presential" | "online" | "">("");
+  const [isPrivate, setIsPrivate] = useState<boolean | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(
+    addDays(new Date(), 1)
+  );
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(addDays(new Date(), 4));
+  const [endTime, setEndTime] = useState<Date | null>(null);
+  const [uploadedCoverImage, setUploadedCoverImage] =
+    useState<IUploadedCoverImage | null>(null);
+  // const [responsibleName, setResponsibleName] = useState<string>("");
+  // const [responsibleEmail, setResponsibleEmail] = useState<string>("");
+  // const [responsibleDescription, setResponsibleDescription] =
+  //   useState<string>("");
   console.log("Search params", searchParams.get("venue"));
   console.log("Search params", searchParams.get("type"));
+
+  useEffect(() => {
+    if (searchParams.get("venue") !== null) {
+      if (searchParams.get("venue") === "online") {
+        setVenueType("online");
+      }
+      if (searchParams.get("venue") === "presential") {
+        setVenueType("presential");
+      }
+    } else {
+      setVenueType("");
+    }
+
+    if (searchParams.get("type") !== null) {
+      if (
+        searchParams.get("type") === "1" ||
+        searchParams.get("type") === "2"
+      ) {
+        setEventTypeId(searchParams.get("type")!);
+      }
+    }
+  }, [searchParams]);
 
   const isStepSkipped = (step: number) => {
     return skipped.has(step);
@@ -46,6 +109,10 @@ const CreateEvent = () => {
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
+    window.scrollTo({
+      top: 0,      
+      behavior: "smooth",
+    });
   };
 
   const handleBack = () => {
@@ -88,7 +155,12 @@ const CreateEvent = () => {
               color: (theme) => theme.palette.text.primary,
             }}
           >
-            Criar evento
+            Criar evento{" "}
+            {venueType === "online"
+              ? "online"
+              : venueType === "presential"
+              ? "presencial"
+              : ""}
           </Typography>
           <Divider />
           <Grid
@@ -125,7 +197,32 @@ const CreateEvent = () => {
             </Grid>
           </Grid>
           {/* steps */}
-          {activeStep === 0 && <StepOne />}
+          {activeStep === 0 && (
+            <StepOne
+              title={title}
+              setTitle={setTitle}
+              eventTypeId={eventTypeId}
+              setEventTypeId={setEventTypeId}
+              mainSubject={mainSubject}
+              setMainSubject={setMainSubject}
+              shortDescription={shortDescription}
+              setShortDescription={setShortDescription}
+              venueType={venueType}
+              setVenueType={setVenueType}
+              isPrivate={isPrivate}
+              setIsPrivate={setIsPrivate}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              startTime={startTime}
+              setStartTime={setStartTime}
+              endDate={endDate}
+              setEndDate={setEndDate}
+              endTime={endTime}
+              setEndTime={setEndTime}
+              uploadedCoverImage={uploadedCoverImage}
+              setUploadedCoverImage={setUploadedCoverImage}
+            />
+          )}
           {activeStep === 1 && <StepTwo />}
           {activeStep === 2 && <Typography>Informações</Typography>}
         </Container>

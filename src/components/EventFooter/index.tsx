@@ -47,7 +47,6 @@ export const EventFooter = ({
             <Stack spacing={3} direction="row">
               <Button
                 variant="outlined"
-                color="secondary"
                 onClick={onBack}
                 disabled={activeStep === 0}
               >

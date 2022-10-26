@@ -9,9 +9,9 @@ import {
   StepIcon,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
-import { addDays } from "date-fns";
 import { filesize } from "filesize";
 import { uniqueId } from "lodash";
 import {
@@ -20,9 +20,29 @@ import {
   Laptop,
   MusicNotes,
   Plus,
+  UsersThree,
+  Webcam,
 } from "phosphor-react";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import { UploadImage } from "../../../../../components/UploadImage";
+
+const main_subjects = [
+  "Acadêmico e científico",
+  "Desenvolvimento pessoal",
+  "Design e produtos digitais",
+  "Esportes",
+  "Games e Geek",
+  "Gastronomia",
+  "Empreendedorismo, negócios e inovasão",
+  "Governo e política",
+  "Marketing e vendas",
+  "Moda e beleza",
+  "Saúde e bem-estar",
+  "Religião e espiritualidade",
+  "Sociedade e cultura",
+  "Teatro, stand-up e dança",
+];
 
 interface IUploadedCoverImage {
   file: File;
@@ -45,46 +65,75 @@ interface IUploadedCoverImage {
   url: string | null;
 }
 
-const main_subjects = [
-  "Acadêmico e científico",
-  "Desenvolvimento pessoal",
-  "Design e produtos digitais",
-  "Esportes",
-  "Games e Geek",
-  "Gastronomia",
-  "Empreendedorismo, negócios e inovasão",
-  "Governo e política",
-  "Marketing e vendas",
-  "Moda e beleza",
-  "Saúde e bem-estar",
-  "Religião e espiritualidade",
-  "Sociedade e cultura",
-  "Teatro, stand-up e dança",
-];
+interface IEventGeneralInformation {
+  title: string;
+  setTitle: (value: string) => void;
+  eventTypeId: string;
+  setEventTypeId: (value: string) => void;
+  mainSubject: string;
+  setMainSubject: (value: string) => void;
+  shortDescription: string;
+  setShortDescription: (value: string) => void;
+  venueType: "presential" | "online" | "";
+  setVenueType: (value: "presential" | "online" | "") => void;
+  isPrivate: boolean | null;
+  setIsPrivate: (value: boolean | null) => void;
+  startDate: Date | null;
+  setStartDate: (value: Date | null) => void;
+  startTime: Date | null;
+  setStartTime: (value: Date | null) => void;
+  endDate: Date | null;
+  setEndDate: (value: Date | null) => void;
+  endTime: Date | null;
+  setEndTime: (value: Date | null) => void;
+  uploadedCoverImage: IUploadedCoverImage | null;
+  setUploadedCoverImage: (value: IUploadedCoverImage | null) => void;
+}
 
-export const StepOne = () => {
-  const [uploadedCoverImage, setUploadedCoverImage] =
-    useState<IUploadedCoverImage | null>(null);
-  const [startDate, setStartDate] = useState<Date | null>(
-    addDays(new Date(), 1)
+export const StepOne = ({
+  title,
+  setTitle,
+  eventTypeId,
+  setEventTypeId,
+  mainSubject,
+  setMainSubject,
+  shortDescription,
+  setShortDescription,
+  venueType,
+  setVenueType,
+  isPrivate,
+  setIsPrivate,
+  startDate,
+  setStartDate,
+  startTime,
+  setStartTime,
+  endDate,
+  setEndDate,
+  endTime,
+  setEndTime,
+  uploadedCoverImage,
+  setUploadedCoverImage,
+}: IEventGeneralInformation) => {
+  const [searchParams] = useSearchParams();
+  const theme = useTheme();
+
+  const handleUpload = useCallback(
+    <T extends File>(files: T[]) => {
+      const uploadedImages = files.map((file) => ({
+        file,
+        id: uniqueId(),
+        name: file.name,
+        readableSize: filesize(file.size),
+        preview: URL.createObjectURL(file),
+        progreess: 0,
+        uploaded: false,
+        error: false,
+        url: null,
+      }));
+      setUploadedCoverImage(uploadedImages[0]);
+    },
+    [setUploadedCoverImage]
   );
-  const [startTime, setStartTime] = useState<Date | null>(null);
-
-  const handleUpload = useCallback(<T extends File>(files: T[]) => {
-    const uploadedImages = files.map((file) => ({
-      file,
-      id: uniqueId(),
-      name: file.name,
-      readableSize: filesize(file.size),
-      preview: URL.createObjectURL(file),
-      progreess: 0,
-      uploaded: false,
-      error: false,
-      url: null,
-    }));
-    setUploadedCoverImage(uploadedImages[0]);
-    console.log("Files", files);
-  }, []);
 
   return (
     <Grid container mt={2} spacing={2} justifyContent="center" display="flex">
@@ -102,15 +151,15 @@ export const StepOne = () => {
             >
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
                 display="flex"
               >
                 <Stack direction="row" spacing={1} mt={1} alignItems="center">
-                  <StepIcon icon="I" />
+                  <StepIcon icon="1" />
                   <Typography
                     component="h1"
                     variant="h6"
@@ -127,16 +176,18 @@ export const StepOne = () => {
               </Grid>
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
                 display="flex"
               >
                 <TextField
-                  label="Nome do evento"
+                  label="Título do evento"
                   variant="outlined"
+                  onChange={(e) => setTitle(e.target.value)}
+                  value={title}
                   size="small"
                   fullWidth
                   color="primary"
@@ -144,8 +195,8 @@ export const StepOne = () => {
               </Grid>
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
@@ -155,6 +206,8 @@ export const StepOne = () => {
                   id="outlined-multiline-static"
                   label="Descrição curta"
                   variant="outlined"
+                  onChange={(e) => setShortDescription(e.target.value)}
+                  value={shortDescription}
                   multiline
                   rows={4}
                   size="small"
@@ -165,8 +218,8 @@ export const StepOne = () => {
 
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
@@ -193,7 +246,8 @@ export const StepOne = () => {
                       variant="h6"
                       sx={{
                         color: (theme) => theme.palette.text.primary,
-                        fontSize: 16,
+                        fontSize: 14,
+                        fontWeight: 400,
                       }}
                     >
                       A resolução recomendada é de 1600 x 838. Os formatos
@@ -205,8 +259,8 @@ export const StepOne = () => {
               {uploadedCoverImage && (
                 <Grid
                   item
-                  lg={8}
-                  md={8}
+                  lg={10}
+                  md={10}
                   sm={12}
                   xs={12}
                   justifyContent="center"
@@ -290,15 +344,15 @@ export const StepOne = () => {
             >
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
                 display="flex"
               >
                 <Stack direction="row" spacing={1} mt={1} alignItems="center">
-                  <StepIcon icon="II" />
+                  <StepIcon icon="2" />
                   <Typography
                     component="h1"
                     variant="h6"
@@ -315,8 +369,8 @@ export const StepOne = () => {
               </Grid>
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
@@ -361,8 +415,8 @@ export const StepOne = () => {
               </Grid>
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
@@ -372,9 +426,9 @@ export const StepOne = () => {
                   <Grid item lg={6} md={6} xs={12}>
                     <DatePicker
                       label="Data de término"
-                      value={startDate}
+                      value={endDate}
                       onChange={(newValue) => {
-                        setStartDate(newValue);
+                        setEndDate(newValue);
                       }}
                       renderInput={(params) => (
                         <TextField
@@ -389,9 +443,9 @@ export const StepOne = () => {
                   <Grid item lg={6} md={6} xs={12}>
                     <TimePicker
                       label="Hora de término"
-                      value={startTime}
+                      value={endTime}
                       onChange={(newValue) => {
-                        setStartTime(newValue);
+                        setEndTime(newValue);
                       }}
                       renderInput={(params) => (
                         <TextField
@@ -408,8 +462,8 @@ export const StepOne = () => {
               <Grid
                 item
                 mt={2}
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 alignItems="center"
@@ -431,15 +485,23 @@ export const StepOne = () => {
                   <Stack alignItems="center" spacing={1}>
                     <IconButton
                       color="primary"
-                      title="Jornada ou congresso"
+                      onClick={() => setIsPrivate(false)}
                       sx={{
                         backgroundColor: (theme) =>
-                          theme.palette.action.disabledBackground,
+                          isPrivate === false
+                            ? theme.palette.primary.main
+                            : theme.palette.action.disabledBackground,
                         width: 70,
                         height: 70,
                       }}
                     >
-                      <GlobeHemisphereEast />
+                      <GlobeHemisphereEast
+                        color={
+                          isPrivate === false
+                            ? theme.palette.action.disabled
+                            : theme.palette.primary.main
+                        }
+                      />
                     </IconButton>
                     <Typography
                       component="h1"
@@ -455,16 +517,24 @@ export const StepOne = () => {
                   </Stack>
                   <Stack alignItems="center" spacing={1}>
                     <IconButton
-                      title="Festival, Festa ou show"
                       color="primary"
+                      onClick={() => setIsPrivate(true)}
                       sx={{
                         backgroundColor: (theme) =>
-                          theme.palette.action.disabledBackground,
+                          isPrivate === true
+                            ? theme.palette.primary.main
+                            : theme.palette.action.disabledBackground,
                         width: 70,
                         height: 70,
                       }}
                     >
-                      <Buildings />
+                      <Buildings
+                        color={
+                          isPrivate === true
+                            ? theme.palette.action.disabled
+                            : theme.palette.primary.main
+                        }
+                      />
                     </IconButton>
                     <Typography
                       component="h1"
@@ -480,6 +550,100 @@ export const StepOne = () => {
                   </Stack>
                 </Stack>
               </Grid>
+              {searchParams.get("venue") !== "online" &&
+                searchParams.get("venue") !== "presential" && (
+                  <Grid
+                    item
+                    mt={2}
+                    lg={10}
+                    md={10}
+                    sm={12}
+                    xs={12}
+                    alignItems="center"
+                    display="flex"
+                    flexDirection="column"
+                  >
+                    <Typography
+                      component="h1"
+                      variant="h6"
+                      fontWeight={500}
+                      sx={{
+                        color: (theme) => theme.palette.text.primary,
+                        fontSize: 16,
+                      }}
+                    >
+                      Tipo de evento
+                    </Typography>
+                    <Stack spacing={4} direction="row" mt={2}>
+                      <Stack alignItems="center" spacing={1}>
+                        <IconButton
+                          color="primary"
+                          onClick={() => setVenueType("presential")}
+                          sx={{
+                            backgroundColor: (theme) =>
+                              venueType === "presential"
+                                ? theme.palette.primary.main
+                                : theme.palette.action.disabledBackground,
+                            width: 70,
+                            height: 70,
+                          }}
+                        >
+                          <UsersThree
+                            color={
+                              venueType === "presential"
+                                ? theme.palette.action.disabled
+                                : theme.palette.primary.main
+                            }
+                          />
+                        </IconButton>
+                        <Typography
+                          component="h1"
+                          variant="h6"
+                          fontWeight={500}
+                          sx={{
+                            color: (theme) => theme.palette.text.disabled,
+                            fontSize: 14,
+                          }}
+                        >
+                          Presencial
+                        </Typography>
+                      </Stack>
+                      <Stack alignItems="center" spacing={1}>
+                        <IconButton
+                          color="primary"
+                          onClick={() => setVenueType("online")}
+                          sx={{
+                            backgroundColor: (theme) =>
+                              venueType === "online"
+                                ? theme.palette.primary.main
+                                : theme.palette.action.disabledBackground,
+                            width: 70,
+                            height: 70,
+                          }}
+                        >
+                          <Webcam
+                            color={
+                              venueType === "online"
+                                ? theme.palette.action.disabled
+                                : theme.palette.primary.main
+                            }
+                          />
+                        </IconButton>
+                        <Typography
+                          component="h1"
+                          variant="h6"
+                          fontWeight={500}
+                          sx={{
+                            color: (theme) => theme.palette.text.disabled,
+                            fontSize: 14,
+                          }}
+                        >
+                          Online
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                  </Grid>
+                )}
             </Grid>
           </CardContent>
         </Card>
@@ -499,15 +663,15 @@ export const StepOne = () => {
             >
               <Grid
                 item
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 justifyContent="center"
                 display="flex"
               >
                 <Stack direction="row" spacing={1} mt={1} alignItems="center">
-                  <StepIcon icon="III" />
+                  <StepIcon icon="3" />
                   <Typography
                     component="h1"
                     variant="h6"
@@ -525,8 +689,8 @@ export const StepOne = () => {
               <Grid
                 item
                 mt={2}
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 alignItems="center"
@@ -537,15 +701,23 @@ export const StepOne = () => {
                   <Stack alignItems="center" spacing={1}>
                     <IconButton
                       color="primary"
-                      title="Jornada ou congresso"
+                      onClick={() => setEventTypeId("1")}
                       sx={{
                         backgroundColor: (theme) =>
-                          theme.palette.action.disabledBackground,
+                          eventTypeId === "1"
+                            ? theme.palette.primary.main
+                            : theme.palette.action.disabledBackground,
                         width: 70,
                         height: 70,
                       }}
                     >
-                      <Laptop />
+                      <Laptop
+                        color={
+                          eventTypeId === "1"
+                            ? theme.palette.action.disabled
+                            : theme.palette.primary.main
+                        }
+                      />
                     </IconButton>
                     <Typography
                       component="h1"
@@ -563,14 +735,23 @@ export const StepOne = () => {
                     <IconButton
                       title="Festival, Festa ou show"
                       color="primary"
+                      onClick={() => setEventTypeId("2")}
                       sx={{
                         backgroundColor: (theme) =>
-                          theme.palette.action.disabledBackground,
+                          eventTypeId === "2"
+                            ? theme.palette.primary.main
+                            : theme.palette.action.disabledBackground,
                         width: 70,
                         height: 70,
                       }}
                     >
-                      <MusicNotes />
+                      <MusicNotes
+                        color={
+                          eventTypeId === "2"
+                            ? theme.palette.action.disabled
+                            : theme.palette.primary.main
+                        }
+                      />
                     </IconButton>
                     <Typography
                       component="h1"
@@ -589,8 +770,8 @@ export const StepOne = () => {
               <Grid
                 item
                 mt={3}
-                lg={8}
-                md={8}
+                lg={10}
+                md={10}
                 sm={12}
                 xs={12}
                 alignItems="center"
@@ -625,9 +806,11 @@ export const StepOne = () => {
                     <Grid item key={subject}>
                       <Chip
                         label={subject}
-                        onClick={() => {}}
+                        onClick={() => setMainSubject(subject)}
                         color="primary"
-                        variant="outlined"
+                        variant={
+                          mainSubject === subject ? "filled" : "outlined"
+                        }
                       />
                     </Grid>
                   ))}
