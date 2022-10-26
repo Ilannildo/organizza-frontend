@@ -622,10 +622,9 @@ export const StepOne = () => {
               >
                 <Grid container spacing={2}>
                   {main_subjects.map((subject) => (
-                    <Grid item>
+                    <Grid item key={subject}>
                       <Chip
                         label={subject}
-                        key={subject}
                         onClick={() => {}}
                         color="primary"
                         variant="outlined"
@@ -638,9 +637,7 @@ export const StepOne = () => {
                       onClick={() => {}}
                       color="error"
                       variant="outlined"
-                      icon={
-                        <Plus style={{marginLeft: 8}} />
-                      }
+                      icon={<Plus style={{ marginLeft: 8 }} />}
                     />
                   </Grid>
                 </Grid>

@@ -52,7 +52,7 @@ const OrganizerDashboard = () => {
             </Grid>
             <Grid item lg={3} md={4} sm={6} xs={12}>
               <CreateCard
-                label="Eevento Presencial"
+                label="Evento Presencial"
                 color="secondary"
                 onClick={() => navigate('event?venue=presential')}
               />

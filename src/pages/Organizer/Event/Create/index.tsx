@@ -13,6 +13,7 @@ import { useSearchParams } from "react-router-dom";
 import { Navbar } from "../../../../components/Navbar";
 import { StepOne } from "./StepOne";
 import { EventFooter } from "../../../../components/EventFooter";
+import { StepTwo } from "./StepTwo";
 
 const steps = [
   "Informações gerais",
@@ -125,7 +126,7 @@ const CreateEvent = () => {
           </Grid>
           {/* steps */}
           {activeStep === 0 && <StepOne />}
-          {activeStep === 1 && <Typography>Endereço</Typography>}
+          {activeStep === 1 && <StepTwo />}
           {activeStep === 2 && <Typography>Informações</Typography>}
         </Container>
       </Box>
