@@ -10,6 +10,7 @@ import { AppRoutes } from "./routes";
 import { AuthProvider } from "./contexts/AuthContext";
 import { WithAxios } from "./contexts/WithAxios";
 import { ptBR } from "date-fns/locale";
+import { NavigationScroll } from "./layout/NavigationScroll";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +35,9 @@ const App = () => {
                   theme="light"
                 />
                 <WithAxios>
-                  <AppRoutes />
+                  <NavigationScroll>
+                    <AppRoutes />
+                  </NavigationScroll>
                 </WithAxios>
               </LocalizationProvider>
             </BrowserRouter>

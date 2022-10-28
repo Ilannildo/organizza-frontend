@@ -63,14 +63,27 @@ const CreateEvent = () => {
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [uploadedCoverImage, setUploadedCoverImage] =
     useState<IUploadedCoverImage | null>(null);
+
+  const [titleError, setTitleError] = useState<string>(" ");
+  const [eventTypeIdError, setEventTypeIdError] = useState<string>(" ");
+  const [mainSubjectError, setMainSubjectError] = useState<string>(" ");
+  const [shortDescriptionError, setShortDescriptionError] =
+    useState<string>(" ");
+  const [venueTypeError, setVenueTypeError] = useState<string>(" ");
+  const [isPrivateError, setIsPrivateError] = useState<string>(" ");
+  const [startDateError, setStartDateError] = useState<string>(" ");
+  const [startTimeError, setStartTimeError] = useState<string>(" ");
+  const [endDateError, setEndDateError] = useState<string>(" ");
+  const [endTimeError, setEndTimeError] = useState<string>(" ");
+  const [uploadedCoverImageError, setUploadedCoverImageError] =
+    useState<string>(" ");
   // const [responsibleName, setResponsibleName] = useState<string>("");
   // const [responsibleEmail, setResponsibleEmail] = useState<string>("");
   // const [responsibleDescription, setResponsibleDescription] =
   //   useState<string>("");
-  console.log("Search params", searchParams.get("venue"));
-  console.log("Search params", searchParams.get("type"));
 
   useEffect(() => {
+    console.log(searchParams.get("venue"))
     if (searchParams.get("venue") !== null) {
       if (searchParams.get("venue") === "online") {
         setVenueType("online");
@@ -92,6 +105,97 @@ const CreateEvent = () => {
     }
   }, [searchParams]);
 
+  const validateStepOne = () => {
+    if(title === "") {
+      setTitleError("Título do evento é obrigatório");
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    if(shortDescription === "") {
+      setShortDescriptionError("Descrição do evento é obrigatório");
+      window.scrollTo({
+        top: 10,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    if(uploadedCoverImage === null) {
+      setUploadedCoverImageError("Capa do evento é obrigatório");
+      window.scrollTo({
+        top: 300,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    if(startDate === null) {
+      setStartDateError("Data de início é obrigatório");
+      window.scrollTo({
+        top: 700,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    if(startTime === null) {
+      setStartTimeError("Hora de início é obrigatório");
+      window.scrollTo({
+        top: 700,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    if(endDate === null) {
+      setEndDateError("Data de término é obrigatório");
+      window.scrollTo({
+        top: 700,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    if(endTime === null) {
+      setEndTimeError("Hora de término é obrigatório");
+      window.scrollTo({
+        top: 700,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    if(isPrivate === null) {
+      setIsPrivateError("Visibilidade do evento é obrigatório");
+      window.scrollTo({
+        top: 900,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    if(venueType === "") {
+      setVenueTypeError("Tipo do evento é obrigatório");
+      window.scrollTo({
+        top: 950,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    if(eventTypeId === "") {
+      setEventTypeIdError("Categoria do evento é obrigatório");
+      window.scrollTo({
+        top: 1000,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    if(mainSubject === "") {
+      setMainSubjectError("Assunto principal é obrigatório");
+      window.scrollTo({
+        top: 1500,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    return true;
+  };
   const isStepSkipped = (step: number) => {
     return skipped.has(step);
   };
@@ -107,12 +211,16 @@ const CreateEvent = () => {
       newSkipped.delete(activeStep);
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
-    window.scrollTo({
-      top: 0,      
-      behavior: "smooth",
-    });
+    if (activeStep === 0) {
+      if (validateStepOne()) {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped(newSkipped);
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }
+    }
   };
 
   const handleBack = () => {
@@ -221,6 +329,28 @@ const CreateEvent = () => {
               setEndTime={setEndTime}
               uploadedCoverImage={uploadedCoverImage}
               setUploadedCoverImage={setUploadedCoverImage}
+              titleError={titleError}
+              setTitleError={setTitleError}
+              eventTypeIdError={eventTypeIdError}
+              setEventTypeIdError={setEventTypeIdError}
+              mainSubjectError={mainSubjectError}
+              setMainSubjectError={setMainSubjectError}
+              shortDescriptionError={shortDescriptionError}
+              setShortDescriptionError={setShortDescriptionError}
+              venueTypeError={venueTypeError}
+              setVenueTypeError={setVenueTypeError}
+              isPrivateError={isPrivateError}
+              setIsPrivateError={setIsPrivateError}
+              startDateError={startDateError}
+              setStartDateError={setStartDateError}
+              startTimeError={startTimeError}
+              setStartTimeError={setStartTimeError}
+              endDateError={endDateError}
+              setEndDateError={setEndDateError}
+              endTimeError={endTimeError}
+              setEndTimeError={setEndTimeError}
+              uploadedCoverImageError={uploadedCoverImageError}
+              setUploadedCoverImageError={setUploadedCoverImageError}
             />
           )}
           {activeStep === 1 && <StepTwo />}

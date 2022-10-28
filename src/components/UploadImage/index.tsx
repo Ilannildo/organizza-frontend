@@ -10,9 +10,10 @@ const MESSAGE_COLORS = {
 
 interface IUploadImage {
   onUpload: <T extends File>(files: T[]) => void;
+  error: string;
 }
 
-export const UploadImage = ({ onUpload }: IUploadImage) => {
+export const UploadImage = ({ onUpload, error }: IUploadImage) => {
   const theme = useTheme();
 
   const renderDragMessage = (isDragActive: boolean, isDragReject: boolean) => {
@@ -69,46 +70,65 @@ export const UploadImage = ({ onUpload }: IUploadImage) => {
       onDropAccepted={(acceptedFiles) => onUpload(acceptedFiles)}
     >
       {({ getInputProps, getRootProps, isDragActive, isDragReject }) => (
-        <Box
-          {...getRootProps()}
-          sx={{
-            border: "1px dashed #ddd",
-            borderColor: isDragReject
-              ? MESSAGE_COLORS.error
-              : isDragActive
-              ? MESSAGE_COLORS.success
-              : MESSAGE_COLORS.default,
-            p: 3,
-            borderRadius: 1,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            transition: "height 0.2s ease",
-          }}
-        >
-          <input {...getInputProps()} />
-          <Avatar
-            variant="circular"
+        <>
+          <Box
+            {...getRootProps()}
             sx={{
-              backgroundColor: "rgba(25, 118,210,.12)",
+              border: "1px dashed #ddd",
+              borderColor:
+                error !== " "
+                  ? MESSAGE_COLORS.error
+                  : isDragReject
+                  ? MESSAGE_COLORS.error
+                  : isDragActive
+                  ? MESSAGE_COLORS.success
+                  : MESSAGE_COLORS.default,
+              p: 3,
+              borderRadius: 1,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+              transition: "height 0.2s ease",
             }}
           >
-            <Upload color={theme.palette.primary.main} />
-          </Avatar>
-          {renderDragMessage(isDragActive, isDragReject)}
-          <Typography
-            component="h1"
-            variant="h6"
-            mb={2}
-            sx={{
-              fontSize: 12,
-              color: MESSAGE_COLORS.default,
-            }}
-          >
-            PNG, JPG ou GIF (max. 3MB)
-          </Typography>
-        </Box>
+            <input {...getInputProps()} />
+            <Avatar
+              variant="circular"
+              sx={{
+                backgroundColor: "rgba(25, 118,210,.12)",
+              }}
+            >
+              <Upload color={theme.palette.primary.main} />
+            </Avatar>
+            {renderDragMessage(isDragActive, isDragReject)}
+            <Typography
+              component="h1"
+              variant="h6"
+              mb={2}
+              sx={{
+                fontSize: 12,
+                color: MESSAGE_COLORS.default,
+              }}
+            >
+              PNG, JPG ou GIF (max. 3MB)
+            </Typography>
+          </Box>
+          {error !== " " && (
+            <Typography
+              component="h1"
+              variant="h6"
+              mb={1}
+              sx={{
+                color: (theme) => theme.palette.error.main,
+                fontSize: 12,
+                fontWeight: 400,
+              }}
+            >
+              {error}
+            </Typography>
+          )}
+        </>
       )}
     </Dropzone>
   );

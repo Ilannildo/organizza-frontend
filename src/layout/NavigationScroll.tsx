@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-// import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 type NavigationScrollProps = {
   children: any;
@@ -8,8 +8,8 @@ type NavigationScrollProps = {
 export const NavigationScroll: React.FC<NavigationScrollProps> = ({
   children,
 }) => {
-  // const location = useLocation();
-  // const { pathname } = location;
+  const location = useLocation();
+  const { pathname } = location;
 
   useEffect(() => {
     window.scrollTo({
@@ -18,13 +18,13 @@ export const NavigationScroll: React.FC<NavigationScrollProps> = ({
       behavior: 'smooth'
     });
   }, []);
-  // useEffect(() => {
-  //   window.scrollTo({
-  //     top: 0,
-  //     left: 0,
-  //     behavior: 'smooth'
-  //   });
-  // }, [pathname]);
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }, [pathname]);
 
   return children;
 };

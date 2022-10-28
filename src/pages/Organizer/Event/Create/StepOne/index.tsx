@@ -88,6 +88,28 @@ interface IEventGeneralInformation {
   setEndTime: (value: Date | null) => void;
   uploadedCoverImage: IUploadedCoverImage | null;
   setUploadedCoverImage: (value: IUploadedCoverImage | null) => void;
+  titleError: string;
+  setTitleError: (value: string) => void;
+  eventTypeIdError: string;
+  setEventTypeIdError: (value: string) => void;
+  mainSubjectError: string;
+  setMainSubjectError: (value: string) => void;
+  shortDescriptionError: string;
+  setShortDescriptionError: (value: string) => void;
+  venueTypeError: string;
+  setVenueTypeError: (value: string) => void;
+  isPrivateError: string;
+  setIsPrivateError: (value: string) => void;
+  startDateError: string;
+  setStartDateError: (value: string) => void;
+  startTimeError: string;
+  setStartTimeError: (value: string) => void;
+  endDateError: string;
+  setEndDateError: (value: string) => void;
+  endTimeError: string;
+  setEndTimeError: (value: string) => void;
+  uploadedCoverImageError: string;
+  setUploadedCoverImageError: (value: string) => void;
 }
 
 export const StepOne = ({
@@ -113,6 +135,28 @@ export const StepOne = ({
   setEndTime,
   uploadedCoverImage,
   setUploadedCoverImage,
+  titleError,
+  setTitleError,
+  eventTypeIdError,
+  setEventTypeIdError,
+  mainSubjectError,
+  setMainSubjectError,
+  shortDescriptionError,
+  setShortDescriptionError,
+  venueTypeError,
+  setVenueTypeError,
+  isPrivateError,
+  setIsPrivateError,
+  startDateError,
+  setStartDateError,
+  startTimeError,
+  setStartTimeError,
+  endDateError,
+  setEndDateError,
+  endTimeError,
+  setEndTimeError,
+  uploadedCoverImageError,
+  setUploadedCoverImageError,
 }: IEventGeneralInformation) => {
   const [searchParams] = useSearchParams();
   const theme = useTheme();
@@ -130,9 +174,10 @@ export const StepOne = ({
         error: false,
         url: null,
       }));
+      setUploadedCoverImageError(" ");
       setUploadedCoverImage(uploadedImages[0]);
     },
-    [setUploadedCoverImage]
+    [setUploadedCoverImage, setUploadedCoverImageError]
   );
 
   return (
@@ -187,8 +232,13 @@ export const StepOne = ({
                   label="Título do evento"
                   variant="outlined"
                   onChange={(e) => setTitle(e.target.value)}
+                  onBlur={() => {
+                    setTitleError(" ");
+                  }}
                   value={title}
                   size="small"
+                  error={titleError !== " "}
+                  helperText={titleError}
                   fullWidth
                   color="primary"
                 />
@@ -205,6 +255,11 @@ export const StepOne = ({
                 <TextField
                   id="outlined-multiline-static"
                   label="Descrição curta"
+                  error={shortDescriptionError !== " "}
+                  helperText={shortDescriptionError}
+                  onBlur={() => {
+                    setShortDescriptionError(" ");
+                  }}
                   variant="outlined"
                   onChange={(e) => setShortDescription(e.target.value)}
                   value={shortDescription}
@@ -236,9 +291,12 @@ export const StepOne = ({
                         fontSize: 14,
                       }}
                     >
-                      Capa (Imagem principal)
+                      Capa (Imagem principal){" "}
                     </Typography>
-                    <UploadImage onUpload={handleUpload} />
+                    <UploadImage
+                      onUpload={handleUpload}
+                      error={uploadedCoverImageError}
+                    />
                   </Grid>
                   <Grid item lg={6} md={6}>
                     <Typography
@@ -390,6 +448,11 @@ export const StepOne = ({
                           variant="outlined"
                           size="small"
                           fullWidth
+                          error={startDateError !== " "}
+                          helperText={startDateError}
+                          onBlur={() => {
+                            setStartDateError(" ");
+                          }}
                         />
                       )}
                     />
@@ -407,6 +470,11 @@ export const StepOne = ({
                           variant="outlined"
                           size="small"
                           fullWidth
+                          error={startTimeError !== " "}
+                          helperText={startTimeError}
+                          onBlur={() => {
+                            setStartTimeError(" ");
+                          }}
                         />
                       )}
                     />
@@ -436,6 +504,11 @@ export const StepOne = ({
                           variant="outlined"
                           size="small"
                           fullWidth
+                          error={endDateError !== " "}
+                          helperText={endDateError}
+                          onBlur={() => {
+                            setEndDateError(" ");
+                          }}
                         />
                       )}
                     />
@@ -453,6 +526,11 @@ export const StepOne = ({
                           variant="outlined"
                           size="small"
                           fullWidth
+                          error={endTimeError !== " "}
+                          helperText={endTimeError}
+                          onBlur={() => {
+                            setEndTimeError(" ");
+                          }}
                         />
                       )}
                     />
@@ -485,7 +563,10 @@ export const StepOne = ({
                   <Stack alignItems="center" spacing={1}>
                     <IconButton
                       color="primary"
-                      onClick={() => setIsPrivate(false)}
+                      onClick={() => {
+                        setIsPrivate(false);
+                        setIsPrivateError(" ");
+                      }}
                       sx={{
                         backgroundColor: (theme) =>
                           isPrivate === false
@@ -518,7 +599,10 @@ export const StepOne = ({
                   <Stack alignItems="center" spacing={1}>
                     <IconButton
                       color="primary"
-                      onClick={() => setIsPrivate(true)}
+                      onClick={() => {
+                        setIsPrivate(true);
+                        setIsPrivateError(" ");
+                      }}
                       sx={{
                         backgroundColor: (theme) =>
                           isPrivate === true
@@ -549,6 +633,20 @@ export const StepOne = ({
                     </Typography>
                   </Stack>
                 </Stack>
+                {isPrivateError !== " " && (
+                  <Typography
+                    component="h1"
+                    variant="h6"
+                    mt={2}
+                    sx={{
+                      color: (theme) => theme.palette.error.main,
+                      fontSize: 12,
+                      fontWeight: 400,
+                    }}
+                  >
+                    {isPrivateError}
+                  </Typography>
+                )}
               </Grid>
               {searchParams.get("venue") !== "online" &&
                 searchParams.get("venue") !== "presential" && (
@@ -578,7 +676,10 @@ export const StepOne = ({
                       <Stack alignItems="center" spacing={1}>
                         <IconButton
                           color="primary"
-                          onClick={() => setVenueType("presential")}
+                          onClick={() => {
+                            setVenueType("presential");
+                            setVenueTypeError(" ");
+                          }}
                           sx={{
                             backgroundColor: (theme) =>
                               venueType === "presential"
@@ -611,7 +712,10 @@ export const StepOne = ({
                       <Stack alignItems="center" spacing={1}>
                         <IconButton
                           color="primary"
-                          onClick={() => setVenueType("online")}
+                          onClick={() => {
+                            setVenueType("online");
+                            setVenueTypeError(" ");
+                          }}
                           sx={{
                             backgroundColor: (theme) =>
                               venueType === "online"
@@ -642,6 +746,20 @@ export const StepOne = ({
                         </Typography>
                       </Stack>
                     </Stack>
+                    {venueTypeError !== " " && (
+                      <Typography
+                        component="h1"
+                        variant="h6"
+                        mt={2}
+                        sx={{
+                          color: (theme) => theme.palette.error.main,
+                          fontSize: 12,
+                          fontWeight: 400,
+                        }}
+                      >
+                        {venueTypeError}
+                      </Typography>
+                    )}
                   </Grid>
                 )}
             </Grid>
@@ -701,7 +819,10 @@ export const StepOne = ({
                   <Stack alignItems="center" spacing={1}>
                     <IconButton
                       color="primary"
-                      onClick={() => setEventTypeId("1")}
+                      onClick={() => {
+                        setEventTypeId("1");
+                        setEventTypeIdError(" ");
+                      }}
                       sx={{
                         backgroundColor: (theme) =>
                           eventTypeId === "1"
@@ -735,7 +856,10 @@ export const StepOne = ({
                     <IconButton
                       title="Festival, Festa ou show"
                       color="primary"
-                      onClick={() => setEventTypeId("2")}
+                      onClick={() => {
+                        setEventTypeId("2");
+                        setEventTypeIdError(" ");
+                      }}
                       sx={{
                         backgroundColor: (theme) =>
                           eventTypeId === "2"
@@ -766,6 +890,20 @@ export const StepOne = ({
                     </Typography>
                   </Stack>
                 </Stack>
+                {eventTypeIdError !== " " && (
+                  <Typography
+                    component="h1"
+                    variant="h6"
+                    mt={2}
+                    sx={{
+                      color: (theme) => theme.palette.error.main,
+                      fontSize: 12,
+                      fontWeight: 400,
+                    }}
+                  >
+                    {eventTypeIdError}
+                  </Typography>
+                )}
               </Grid>
               <Grid
                 item
@@ -806,7 +944,10 @@ export const StepOne = ({
                     <Grid item key={subject}>
                       <Chip
                         label={subject}
-                        onClick={() => setMainSubject(subject)}
+                        onClick={() => {
+                          setMainSubject(subject);
+                          setMainSubjectError(" ");
+                        }}
                         color="primary"
                         variant={
                           mainSubject === subject ? "filled" : "outlined"
@@ -824,6 +965,20 @@ export const StepOne = ({
                     />
                   </Grid>
                 </Grid>
+                {mainSubjectError !== " " && (
+                  <Typography
+                    component="h1"
+                    variant="h6"
+                    mt={2}
+                    sx={{
+                      color: (theme) => theme.palette.error.main,
+                      fontSize: 12,
+                      fontWeight: 400,
+                    }}
+                  >
+                    {mainSubjectError}
+                  </Typography>
+                )}
               </Grid>
             </Grid>
           </CardContent>
