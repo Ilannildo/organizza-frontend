@@ -4,6 +4,7 @@ interface IEventFooter {
   onBack: () => void;
   onComplete: () => void;
   activeStep: number;
+  acceptedTerms: boolean;
   steps: string[];
 }
 
@@ -11,7 +12,8 @@ export const EventFooter = ({
   onBack,
   onComplete,
   activeStep,
-  steps
+  acceptedTerms,
+  steps,
 }: IEventFooter) => {
   return (
     <Box
@@ -42,6 +44,7 @@ export const EventFooter = ({
             sm={12}
             xs={12}
             justifyContent="end"
+            position="relative"
             display="flex"
           >
             <Stack spacing={3} direction="row">
@@ -52,9 +55,15 @@ export const EventFooter = ({
               >
                 Voltar
               </Button>
-              <Button variant="contained" onClick={onComplete}>
-                {activeStep === steps.length - 1 ? 'Publicar evento' : 'Próximo passo'}
-                </Button>
+              <Button
+                variant="contained"
+                onClick={onComplete}
+                disabled={activeStep === steps.length - 1 && !acceptedTerms}
+              >
+                {activeStep === steps.length - 1
+                  ? "Criar evento"
+                  : "Próximo passo"}
+              </Button>
             </Stack>
           </Grid>
         </Grid>

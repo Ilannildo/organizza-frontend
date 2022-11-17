@@ -2,7 +2,6 @@ import {
   Box,
   Card,
   CardContent,
-  Chip,
   Grid,
   IconButton,
   Stack,
@@ -17,32 +16,12 @@ import { uniqueId } from "lodash";
 import {
   Buildings,
   GlobeHemisphereEast,
-  Laptop,
-  MusicNotes,
-  Plus,
   UsersThree,
   Webcam,
 } from "phosphor-react";
 import { useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { UploadImage } from "../../../../../components/UploadImage";
-
-const main_subjects = [
-  "Acadêmico e científico",
-  "Desenvolvimento pessoal",
-  "Design e produtos digitais",
-  "Esportes",
-  "Games e Geek",
-  "Gastronomia",
-  "Empreendedorismo, negócios e inovasão",
-  "Governo e política",
-  "Marketing e vendas",
-  "Moda e beleza",
-  "Saúde e bem-estar",
-  "Religião e espiritualidade",
-  "Sociedade e cultura",
-  "Teatro, stand-up e dança",
-];
 
 interface IUploadedCoverImage {
   file: File;
@@ -68,10 +47,7 @@ interface IUploadedCoverImage {
 interface IEventGeneralInformation {
   title: string;
   setTitle: (value: string) => void;
-  eventTypeId: string;
-  setEventTypeId: (value: string) => void;
-  mainSubject: string;
-  setMainSubject: (value: string) => void;
+  
   shortDescription: string;
   setShortDescription: (value: string) => void;
   venueType: "presential" | "online" | "";
@@ -90,10 +66,7 @@ interface IEventGeneralInformation {
   setUploadedCoverImage: (value: IUploadedCoverImage | null) => void;
   titleError: string;
   setTitleError: (value: string) => void;
-  eventTypeIdError: string;
-  setEventTypeIdError: (value: string) => void;
-  mainSubjectError: string;
-  setMainSubjectError: (value: string) => void;
+  
   shortDescriptionError: string;
   setShortDescriptionError: (value: string) => void;
   venueTypeError: string;
@@ -115,10 +88,7 @@ interface IEventGeneralInformation {
 export const StepOne = ({
   title,
   setTitle,
-  eventTypeId,
-  setEventTypeId,
-  mainSubject,
-  setMainSubject,
+  
   shortDescription,
   setShortDescription,
   venueType,
@@ -137,10 +107,6 @@ export const StepOne = ({
   setUploadedCoverImage,
   titleError,
   setTitleError,
-  eventTypeIdError,
-  setEventTypeIdError,
-  mainSubjectError,
-  setMainSubjectError,
   shortDescriptionError,
   setShortDescriptionError,
   venueTypeError,
@@ -235,10 +201,10 @@ export const StepOne = ({
                   onBlur={() => {
                     setTitleError(" ");
                   }}
-                  value={title}
-                  size="small"
                   error={titleError !== " "}
                   helperText={titleError}
+                  value={title}
+                  size="small"
                   fullWidth
                   color="primary"
                 />
@@ -317,8 +283,8 @@ export const StepOne = ({
               {uploadedCoverImage && (
                 <Grid
                   item
-                  lg={10}
-                  md={10}
+                  lg={6}
+                  md={6}
                   sm={12}
                   xs={12}
                   justifyContent="center"
@@ -342,7 +308,7 @@ export const StepOne = ({
                         Preview
                       </Typography>
                       <Box
-                        height="200px"
+                        height="300px"
                         width="100%"
                         mt={1}
                         sx={{
@@ -571,7 +537,7 @@ export const StepOne = ({
                         backgroundColor: (theme) =>
                           isPrivate === false
                             ? theme.palette.primary.main
-                            : theme.palette.action.disabledBackground,
+                            : theme.palette.primaryContainer.main,
                         width: 70,
                         height: 70,
                       }}
@@ -579,7 +545,7 @@ export const StepOne = ({
                       <GlobeHemisphereEast
                         color={
                           isPrivate === false
-                            ? theme.palette.action.disabled
+                            ? theme.palette.primaryContainer.main
                             : theme.palette.primary.main
                         }
                       />
@@ -607,7 +573,7 @@ export const StepOne = ({
                         backgroundColor: (theme) =>
                           isPrivate === true
                             ? theme.palette.primary.main
-                            : theme.palette.action.disabledBackground,
+                            : theme.palette.primaryContainer.main,
                         width: 70,
                         height: 70,
                       }}
@@ -615,7 +581,7 @@ export const StepOne = ({
                       <Buildings
                         color={
                           isPrivate === true
-                            ? theme.palette.action.disabled
+                            ? theme.palette.primaryContainer.main
                             : theme.palette.primary.main
                         }
                       />
@@ -762,224 +728,6 @@ export const StepOne = ({
                     )}
                   </Grid>
                 )}
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      <Grid item lg={10} md={10} sm={12} xs={12}>
-        <Card variant="outlined">
-          <CardContent>
-            <Grid
-              container
-              spacing={2}
-              justifyContent="center"
-              component="form"
-              display="flex"
-              noValidate
-              autoComplete="off"
-            >
-              <Grid
-                item
-                lg={10}
-                md={10}
-                sm={12}
-                xs={12}
-                justifyContent="center"
-                display="flex"
-              >
-                <Stack direction="row" spacing={1} mt={1} alignItems="center">
-                  <StepIcon icon="3" />
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    mb={2}
-                    fontWeight={600}
-                    sx={{
-                      color: (theme) => theme.palette.text.primary,
-                      fontSize: 18,
-                    }}
-                  >
-                    Qual a categoria do seu evento?
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid
-                item
-                mt={2}
-                lg={10}
-                md={10}
-                sm={12}
-                xs={12}
-                alignItems="center"
-                display="flex"
-                flexDirection="column"
-              >
-                <Stack spacing={4} direction="row" mt={2}>
-                  <Stack alignItems="center" spacing={1}>
-                    <IconButton
-                      color="primary"
-                      onClick={() => {
-                        setEventTypeId("1");
-                        setEventTypeIdError(" ");
-                      }}
-                      sx={{
-                        backgroundColor: (theme) =>
-                          eventTypeId === "1"
-                            ? theme.palette.primary.main
-                            : theme.palette.action.disabledBackground,
-                        width: 70,
-                        height: 70,
-                      }}
-                    >
-                      <Laptop
-                        color={
-                          eventTypeId === "1"
-                            ? theme.palette.action.disabled
-                            : theme.palette.primary.main
-                        }
-                      />
-                    </IconButton>
-                    <Typography
-                      component="h1"
-                      variant="h6"
-                      fontWeight={500}
-                      sx={{
-                        color: (theme) => theme.palette.text.disabled,
-                        fontSize: 14,
-                      }}
-                    >
-                      Jornada ou congresso
-                    </Typography>
-                  </Stack>
-                  <Stack alignItems="center" spacing={1}>
-                    <IconButton
-                      title="Festival, Festa ou show"
-                      color="primary"
-                      onClick={() => {
-                        setEventTypeId("2");
-                        setEventTypeIdError(" ");
-                      }}
-                      sx={{
-                        backgroundColor: (theme) =>
-                          eventTypeId === "2"
-                            ? theme.palette.primary.main
-                            : theme.palette.action.disabledBackground,
-                        width: 70,
-                        height: 70,
-                      }}
-                    >
-                      <MusicNotes
-                        color={
-                          eventTypeId === "2"
-                            ? theme.palette.action.disabled
-                            : theme.palette.primary.main
-                        }
-                      />
-                    </IconButton>
-                    <Typography
-                      component="h1"
-                      variant="h6"
-                      fontWeight={500}
-                      sx={{
-                        color: (theme) => theme.palette.text.disabled,
-                        fontSize: 14,
-                      }}
-                    >
-                      Festival, Festa ou show
-                    </Typography>
-                  </Stack>
-                </Stack>
-                {eventTypeIdError !== " " && (
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    mt={2}
-                    sx={{
-                      color: (theme) => theme.palette.error.main,
-                      fontSize: 12,
-                      fontWeight: 400,
-                    }}
-                  >
-                    {eventTypeIdError}
-                  </Typography>
-                )}
-              </Grid>
-              <Grid
-                item
-                mt={3}
-                lg={10}
-                md={10}
-                sm={12}
-                xs={12}
-                alignItems="center"
-                display="flex"
-                flexDirection="column"
-              >
-                <Typography
-                  component="h1"
-                  variant="h6"
-                  fontWeight={500}
-                  sx={{
-                    color: (theme) => theme.palette.text.primary,
-                    fontSize: 16,
-                  }}
-                >
-                  Selecione o assunto principal
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                mt={1}
-                lg={10}
-                md={10}
-                sm={12}
-                xs={12}
-                alignItems="center"
-                display="flex"
-                flexDirection="column"
-              >
-                <Grid container spacing={2}>
-                  {main_subjects.map((subject) => (
-                    <Grid item key={subject}>
-                      <Chip
-                        label={subject}
-                        onClick={() => {
-                          setMainSubject(subject);
-                          setMainSubjectError(" ");
-                        }}
-                        color="primary"
-                        variant={
-                          mainSubject === subject ? "filled" : "outlined"
-                        }
-                      />
-                    </Grid>
-                  ))}
-                  <Grid item>
-                    <Chip
-                      label="Adicionar assunto"
-                      onClick={() => {}}
-                      color="error"
-                      variant="outlined"
-                      icon={<Plus style={{ marginLeft: 8 }} />}
-                    />
-                  </Grid>
-                </Grid>
-                {mainSubjectError !== " " && (
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    mt={2}
-                    sx={{
-                      color: (theme) => theme.palette.error.main,
-                      fontSize: 12,
-                      fontWeight: 400,
-                    }}
-                  >
-                    {mainSubjectError}
-                  </Typography>
-                )}
-              </Grid>
             </Grid>
           </CardContent>
         </Card>

@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { api } from "../../services/api";
 import { createUseUserAuthKey } from "./keys";
-import { IUser } from "./types";
+import { IUser } from "../../models/user";
+import { api } from "../../services/api";
 
 export const useAuthenticatedUser = (options?: UseQueryOptions<IUser>) => {
   return useQuery(

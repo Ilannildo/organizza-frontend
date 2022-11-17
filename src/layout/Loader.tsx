@@ -1,4 +1,5 @@
 // material-ui
+import { Typography } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
 import useMountTransition from "./useFade";
@@ -124,9 +125,11 @@ const LoaderContainer = styled("div")({
 const Loader = ({
   isLoading = true,
   progressBar = false,
+  label,
 }: {
   isLoading: boolean;
   progressBar?: boolean;
+  label?: string;
 }) => {
   const hasTransitionedIn = useMountTransition({
     isMounted: isLoading,
@@ -150,6 +153,7 @@ const Loader = ({
           </LoaderContent>
           <LoaderContainer>
             {progressBar === true && <LinearProgress color="primary" />}
+            {label && <Typography>{label}</Typography>}
           </LoaderContainer>
         </LoaderWrapper>
       )}

@@ -17,6 +17,8 @@ import { addDays } from "date-fns";
 import BarCodeImg from "../../assets/barcode.png";
 import { useState } from "react";
 
+
+
 export const Ticket = () => {
   const [startDate, setStartDate] = useState<Date | null>(
     addDays(new Date(), 1)

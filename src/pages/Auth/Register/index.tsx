@@ -70,7 +70,7 @@ const Register = () => {
         password,
       });
 
-      toast.success("Cadastrado realizado!");
+      toast.success("Cadastro realizado com sucesso!");
       //verificar se existe parametro
       if (searchparams.get("callback-url")) {
         setIsLoading(false);

@@ -15,6 +15,10 @@ import { Navbar } from "../../../../components/Navbar";
 import { StepOne } from "./StepOne";
 import { EventFooter } from "../../../../components/EventFooter";
 import { StepTwo } from "./StepTwo";
+import { ICity } from "../../../../models/city";
+import { StepThree } from "./StepThree";
+import Loader from "../../../../layout/Loader";
+import { api } from "../../../../services/api";
 
 const steps = [
   "Informações gerais",
@@ -46,6 +50,7 @@ interface IUploadedCoverImage {
 const CreateEvent = () => {
   const [searchParams] = useSearchParams();
   const [activeStep, setActiveStep] = useState(0);
+  const [isCreatingEvent, setIsCreatingEvent] = useState(false);
   const [completed, setCompleted] = useState<{ [k: number]: boolean }>({});
   const [skipped, setSkipped] = useState(new Set<number>());
 
@@ -64,6 +69,12 @@ const CreateEvent = () => {
   const [uploadedCoverImage, setUploadedCoverImage] =
     useState<IUploadedCoverImage | null>(null);
 
+  const [street, setStreet] = useState<string>("");
+  const [city, setCity] = useState<ICity | null>(null);
+  const [placeUndefined, setPlaceUndefined] = useState<boolean>(false);
+  const [cityError, setCityError] = useState<string>(" ");
+  const [streetError, setStreetError] = useState<string>(" ");
+
   const [titleError, setTitleError] = useState<string>(" ");
   const [eventTypeIdError, setEventTypeIdError] = useState<string>(" ");
   const [mainSubjectError, setMainSubjectError] = useState<string>(" ");
@@ -77,13 +88,18 @@ const CreateEvent = () => {
   const [endTimeError, setEndTimeError] = useState<string>(" ");
   const [uploadedCoverImageError, setUploadedCoverImageError] =
     useState<string>(" ");
-  // const [responsibleName, setResponsibleName] = useState<string>("");
-  // const [responsibleEmail, setResponsibleEmail] = useState<string>("");
-  // const [responsibleDescription, setResponsibleDescription] =
-  //   useState<string>("");
+  const [responsibleName, setResponsibleName] = useState<string>("");
+  const [responsibleEmail, setResponsibleEmail] = useState<string>("");
+  const [responsibleDescription, setResponsibleDescription] =
+    useState<string>("");
+  const [acceptedTerms, setAcceptedTerms] = useState<boolean>(false);
+  const [responsibleNameError, setResponsibleNameError] = useState<string>(" ");
+  const [responsibleEmailError, setResponsibleEmailError] =
+    useState<string>(" ");
+  const [responsibleDescriptionError, setResponsibleDescriptionError] =
+    useState<string>(" ");
 
   useEffect(() => {
-    console.log(searchParams.get("venue"))
     if (searchParams.get("venue") !== null) {
       if (searchParams.get("venue") === "online") {
         setVenueType("online");
@@ -106,7 +122,7 @@ const CreateEvent = () => {
   }, [searchParams]);
 
   const validateStepOne = () => {
-    if(title === "") {
+    if (title === "") {
       setTitleError("Título do evento é obrigatório");
       window.scrollTo({
         top: 0,
@@ -114,7 +130,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if(shortDescription === "") {
+    if (shortDescription === "") {
       setShortDescriptionError("Descrição do evento é obrigatório");
       window.scrollTo({
         top: 10,
@@ -122,7 +138,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if(uploadedCoverImage === null) {
+    if (uploadedCoverImage === null) {
       setUploadedCoverImageError("Capa do evento é obrigatório");
       window.scrollTo({
         top: 300,
@@ -130,7 +146,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if(startDate === null) {
+    if (startDate === null) {
       setStartDateError("Data de início é obrigatório");
       window.scrollTo({
         top: 700,
@@ -138,7 +154,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if(startTime === null) {
+    if (startTime === null) {
       setStartTimeError("Hora de início é obrigatório");
       window.scrollTo({
         top: 700,
@@ -146,7 +162,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if(endDate === null) {
+    if (endDate === null) {
       setEndDateError("Data de término é obrigatório");
       window.scrollTo({
         top: 700,
@@ -154,7 +170,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if(endTime === null) {
+    if (endTime === null) {
       setEndTimeError("Hora de término é obrigatório");
       window.scrollTo({
         top: 700,
@@ -162,7 +178,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if(isPrivate === null) {
+    if (isPrivate === null) {
       setIsPrivateError("Visibilidade do evento é obrigatório");
       window.scrollTo({
         top: 900,
@@ -170,7 +186,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if(venueType === "") {
+    if (venueType === "") {
       setVenueTypeError("Tipo do evento é obrigatório");
       window.scrollTo({
         top: 950,
@@ -178,7 +194,29 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if(eventTypeId === "") {
+    return true;
+  };
+
+  const validateStepTwo = () => {
+    if (!placeUndefined) {
+      if (city === null) {
+        setCityError("Cidade do evento é obrigatório");
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+        return false;
+      }
+      if (street === "") {
+        setStreetError("Endereço do evento é obrigatório");
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+        return false;
+      }
+    }
+    if (eventTypeId === "") {
       setEventTypeIdError("Categoria do evento é obrigatório");
       window.scrollTo({
         top: 1000,
@@ -186,7 +224,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if(mainSubject === "") {
+    if (mainSubject === "") {
       setMainSubjectError("Assunto principal é obrigatório");
       window.scrollTo({
         top: 1500,
@@ -196,6 +234,39 @@ const CreateEvent = () => {
     }
     return true;
   };
+
+  const validateStepThree = () => {
+    if (responsibleName === "") {
+      setResponsibleNameError("Nome do responśavel do evento é obrigatório");
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      return false;
+    }
+    if (responsibleEmail === "") {
+      setResponsibleEmailError("Email do responsável do evento é obrigatório");
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      return false;
+    }
+
+    if (responsibleDescription === "") {
+      setResponsibleDescriptionError(
+        "Descrição do responsável do evento é obrigatório"
+      );
+      window.scrollTo({
+        top: 1000,
+        behavior: "smooth",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const isStepSkipped = (step: number) => {
     return skipped.has(step);
   };
@@ -221,6 +292,21 @@ const CreateEvent = () => {
         });
       }
     }
+    if (activeStep === 1) {
+      if (validateStepTwo()) {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped(newSkipped);
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }
+    }
+    if (activeStep === 2) {
+      if (validateStepThree()) {
+        handleSubmit();
+      }
+    }
   };
 
   const handleBack = () => {
@@ -238,9 +324,38 @@ const CreateEvent = () => {
     handleNext();
   };
 
+  const handleSubmit = async () => {
+    setIsCreatingEvent(true);
+    try {
+      const response = await api.post("/events", {
+        title,
+        event_type_id: eventTypeId,
+        main_subject_id: mainSubject,
+        short_description: shortDescription,
+        venue_type: venueType,
+        is_private: isPrivate,
+        start_date: startDate,
+        start_time: startTime,
+        end_date: endDate,
+        end_time: endTime,
+        address: street,
+        city_id: city?.id,
+        responsible_name: responsibleName,
+        responsible_email: responsibleEmail,
+      });
+
+      if (response.data) {
+        console.log("Evento criado com sucesso");
+      }
+    } catch (error: any) {
+      console.log("Error ao criar evento =>", error);
+    }
+  };
+
   return (
     <>
       <Navbar />
+      <Loader isLoading={isCreatingEvent} label="Aguarde" />
       <Box
         sx={{
           backgroundColor: (theme) => theme.palette.background.default,
@@ -309,10 +424,6 @@ const CreateEvent = () => {
             <StepOne
               title={title}
               setTitle={setTitle}
-              eventTypeId={eventTypeId}
-              setEventTypeId={setEventTypeId}
-              mainSubject={mainSubject}
-              setMainSubject={setMainSubject}
               shortDescription={shortDescription}
               setShortDescription={setShortDescription}
               venueType={venueType}
@@ -331,10 +442,6 @@ const CreateEvent = () => {
               setUploadedCoverImage={setUploadedCoverImage}
               titleError={titleError}
               setTitleError={setTitleError}
-              eventTypeIdError={eventTypeIdError}
-              setEventTypeIdError={setEventTypeIdError}
-              mainSubjectError={mainSubjectError}
-              setMainSubjectError={setMainSubjectError}
               shortDescriptionError={shortDescriptionError}
               setShortDescriptionError={setShortDescriptionError}
               venueTypeError={venueTypeError}
@@ -353,14 +460,53 @@ const CreateEvent = () => {
               setUploadedCoverImageError={setUploadedCoverImageError}
             />
           )}
-          {activeStep === 1 && <StepTwo />}
-          {activeStep === 2 && <Typography>Informações</Typography>}
+          {activeStep === 1 && (
+            <StepTwo
+              city={city}
+              setCity={setCity}
+              street={street}
+              setStreet={setStreet}
+              placeUndefined={placeUndefined}
+              setPlaceUndefined={setPlaceUndefined}
+              eventTypeId={eventTypeId}
+              setEventTypeId={setEventTypeId}
+              mainSubject={mainSubject}
+              setMainSubject={setMainSubject}
+              eventTypeIdError={eventTypeIdError}
+              setEventTypeIdError={setEventTypeIdError}
+              mainSubjectError={mainSubjectError}
+              setMainSubjectError={setMainSubjectError}
+              cityError={cityError}
+              setCityError={setCityError}
+              streetError={streetError}
+              setStreetError={setStreetError}
+            />
+          )}
+          {activeStep === 2 && (
+            <StepThree
+              responsibleName={responsibleName}
+              setResponsibleName={setResponsibleName}
+              responsibleEmail={responsibleEmail}
+              setResponsibleEmail={setResponsibleEmail}
+              responsibleDescription={responsibleDescription}
+              setResponsibleDescription={setResponsibleDescription}
+              responsibleNameError={responsibleNameError}
+              setResponsibleNameError={setResponsibleNameError}
+              responsibleEmailError={responsibleEmailError}
+              setResponsibleEmailError={setResponsibleEmailError}
+              responsibleDescriptionError={responsibleDescriptionError}
+              setResponsibleDescriptionError={setResponsibleDescriptionError}
+              acceptedTerms={acceptedTerms}
+              setAcceptedTerms={setAcceptedTerms}
+            />
+          )}
         </Container>
       </Box>
       <EventFooter
         onBack={handleBack}
         onComplete={handleComplete}
         activeStep={activeStep}
+        acceptedTerms={acceptedTerms}
         steps={steps}
       />
     </>
