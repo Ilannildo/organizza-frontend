@@ -247,7 +247,7 @@ export const StepOne = ({
                 display="flex"
               >
                 <Grid container spacing={2} alignItems="center" display="flex">
-                  <Grid item lg={6} md={6}>
+                  <Grid item lg={6} md={6} sm={6}>
                     <Typography
                       component="h1"
                       variant="h6"
@@ -264,7 +264,7 @@ export const StepOne = ({
                       error={uploadedCoverImageError}
                     />
                   </Grid>
-                  <Grid item lg={6} md={6}>
+                  <Grid item lg={6} md={6} sm={6}>
                     <Typography
                       component="h1"
                       variant="h6"
@@ -285,7 +285,7 @@ export const StepOne = ({
                   item
                   lg={6}
                   md={6}
-                  sm={12}
+                  sm={6}
                   xs={12}
                   justifyContent="center"
                   display="flex"
@@ -296,7 +296,7 @@ export const StepOne = ({
                     alignItems="center"
                     display="flex"
                   >
-                    <Grid item lg={12} md={12}>
+                    <Grid item lg={12} md={12} sm={12}>
                       <Typography
                         component="h1"
                         variant="h6"

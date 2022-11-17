@@ -342,9 +342,11 @@ const CreateEvent = () => {
         city_id: city?.id,
         responsible_name: responsibleName,
         responsible_email: responsibleEmail,
+        responsible_description: responsibleDescription,
       });
 
       if (response.data) {
+        setIsCreatingEvent(false);
         console.log("Evento criado com sucesso");
       }
     } catch (error: any) {

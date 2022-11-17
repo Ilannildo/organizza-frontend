@@ -13,27 +13,12 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { Laptop, MusicNotes, Plus } from "phosphor-react";
+import { Plus } from "phosphor-react";
 import { ICity } from "../../../../../models/city";
 import { useAllCities } from "../../../../../stores/city";
+import { useAllEventTypes } from "../../../../../stores/eventType";
+import { useAllMainSubjects } from "../../../../../stores/mainSubject";
 import { useAllStates } from "../../../../../stores/state";
-
-const main_subjects = [
-  "Acadêmico e científico",
-  "Desenvolvimento pessoal",
-  "Design e produtos digitais",
-  "Esportes",
-  "Games e Geek",
-  "Gastronomia",
-  "Empreendedorismo, negócios e inovasão",
-  "Governo e política",
-  "Marketing e vendas",
-  "Moda e beleza",
-  "Saúde e bem-estar",
-  "Religião e espiritualidade",
-  "Sociedade e cultura",
-  "Teatro, stand-up e dança",
-];
 
 interface IStepTwo {
   city: ICity | null;
@@ -78,6 +63,8 @@ export const StepTwo = ({
 }: IStepTwo) => {
   const { data: cities, isLoading: isLoadingCities } = useAllCities();
   const { data: states, isLoading: isLoadingStates } = useAllStates();
+  const { data: eventTypes } = useAllEventTypes();
+  const { data: mainSubjects } = useAllMainSubjects();
   const theme = useTheme();
 
   return (
@@ -175,7 +162,6 @@ export const StepTwo = ({
                           variant="outlined"
                           size="small"
                           fullWidth
-                          
                         />
                       )}
                     />
@@ -230,138 +216,6 @@ export const StepTwo = ({
         </Card>
       </Grid>
 
-      {/* <Grid item lg={10} md={10} sm={12} xs={12}>
-        <Card variant="outlined">
-          <CardContent>
-            <Grid
-              container
-              spacing={2}
-              justifyContent="center"
-              component="form"
-              display="flex"
-              noValidate
-              autoComplete="off"
-            >
-              <Grid
-                item
-                lg={10}
-                md={10}
-                sm={12}
-                xs={12}
-                justifyContent="center"
-                display="flex"
-              >
-                <Stack direction="row" spacing={1} mt={1} alignItems="center">
-                  <StepIcon icon="5" />
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    mb={2}
-                    fontWeight={600}
-                    sx={{
-                      color: (theme) => theme.palette.text.primary,
-                      fontSize: 18,
-                    }}
-                  >
-                    Ingressos e inscrições
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid
-                item
-                lg={10}
-                md={10}
-                sm={12}
-                xs={12}
-                justifyContent="center"
-                display="flex"
-              >
-                <Grid container spacing={2}>
-                  <Grid
-                    item
-                    lg={12}
-                    md={12}
-                    sm={12}
-                    xs={12}
-                    alignItems="center"
-                    display="flex"
-                    flexDirection="column"
-                  >
-                    {tickets.map((ticket) => (
-                      <Ticket key={ticket.id} />
-                    ))}
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid
-                item
-                mt={2}
-                lg={10}
-                md={10}
-                sm={12}
-                xs={12}
-                alignItems="center"
-                display="flex"
-                flexDirection="column"
-              >
-                <Stack spacing={4} direction="row" mt={2}>
-                  <Stack alignItems="center" spacing={1}>
-                    <IconButton
-                      color="primary"
-                      onClick={() => addTicket("1")}
-                      sx={{
-                        backgroundColor: (theme) =>
-                          theme.palette.action.disabledBackground,
-                        width: 70,
-                        height: 70,
-                      }}
-                    >
-                      <TicketIcon />
-                    </IconButton>
-                    <Typography
-                      component="h1"
-                      variant="h6"
-                      fontWeight={500}
-                      sx={{
-                        color: (theme) => theme.palette.text.disabled,
-                        fontSize: 14,
-                      }}
-                    >
-                      Adicionar ingresso pago
-                    </Typography>
-                  </Stack>
-                  <Stack alignItems="center" spacing={1}>
-                    <IconButton
-                      color="primary"
-                      onClick={() => addTicket("2")}
-                      sx={{
-                        backgroundColor: (theme) =>
-                          theme.palette.action.disabledBackground,
-                        width: 70,
-                        height: 70,
-                      }}
-                    >
-                      <TicketIcon />
-                    </IconButton>
-                    <Typography
-                      component="h1"
-                      variant="h6"
-                      fontWeight={500}
-                      sx={{
-                        color: (theme) => theme.palette.text.disabled,
-                        fontSize: 14,
-                      }}
-                    >
-                      Adicionar ingresso grátis
-                    </Typography>
-                  </Stack>
-                </Stack>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid> */}
       <Grid item lg={10} md={10} sm={12} xs={12}>
         <Card variant="outlined">
           <CardContent>
@@ -411,79 +265,46 @@ export const StepTwo = ({
                 flexDirection="column"
               >
                 <Stack spacing={4} direction="row" mt={2}>
-                  <Stack alignItems="center" spacing={1}>
-                    <IconButton
-                      color="primary"
-                      onClick={() => {
-                        setEventTypeId("1");
-                        setEventTypeIdError(" ");
-                      }}
-                      sx={{
-                        backgroundColor: (theme) =>
-                          eventTypeId === "1"
-                            ? theme.palette.primary.main
-                            : theme.palette.primaryContainer.main,
-                        width: 70,
-                        height: 70,
-                      }}
-                    >
-                      <Laptop
-                        color={
-                          eventTypeId === "1"
-                            ? theme.palette.primaryContainer.main
-                            : theme.palette.primary.main
-                        }
-                      />
-                    </IconButton>
-                    <Typography
-                      component="h1"
-                      variant="h6"
-                      fontWeight={500}
-                      sx={{
-                        color: (theme) => theme.palette.text.disabled,
-                        fontSize: 14,
-                      }}
-                    >
-                      Jornada ou congresso
-                    </Typography>
-                  </Stack>
-                  <Stack alignItems="center" spacing={1}>
-                    <IconButton
-                      title="Festival, Festa ou show"
-                      color="primary"
-                      onClick={() => {
-                        setEventTypeId("2");
-                        setEventTypeIdError(" ");
-                      }}
-                      sx={{
-                        backgroundColor: (theme) =>
-                          eventTypeId === "2"
-                            ? theme.palette.primary.main
-                            : theme.palette.primaryContainer.main,
-                        width: 70,
-                        height: 70,
-                      }}
-                    >
-                      <MusicNotes
-                        color={
-                          eventTypeId === "2"
-                            ? theme.palette.primaryContainer.main
-                            : theme.palette.primary.main
-                        }
-                      />
-                    </IconButton>
-                    <Typography
-                      component="h1"
-                      variant="h6"
-                      fontWeight={500}
-                      sx={{
-                        color: (theme) => theme.palette.text.disabled,
-                        fontSize: 14,
-                      }}
-                    >
-                      Festival, Festa ou show
-                    </Typography>
-                  </Stack>
+                  {eventTypes?.map((type) => (
+                    <Stack key={type.id} alignItems="center" spacing={1}>
+                      <IconButton
+                        color="primary"
+                        onClick={() => {
+                          setEventTypeId(type.id);
+                          setEventTypeIdError(" ");
+                        }}
+                        sx={{
+                          backgroundColor: (theme) =>
+                            eventTypeId === type.id
+                              ? theme.palette.primary.main
+                              : theme.palette.primaryContainer.main,
+                          width: 70,
+                          height: 70,
+                        }}
+                      >
+                        <i
+                          className={`ph-${type.icon_name}`}
+                          style={{
+                            color:
+                              eventTypeId === type.id
+                                ? theme.palette.primaryContainer.main
+                                : theme.palette.primary.main,
+                          }}
+                        />
+                      </IconButton>
+                      <Typography
+                        component="h1"
+                        variant="h6"
+                        fontWeight={500}
+                        sx={{
+                          color: (theme) => theme.palette.text.disabled,
+                          fontSize: 14,
+                        }}
+                      >
+                        {type.title}
+                      </Typography>
+                    </Stack>
+                  ))}
                 </Stack>
                 {eventTypeIdError !== " " && (
                   <Typography
@@ -535,17 +356,17 @@ export const StepTwo = ({
                 flexDirection="column"
               >
                 <Grid container spacing={2}>
-                  {main_subjects.map((subject) => (
-                    <Grid item key={subject}>
+                  {mainSubjects?.map((subject) => (
+                    <Grid item key={subject.id}>
                       <Chip
-                        label={subject}
+                        label={subject.title}
                         onClick={() => {
-                          setMainSubject(subject);
+                          setMainSubject(subject.id);
                           setMainSubjectError(" ");
                         }}
                         color="primary"
                         variant={
-                          mainSubject === subject ? "filled" : "outlined"
+                          mainSubject === subject.id ? "filled" : "outlined"
                         }
                       />
                     </Grid>
