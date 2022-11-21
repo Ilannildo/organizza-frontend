@@ -58,7 +58,7 @@ const Login = () => {
             replace: true,
           });
         } else {
-          navigate("/organizer", {
+          navigate("/organizador", {
             replace: true,
           });
         }

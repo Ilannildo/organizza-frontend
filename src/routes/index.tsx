@@ -1,8 +1,8 @@
 import React, { lazy } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { useAuthenticatedUser } from "../stores/user";
 import { Loadable } from "../layout/Loadable";
 import Loader from "../layout/Loader";
-import { useAuthenticatedUser } from "../stores/user";
 
 // import pages with lazy load
 const OrganizerDashboard = Loadable(
@@ -11,6 +11,7 @@ const OrganizerDashboard = Loadable(
 const CreateEvent = Loadable(
   lazy(() => import("../pages/Organizer/Event/Create"))
 );
+const Event = Loadable(lazy(() => import("../pages/Event")));
 const Login = Loadable(lazy(() => import("../pages/Auth/Login")));
 const Register = Loadable(lazy(() => import("../pages/Auth/Register")));
 const NotFound = Loadable(lazy(() => import("../pages/Auth/NotFound")));
@@ -27,7 +28,7 @@ export const AppRoutes = () => {
     <Routes>
       <Route index element={<Home />} />
       <Route
-        path="organizer"
+        path="organizador"
         element={
           <ProtectedRoute allowedRoles={[AllowedRolesNames["ORGANIZER"]]}>
             <OrganizerDashboard />
@@ -35,15 +36,16 @@ export const AppRoutes = () => {
         }
       />
       <Route
-          path="organizer/event"
-          element={
-            <ProtectedRoute allowedRoles={[AllowedRolesNames["ORGANIZER"]]}>
-              <CreateEvent />
-            </ProtectedRoute>
-          }
-        />
+        path="organizador/evento"
+        element={
+          <ProtectedRoute allowedRoles={[AllowedRolesNames["ORGANIZER"]]}>
+            <CreateEvent />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="evento/:slug" element={<Event />} />
       <Route path="login" element={<Login />} />
-      <Route path="register" element={<Register />} />
+      <Route path="cadastro" element={<Register />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
