@@ -131,7 +131,7 @@ const Login = () => {
               alignItems="center"
               flexDirection="column"
             >
-              <img src={Logo} alt="Logo Monitora Tocantins" draggable="false" />
+              <img src={Logo} alt="Logo Organizza" draggable="false" />
               <Typography fontSize={16} variant="h1" fontWeight="500">
                 Deixando o seu evento melhor!
               </Typography>

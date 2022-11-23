@@ -24,7 +24,6 @@ export const Navbar = () => {
             ? "linear-gradient(152.97deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 100%)"
             : "transparent",
           backdropFilter: matchesSM ? "blur(10px)" : "none",
-          // backgroundColor: (theme) => theme.palette.background.default,
           zIndex: 10,
         }}
       >
