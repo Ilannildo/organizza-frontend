@@ -28,3 +28,16 @@ export function stringToColor(string: string) {
 
   return color;
 }
+
+export const getEventStatus = (status: "published" | "started" | "finished") => {
+  if(status === "published") return "Publicado"
+  if(status === "started") return "Cadastrado"
+  if(status === "finished") return "Encerrado"
+}
+
+export const getEventStatusColor = (status: "published" | "started" | "finished") => {
+  if(status === "published") return "#A1E3CB"
+  if(status === "started") return "#F19413"
+  if(status === "finished") return "#C2C7CF"
+  return "#00D488"
+}

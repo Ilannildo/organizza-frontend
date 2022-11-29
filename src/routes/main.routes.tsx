@@ -5,6 +5,7 @@ import { AllowedRolesNames, ProtectedRoute } from "../layout/ProtectedRoute";
 // import pages with lazy load
 const Login = Loadable(lazy(() => import("../pages/Auth/Login")));
 const Register = Loadable(lazy(() => import("../pages/Auth/Register")));
+const ConfirmEmail = Loadable(lazy(() => import("../pages/Auth/ConfirmEmail")));
 const Event = Loadable(lazy(() => import("../pages/Event")));
 const NotFound = Loadable(lazy(() => import("../pages/Auth/NotFound")));
 const Home = Loadable(lazy(() => import("../pages/Home")));
@@ -30,6 +31,10 @@ export const MainRoutes = {
     {
       path: "cadastro",
       element: <Register />,
+    },
+    {
+      path: "confirmar-cadastro/:code",
+      element: <ConfirmEmail />,
     },
     {
       path: "evento/:slug",

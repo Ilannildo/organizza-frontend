@@ -44,7 +44,7 @@ export const theme = createTheme({
       main: "#1A1C1E",
     },
     onSurfaceVariant: {
-      main: "#42474E",
+      main: "#C2C7CF",
     },
     onTertiary: {
       main: "#FFFFFF",

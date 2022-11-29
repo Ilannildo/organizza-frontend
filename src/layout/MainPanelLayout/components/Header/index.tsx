@@ -2,8 +2,19 @@ import PropTypes from "prop-types";
 
 // material-ui
 import { useTheme } from "@mui/material/styles";
-import { Avatar, Box, ButtonBase, useMediaQuery } from "@mui/material";
-import { List } from "phosphor-react";
+import {
+  Avatar,
+  Box,
+  ButtonBase,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
+import { ArrowSquareOut, List } from "phosphor-react";
+import { useEventById } from "../../../../stores/event";
+import { format } from "date-fns";
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 interface IHeader {
@@ -13,6 +24,10 @@ interface IHeader {
 const Header = ({ handleLeftDrawerToggle }: IHeader) => {
   const theme = useTheme();
   const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
+
+  const { data: event, isLoading: isLoadingEvent } = useEventById(
+    "212fb203-de9a-45a9-9a06-be7379f79fc6"
+  );
 
   return (
     <>
@@ -47,8 +62,82 @@ const Header = ({ handleLeftDrawerToggle }: IHeader) => {
         )}
       </Box>
 
-      {/* header search */}
-      {/* <SearchSection /> */}
+      {isLoadingEvent && (
+        <Box
+          sx={{
+            marginLeft: 2,
+            display: "flex",
+            flexDirection: "column",
+            [theme.breakpoints.down("md")]: {
+              width: "auto",
+            },
+          }}
+        >
+          <Typography
+            fontWeight={400}
+            fontSize={12}
+            color={theme.palette.text.disabled}
+          >
+            Carregando evento
+          </Typography>
+        </Box>
+      )}
+      {!isLoadingEvent && event && (
+        <Box
+          sx={{
+            marginLeft: 2,
+            display: "flex",
+            flexDirection: "column",
+            [theme.breakpoints.down("md")]: {
+              width: "auto",
+            },
+          }}
+        >
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Typography
+              fontWeight={600}
+              fontSize={16}
+              color={theme.palette.onPrimaryContainer.main}
+            >
+              {event.title}
+            </Typography>
+
+            <Tooltip
+              title={
+                <Typography fontSize={12}>
+                  Ver página de preview
+                </Typography>
+              }
+            >
+              <IconButton
+                component="a"
+                size="small"
+                href={`/evento/preview/${event.slug}`}
+                target="_blank"
+              >
+                <ArrowSquareOut />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+          <Typography
+            fontWeight={400}
+            fontSize={12}
+            color={theme.palette.text.disabled}
+          >
+            {`De: ${format(
+              new Date(event.start_date),
+              "dd 'de' MMM 'de' yyyy"
+            )}, às ${format(
+              new Date(event.start_time),
+              "HH:mm"
+            )} - Até: ${format(
+              new Date(event.end_date),
+              "dd 'de' MMM 'de' yyyy"
+            )}, às ${format(new Date(event.end_time), "HH:mm")}`}
+          </Typography>
+        </Box>
+      )}
+
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
 
