@@ -1,4 +1,13 @@
-import { CalendarCheck, ChalkboardTeacher } from "phosphor-react";
+import {
+  Article,
+  CalendarCheck,
+  ChalkboardTeacher,
+  CurrencyDollar,
+  Handshake,
+  PresentationChart,
+  Ticket,
+  UserCirclePlus,
+} from "phosphor-react";
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
 
@@ -44,6 +53,123 @@ const pages = {
           breadcrumbs: false,
         },
       ],
+    },
+    {
+      id: "submissoes",
+      title: "Submissão de trabalhos",
+      type: "collapse",
+      url: "organizador/painel-evento/submissoes",
+      icon: Article,
+      breadcrumbs: false,
+      children: [
+        {
+          id: "cursos",
+          title: "Cursos",
+          type: "item",
+          url: "organizador/painel-evento/atividades/cursos",
+          breadcrumbs: false,
+        },
+        {
+          id: "palestras",
+          title: "Palestras",
+          type: "item",
+          url: "organizador/painel-evento/atividades/palestras",
+          breadcrumbs: false,
+        },
+        {
+          id: "certificados",
+          title: "Certificados",
+          type: "item",
+          url: "organizador/painel-evento/atividades/certificados",
+          breadcrumbs: false,
+        },
+      ],
+    },
+    {
+      id: "voluntarios",
+      title: "Equipe de apoio",
+      type: "collapse",
+      url: "organizador/painel-evento/voluntarios",
+      icon: UserCirclePlus,
+      breadcrumbs: false,
+      children: [
+        {
+          id: "cursos",
+          title: "Cursos",
+          type: "item",
+          url: "organizador/painel-evento/atividades/cursos",
+          breadcrumbs: false,
+        },
+        {
+          id: "palestras",
+          title: "Palestras",
+          type: "item",
+          url: "organizador/painel-evento/atividades/palestras",
+          breadcrumbs: false,
+        },
+        {
+          id: "certificados",
+          title: "Certificados",
+          type: "item",
+          url: "organizador/painel-evento/atividades/certificados",
+          breadcrumbs: false,
+        },
+      ],
+    },
+    {
+      id: "inscritos",
+      title: "Inscrições/Ingressos",
+      type: "collapse",
+      url: "organizador/painel-evento/inscritos",
+      icon: Ticket,
+      breadcrumbs: false,
+      children: [
+        {
+          id: "cursos",
+          title: "Cursos",
+          type: "item",
+          url: "organizador/painel-evento/atividades/cursos",
+          breadcrumbs: false,
+        },
+        {
+          id: "palestras",
+          title: "Palestras",
+          type: "item",
+          url: "organizador/painel-evento/atividades/palestras",
+          breadcrumbs: false,
+        },
+        {
+          id: "certificados",
+          title: "Certificados",
+          type: "item",
+          url: "organizador/painel-evento/atividades/certificados",
+          breadcrumbs: false,
+        },
+      ],
+    },
+    {
+      id: "estatisticas",
+      title: "Estatísticas",
+      type: "item",
+      url: "organizador/painel-evento/estatisticas",
+      icon: PresentationChart,
+      breadcrumbs: false,
+    },
+    {
+      id: "financeiro",
+      title: "Financeiro",
+      type: "item",
+      url: "organizador/painel-evento/financeiro",
+      icon: CurrencyDollar,
+      breadcrumbs: false,
+    },
+    {
+      id: "patrocinadores",
+      title: "Patrocinadores",
+      type: "item",
+      url: "organizador/painel-evento/patrocinadores",
+      icon: Handshake,
+      breadcrumbs: false,
     },
   ],
 };

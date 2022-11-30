@@ -6,7 +6,9 @@ import {
   Avatar,
   Box,
   ButtonBase,
+  Divider,
   IconButton,
+  Skeleton,
   Stack,
   Tooltip,
   Typography,
@@ -15,6 +17,8 @@ import {
 import { ArrowSquareOut, List } from "phosphor-react";
 import { useEventById } from "../../../../stores/event";
 import { format } from "date-fns";
+import NotificationSection from "../NotificationSection";
+import ProfileSection from "../ProfileSection";
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 interface IHeader {
@@ -73,13 +77,15 @@ const Header = ({ handleLeftDrawerToggle }: IHeader) => {
             },
           }}
         >
-          <Typography
-            fontWeight={400}
-            fontSize={12}
-            color={theme.palette.text.disabled}
-          >
-            Carregando evento
-          </Typography>
+          <Skeleton
+            variant="rectangular"
+            width={300}
+            height={24}
+            sx={{
+              mb: 1,
+            }}
+          />
+          <Skeleton variant="rectangular" width={250} height={16} />
         </Box>
       )}
       {!isLoadingEvent && event && (
@@ -104,9 +110,7 @@ const Header = ({ handleLeftDrawerToggle }: IHeader) => {
 
             <Tooltip
               title={
-                <Typography fontSize={12}>
-                  Ver página de preview
-                </Typography>
+                <Typography fontSize={12}>Ver página de preview</Typography>
               }
             >
               <IconButton
@@ -142,8 +146,11 @@ const Header = ({ handleLeftDrawerToggle }: IHeader) => {
       <Box sx={{ flexGrow: 1 }} />
 
       {/* notification & profile */}
-      {/* <NotificationSection /> */}
-      {/* <ProfileSection /> */}
+      <NotificationSection />
+      <Divider orientation="vertical" flexItem variant="middle" sx={{
+        color: theme.palette.surfaceVariant.main
+      }} />
+      <ProfileSection />
     </>
   );
 };

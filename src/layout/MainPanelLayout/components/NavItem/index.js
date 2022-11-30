@@ -103,9 +103,6 @@ const NavItem = ({ item, level }) => {
       <ListItemText
         primary={
           <Typography
-            fontWeight={
-              isOpen.findIndex((id) => id === item.id) > -1 ? "500" : "normal"
-            }
             color={
               isOpen.findIndex((id) => id === item.id) > -1
                 ? theme.palette.onPrimary.main

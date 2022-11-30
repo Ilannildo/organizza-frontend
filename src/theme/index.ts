@@ -18,7 +18,8 @@ export const theme = createTheme({
       paper: "#FDFCFF",
     },
     success: {
-      main: "#00D488",
+      // main: "#00D488",
+      main: "#A1E3CB",
     },
     error: {
       main: "#BA1A1A",

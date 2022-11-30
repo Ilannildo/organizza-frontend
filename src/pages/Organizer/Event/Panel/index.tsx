@@ -1,18 +1,24 @@
 import {
-  Badge,
   Button,
   Card,
   CardContent,
   Grid,
+  Skeleton,
   Stack,
   Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
 import { useEventById } from "../../../../stores/event";
-import LoaderProgress from "../../../../layout/LoaderProgress";
 import { getEventStatus, getEventStatusColor } from "../../../../utils/masks";
-import { DiamondsFour, Info } from "phosphor-react";
+import {
+  DiamondsFour,
+  GraduationCap,
+  Info,
+  Ticket,
+  UsersThree,
+  Wallet,
+} from "phosphor-react";
 
 const EventPanel = () => {
   const theme = useTheme();
@@ -21,8 +27,48 @@ const EventPanel = () => {
   );
 
   return (
-    <Grid container>
-      {isLoadingEvent && <LoaderProgress />}
+    <Grid container spacing={2}>
+      {isLoadingEvent && (
+        <Grid item lg={12} md={12} sm={12} xs={12}>
+          <Card variant="elevation" elevation={0}>
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item lg={6} md={6} sm={6} xs={6}>
+                  <Typography
+                    fontSize={14}
+                    sx={{
+                      color: (theme) => theme.palette.onSurfaceVariant.main,
+                      fontWeight: 500,
+                    }}
+                  >
+                    Detalhes do evento
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container mt={1} spacing={2}>
+                <Grid item lg={4} md={4} xs={12}>
+                  <Skeleton variant="rectangular" width={300} height={21} />
+                </Grid>
+                <Grid item lg={4} md={4} xs={12}>
+                  <Skeleton variant="rectangular" width={250} height={21} />
+                </Grid>
+                <Grid item lg={4} md={4} xs={12}>
+                  <Skeleton variant="rectangular" width={250} height={21} />
+                </Grid>
+                <Grid item lg={4} md={4} xs={12}>
+                  <Skeleton variant="rectangular" width={250} height={21} />
+                </Grid>
+                <Grid item lg={4} md={4} xs={12}>
+                  <Skeleton variant="rectangular" width={275} height={21} />
+                </Grid>
+                <Grid item lg={4} md={4} xs={12}>
+                  <Skeleton variant="rectangular" width={250} height={21} />
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      )}
       {!isLoadingEvent && event === undefined && (
         <Typography
           fontSize={14}
@@ -244,6 +290,339 @@ const EventPanel = () => {
           </Card>
         </Grid>
       )}
+
+      <Grid item lg={4} md={4} sm={4} xs={6}>
+        <Card variant="elevation" elevation={0}>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item lg={6} md={6} sm={6} xs={6}>
+                <Typography
+                  fontSize={14}
+                  sx={{
+                    color: (theme) => theme.palette.onSurfaceVariant.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  Ingressos vendidos
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                lg={6}
+                md={6}
+                sm={6}
+                xs={6}
+                justifyContent="end"
+                alignItems="center"
+                display="flex"
+              >
+                <Ticket size={32} color={theme.palette.success.main} />
+              </Grid>
+            </Grid>
+            <Grid container mt={1}>
+              <Grid item>
+                <Typography
+                  fontSize={18}
+                  sx={{
+                    color: (theme) => theme.palette.onPrimaryContainer.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  0
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item lg={4} md={4} sm={4} xs={6}>
+        <Card variant="elevation" elevation={0}>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item lg={6} md={6} sm={6} xs={6}>
+                <Typography
+                  fontSize={14}
+                  sx={{
+                    color: (theme) => theme.palette.onSurfaceVariant.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  Ingressos cancelados
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                lg={6}
+                md={6}
+                sm={6}
+                xs={6}
+                justifyContent="end"
+                alignItems="center"
+                display="flex"
+              >
+                <Ticket size={32} color={theme.palette.error.light} />
+              </Grid>
+            </Grid>
+            <Grid container mt={1}>
+              <Grid item>
+                <Typography
+                  fontSize={18}
+                  sx={{
+                    color: (theme) => theme.palette.onPrimaryContainer.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  0
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item lg={4} md={4} sm={4} xs={6}>
+        <Card variant="elevation" elevation={0}>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item lg={6} md={6} sm={6} xs={6}>
+                <Typography
+                  fontSize={14}
+                  sx={{
+                    color: (theme) => theme.palette.onSurfaceVariant.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  Ingressos restantes
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                lg={6}
+                md={6}
+                sm={6}
+                xs={6}
+                justifyContent="end"
+                alignItems="center"
+                display="flex"
+              >
+                <Ticket size={32} color={theme.palette.primary.main} />
+              </Grid>
+            </Grid>
+            <Grid container mt={1}>
+              <Grid item>
+                <Typography
+                  fontSize={18}
+                  sx={{
+                    color: (theme) => theme.palette.onPrimaryContainer.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  0
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item lg={6} md={6} sm={6} xs={12}>
+        <Card variant="elevation" elevation={0}>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item lg={6} md={6} sm={6} xs={6}>
+                <Typography
+                  fontSize={14}
+                  sx={{
+                    color: (theme) => theme.palette.onSurfaceVariant.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  Vendas totais
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                lg={6}
+                md={6}
+                sm={6}
+                xs={6}
+                justifyContent="end"
+                alignItems="center"
+                display="flex"
+              >
+                <Wallet size={32} color={theme.palette.success.main} />
+              </Grid>
+            </Grid>
+            <Grid container mt={1}>
+              <Grid item>
+                <Typography
+                  fontSize={18}
+                  sx={{
+                    color: (theme) => theme.palette.onPrimaryContainer.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  R$ 0,00
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item lg={6} md={6} sm={6} xs={12}>
+        <Card variant="elevation" elevation={0}>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item lg={10} md={10} sm={10} xs={10}>
+                <Typography
+                  fontSize={14}
+                  sx={{
+                    color: (theme) => theme.palette.onSurfaceVariant.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  Vendas em processamento (pendentes)
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                lg={2}
+                md={2}
+                sm={2}
+                xs={2}
+                justifyContent="end"
+                alignItems="center"
+                display="flex"
+              >
+                <Wallet size={32} color={theme.palette.secondary.main} />
+              </Grid>
+            </Grid>
+            <Grid container mt={1}>
+              <Grid item>
+                <Typography
+                  fontSize={18}
+                  sx={{
+                    color: (theme) => theme.palette.onPrimaryContainer.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  R$ 0,00
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item lg={6} md={6} sm={6} xs={12}>
+        <Card variant="elevation" elevation={0}>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item lg={10} md={10} sm={10} xs={10}>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <UsersThree size={32} color={theme.palette.primary.main} />
+                  <Typography
+                    fontSize={14}
+                    sx={{
+                      color: (theme) => theme.palette.onSurfaceVariant.main,
+                      fontWeight: 500,
+                    }}
+                  >
+                    Total de inscritos no evento
+                  </Typography>
+                </Stack>
+              </Grid>
+
+              <Grid
+                item
+                lg={2}
+                md={2}
+                sm={2}
+                xs={2}
+                justifyContent="end"
+                alignItems="center"
+                display="flex"
+              >
+                <Typography
+                  fontSize={18}
+                  sx={{
+                    color: (theme) => theme.palette.onPrimaryContainer.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  0
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item lg={6} md={6} sm={6} xs={12}>
+        <Card variant="elevation" elevation={0}>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item lg={10} md={10} sm={10} xs={10}>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <GraduationCap size={32} color={theme.palette.primary.main} />
+                  <Typography
+                    fontSize={14}
+                    sx={{
+                      color: (theme) => theme.palette.onSurfaceVariant.main,
+                      fontWeight: 500,
+                    }}
+                  >
+                    Total de incritos nas sessões
+                  </Typography>
+                </Stack>
+              </Grid>
+
+              <Grid
+                item
+                lg={2}
+                md={2}
+                sm={2}
+                xs={2}
+                justifyContent="end"
+                alignItems="center"
+                display="flex"
+              >
+                <Typography
+                  fontSize={18}
+                  sx={{
+                    color: (theme) => theme.palette.onPrimaryContainer.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  0
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item lg={12} md={12} sm={12} xs={12}>
+        <Card
+          variant="elevation"
+          elevation={0}
+          sx={{
+            height: 450,
+          }}
+        >
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item lg={10} md={10} sm={10} xs={10}>
+                <Typography
+                  fontSize={14}
+                  sx={{
+                    color: (theme) => theme.palette.onSurfaceVariant.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  Inscritos no evento
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
     </Grid>
   );
 };
