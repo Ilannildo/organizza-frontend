@@ -24,7 +24,7 @@ export const OrganizerRoutes = {
       element: <EventPanel />,
     },
     {
-      path: "atividades/cursos",
+      path: "programacao/cursos",
       element: <EventSession />,
     },
   ],

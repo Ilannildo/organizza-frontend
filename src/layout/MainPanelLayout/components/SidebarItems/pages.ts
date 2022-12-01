@@ -35,14 +35,14 @@ const pages = {
           id: "cursos",
           title: "Cursos",
           type: "item",
-          url: "organizador/painel-evento/:event_id/programacao/cursos",
+          url: "organizador/painel-evento/programacao/cursos",
           breadcrumbs: false,
         },
         {
           id: "palestras",
           title: "Palestras",
           type: "item",
-          url: "organizador/painel-evento/:event_id/programacao/palestras",
+          url: "organizador/painel-evento/programacao/palestras",
           breadcrumbs: false,
         },
         {
