@@ -10,6 +10,7 @@ export interface ITicket {
   participant_limit: number;
   description: string;
   value: number;
+  sold?: number;
   start_date: Date | null;
   start_time: Date | null;
   due_date: Date | null;

@@ -19,7 +19,8 @@ import Sidebar from "./components/Sidebar";
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open: boolean;
 }>(({ theme, open }) => ({
-  backgroundColor: "#EBF0FF",
+  backgroundColor: "rgba(0,98,161, 0.05)",
+  // backgroundColor: "#EBF0FF",
   width: "100%",
   minHeight: "calc(100vh - 70px)",
   flexGrow: 1,

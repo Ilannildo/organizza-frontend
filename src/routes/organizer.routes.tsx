@@ -1,16 +1,11 @@
-import { lazy } from "react";
-import { Loadable } from "../layout/Loadable";
 import MainPanelLayout from "../layout/MainPanelLayout";
 import { AllowedRolesNames, ProtectedRoute } from "../layout/ProtectedRoute";
-import EventPanel from "../pages/Organizer/Event/Panel";
 
-// import pages with lazy load
-// const EventPanel = Loadable(
-//   lazy(() => import("../pages/Organizer/Event/Panel"))
-// );
-const EventSession = Loadable(
-  lazy(() => import("../pages/Organizer/Event/Session"))
-);
+import EventPanel from "../pages/Organizer/Event/Panel";
+import EventSession from "../pages/Organizer/Event/Session";
+import EventSubscription from "../pages/Organizer/Event/Subscription";
+import EventTicket from "../pages/Organizer/Event/Ticket";
+
 export const OrganizerRoutes = {
   path: "organizador/painel-evento",
   element: (
@@ -26,6 +21,14 @@ export const OrganizerRoutes = {
     {
       path: "programacao/cursos",
       element: <EventSession />,
+    },
+    {
+      path: "ingressos",
+      element: <EventTicket />,
+    },
+    {
+      path: "participantes",
+      element: <EventSubscription />,
     },
   ],
 };

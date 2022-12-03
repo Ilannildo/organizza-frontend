@@ -7,6 +7,7 @@ import {
   PresentationChart,
   Ticket,
   UserCirclePlus,
+  UsersThree,
 } from "phosphor-react";
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
@@ -55,6 +56,22 @@ const pages = {
       ],
     },
     {
+      id: "ingressos",
+      title: "Inscrições",
+      type: "item",
+      url: "organizador/painel-evento/ingressos",
+      icon: Ticket,
+      breadcrumbs: false,
+    },
+    {
+      id: "participantes",
+      title: "Participantes",
+      type: "item",
+      url: "organizador/painel-evento/participantes",
+      icon: UsersThree,
+      breadcrumbs: false,
+    },
+    {
       id: "submissoes",
       title: "Submissões",
       type: "collapse",
@@ -91,37 +108,6 @@ const pages = {
       type: "collapse",
       url: "organizador/painel-evento/voluntarios",
       icon: UserCirclePlus,
-      breadcrumbs: false,
-      children: [
-        {
-          id: "cursos",
-          title: "Cursos",
-          type: "item",
-          url: "organizador/painel-evento/atividades/cursos",
-          breadcrumbs: false,
-        },
-        {
-          id: "palestras",
-          title: "Palestras",
-          type: "item",
-          url: "organizador/painel-evento/atividades/palestras",
-          breadcrumbs: false,
-        },
-        {
-          id: "certificados",
-          title: "Certificados",
-          type: "item",
-          url: "organizador/painel-evento/atividades/certificados",
-          breadcrumbs: false,
-        },
-      ],
-    },
-    {
-      id: "inscricao",
-      title: "Inscrições",
-      type: "collapse",
-      url: "organizador/painel-evento/inscricao",
-      icon: Ticket,
       breadcrumbs: false,
       children: [
         {
