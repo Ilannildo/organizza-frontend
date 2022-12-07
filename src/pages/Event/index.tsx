@@ -93,6 +93,7 @@ const Event = () => {
     setActiveSessionDay(newValue);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleNextHour = () => {
     setActiveSessionHour((prevActiveStep) => prevActiveStep + 1);
   };
