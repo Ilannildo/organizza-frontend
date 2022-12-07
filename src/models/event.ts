@@ -1,3 +1,4 @@
+import { IEventCover } from "./eventCover";
 import { IEventHasAddress } from "./eventHasAddress";
 import { IEventType } from "./eventType";
 import { IMainSubject } from "./mainSubject";
@@ -33,5 +34,5 @@ export interface IEvent {
   event_has_address?: IEventHasAddress;
   main_subject?: IMainSubject;
   event_type?: IEventType;
-  // event_cover?: IEventCover;
+  event_cover?: IEventCover;
 }

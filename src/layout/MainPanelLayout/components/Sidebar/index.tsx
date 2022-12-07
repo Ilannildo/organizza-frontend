@@ -8,17 +8,28 @@ import { BrowserView, MobileView } from "react-device-detect";
 import { drawerWidth } from "../../../../utils/constant";
 import LogoSection from "../LogoSection";
 import MenuList from "../MenuList";
+import { IEvent } from "../../../../models/event";
 
 // project imports
 interface ISidebar {
   drawerOpen: boolean;
   drawerToggle: () => void;
   window?: any;
+  event?: IEvent;
+  isLoadingEvent: boolean;
+  items: any[];
 }
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
-const Sidebar = ({ drawerOpen, drawerToggle, window }: ISidebar) => {
+const Sidebar = ({
+  drawerOpen,
+  drawerToggle,
+  window,
+  event,
+  isLoadingEvent,
+  items,
+}: ISidebar) => {
   const theme = useTheme();
   const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -36,12 +47,12 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }: ISidebar) => {
             paddingRight: "16px",
           }}
         >
-          <MenuList />
+          {!isLoadingEvent && event && <MenuList event={event} items={items} />}
         </PerfectScrollbar>
       </BrowserView>
       <MobileView>
         <Box sx={{ px: 2 }}>
-          <MenuList />
+          {!isLoadingEvent && event && <MenuList event={event} items={items} />}
         </Box>
       </MobileView>
     </>

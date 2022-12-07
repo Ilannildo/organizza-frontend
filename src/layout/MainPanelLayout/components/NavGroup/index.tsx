@@ -7,14 +7,14 @@ import NavItem from "../NavItem/index";
 
 // ==============================|| SIDEBAR MENU LIST GROUP ||============================== //
 
-const NavGroup = ({ item }: any) => {
+const NavGroup = ({ item, event }: any) => {
   // menu list collapse & items
   const items = item.children?.map((menu: any) => {
     switch (menu.type) {
       case "collapse":
-        return <NavCollapse key={menu.id} menu={menu} level={1} />;
+        return <NavCollapse key={menu.id} menu={menu} level={1} event={event} />;
       case "item":
-        return <NavItem key={menu.id} item={menu} level={1} />;
+        return <NavItem key={menu.id} item={menu} level={1} event={event} />;
       default:
         return (
           <Typography key={menu.id} variant="h6" color="error" align="center">

@@ -19,12 +19,16 @@ import {
   UsersThree,
   Wallet,
 } from "phosphor-react";
+import { Params, useParams } from "react-router-dom";
+
+interface IParams extends Params {
+  eventId: string;
+}
 
 const EventPanel = () => {
   const theme = useTheme();
-  const { data: event, isLoading: isLoadingEvent } = useEventById(
-    "212fb203-de9a-45a9-9a06-be7379f79fc6"
-  );
+  const { eventId } = useParams<IParams>();
+  const { data: event, isLoading: isLoadingEvent } = useEventById(eventId);
 
   return (
     <Grid container spacing={2}>

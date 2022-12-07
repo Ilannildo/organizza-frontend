@@ -7,7 +7,7 @@ import EventSubscription from "../pages/Organizer/Event/Subscription";
 import EventTicket from "../pages/Organizer/Event/Ticket";
 
 export const OrganizerRoutes = {
-  path: "organizador/painel-evento",
+  path: "organizador/painel-evento/:eventId",
   element: (
     <ProtectedRoute allowedRoles={[AllowedRolesNames["ORGANIZER"]]}>
       <MainPanelLayout />

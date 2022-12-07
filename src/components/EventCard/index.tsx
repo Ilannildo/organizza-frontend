@@ -10,25 +10,21 @@ import {
 import { CalendarCheck } from "phosphor-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { IEvent } from "../../models/event";
+import { useNavigate } from "react-router-dom";
 
 interface IEventCard {
-  eventId: string;
-  title: string;
-  shortDescription: string;
-  startDate: Date;
-  coverUrl: string;
-  status: "published" | "started" | "pending";
+  event: IEvent;
 }
 
-export const EventCard = ({
-  eventId,
-  title,
-  shortDescription,
-  startDate,
-  coverUrl,
-  status,
-}: IEventCard) => {
+export const EventCard = ({ event }: IEventCard) => {
   const theme = useTheme();
+
+  const navigate = useNavigate();
+
+  const goToEventPanel = () => {
+    navigate(`/organizador/painel-evento/${event.id}`);
+  };
   return (
     <Box
       sx={{
@@ -49,7 +45,9 @@ export const EventCard = ({
         height="190px"
         width="100%"
         sx={{
-          background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 57.29%, #000000 70.83%), url(${coverUrl})`,
+          background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 57.29%, rgba(0,0,0,0.7) 70.83%), url(${
+            event.event_cover ? event.event_cover.url : "cover2.jpeg"
+          })`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "contain, cover",
           display: "flex",
@@ -72,7 +70,7 @@ export const EventCard = ({
           }}
           // noWrap
         >
-          {shortDescription}
+          {event.short_description}
         </Typography>
       </Box>
       <Box
@@ -89,18 +87,18 @@ export const EventCard = ({
         <Box mx={2} my={1} display="flex" flexDirection="column">
           <Tooltip
             title={
-              status === "published"
+              event.status === "published"
                 ? "O seu evento está publicado"
-                : status === "started"
+                : event.status === "started"
                 ? "O seu evento está criado, mas não está publicado"
                 : "O seu evento está pendente de informações"
             }
           >
             <Badge
               color={
-                status === "published"
+                event.status === "published"
                   ? "primary"
-                  : status === "started"
+                  : event.status === "started"
                   ? "warning"
                   : "error"
               }
@@ -118,7 +116,7 @@ export const EventCard = ({
                   WebkitBoxOrient: "vertical",
                 }}
               >
-                {title}
+                {event.title}
               </Typography>
             </Badge>
           </Tooltip>
@@ -131,7 +129,9 @@ export const EventCard = ({
                 fontSize: 12,
               }}
             >
-              {format(startDate, "dd 'de' LLLL 'de' yyyy", { locale: ptBR })}
+              {format(new Date(event.start_date), "dd 'de' LLLL 'de' yyyy", {
+                locale: ptBR,
+              })}
             </Typography>
           </Stack>
         </Box>
@@ -140,6 +140,7 @@ export const EventCard = ({
           sx={{
             mr: 2,
           }}
+          onClick={() => goToEventPanel()}
         >
           GERENCIAR
         </Button>

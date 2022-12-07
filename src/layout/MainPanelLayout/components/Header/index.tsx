@@ -15,23 +15,22 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { ArrowSquareOut, List } from "phosphor-react";
-import { useEventById } from "../../../../stores/event";
 import { format } from "date-fns";
 import NotificationSection from "../NotificationSection";
 import ProfileSection from "../ProfileSection";
+import { IEvent } from "../../../../models/event";
+
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 interface IHeader {
   handleLeftDrawerToggle: () => void;
+  event?: IEvent;
+  isLoadingEvent: boolean;
 }
 
-const Header = ({ handleLeftDrawerToggle }: IHeader) => {
+const Header = ({ handleLeftDrawerToggle, event, isLoadingEvent }: IHeader) => {
   const theme = useTheme();
   const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
-
-  const { data: event, isLoading: isLoadingEvent } = useEventById(
-    "212fb203-de9a-45a9-9a06-be7379f79fc6"
-  );
 
   return (
     <>
@@ -147,9 +146,14 @@ const Header = ({ handleLeftDrawerToggle }: IHeader) => {
 
       {/* notification & profile */}
       <NotificationSection />
-      <Divider orientation="vertical" flexItem variant="middle" sx={{
-        color: theme.palette.surfaceVariant.main
-      }} />
+      <Divider
+        orientation="vertical"
+        flexItem
+        variant="middle"
+        sx={{
+          color: theme.palette.surfaceVariant.main,
+        }}
+      />
       <ProfileSection />
     </>
   );

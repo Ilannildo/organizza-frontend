@@ -18,7 +18,7 @@ import { useCustomization } from "../../../../hooks/useCustomization";
 
 // ==============================|| SIDEBAR MENU LIST ITEMS ||============================== //
 
-const NavItem = ({ item, level }) => {
+const NavItem = ({ item, level, event }) => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("lg"));
   const { isOpen, menuOpen, setMenu } = useCustomization();
@@ -33,7 +33,7 @@ const NavItem = ({ item, level }) => {
 
   let listItemProps = {
     component: forwardRef((props, ref) => (
-      <Link ref={ref} {...props} to={`/${item.url}`} target={itemTarget} />
+      <Link ref={ref} {...props} to={`/organizador/painel-evento/${event.id}/${item.url}`} target={itemTarget} />
     )),
   };
   if (item?.external) {

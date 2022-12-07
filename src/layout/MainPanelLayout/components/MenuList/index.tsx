@@ -1,13 +1,13 @@
 import { Typography } from "@mui/material";
 import React from "react";
+import { IEvent } from "../../../../models/event";
 import NavGroup from "../NavGroup";
-import SidebarItems from "../SidebarItems";
 
-const MenuList: React.FC = () => {
-  const navItems = SidebarItems.items.map((item) => {
+const MenuList = ({ event, items }: { event?: IEvent; items: any[] }) => {
+  const navItems = items.map((item: any) => {
     switch (item.type) {
       case "group":
-        return <NavGroup key={item.id} item={item} />;
+        return <NavGroup key={item.id} item={item} event={event} />;
       default:
         return (
           <Typography key={item.id} variant="h6" color="error" align="center">

@@ -18,7 +18,7 @@ import { CaretDown, CaretUp } from "phosphor-react";
 
 // ==============================|| SIDEBAR MENU LIST COLLAPSE ITEMS ||============================== //
 
-const NavCollapse = ({ menu, level }) => {
+const NavCollapse = ({ menu, level, event }) => {
   const theme = useTheme();
 
   const [open, setOpen] = useState(false);
@@ -33,9 +33,9 @@ const NavCollapse = ({ menu, level }) => {
   const menus = menu.children?.map((item) => {
     switch (item.type) {
       case "collapse":
-        return <NavCollapse key={item.id} menu={item} level={level + 1} />;
+        return <NavCollapse key={item.id} menu={item} level={level + 1} event={event} />;
       case "item":
-        return <NavItem key={item.id} item={item} level={level + 1} />;
+        return <NavItem key={item.id} item={item} level={level + 1} event={event} />;
       default:
         return (
           <Typography key={item.id} variant="h6" color="error" align="center">
