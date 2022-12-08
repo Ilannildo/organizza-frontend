@@ -2,7 +2,8 @@ import MainPanelLayout from "../layout/MainPanelLayout";
 import { AllowedRolesNames, ProtectedRoute } from "../layout/ProtectedRoute";
 
 import EventPanel from "../pages/Organizer/Event/Panel";
-import EventSession from "../pages/Organizer/Event/Session";
+import EventSessionCursos from "../pages/Organizer/Event/Session/cursos";
+import EventSessionPalestras from "../pages/Organizer/Event/Session/palestras";
 import EventSubscription from "../pages/Organizer/Event/Subscription";
 import EventTicket from "../pages/Organizer/Event/Ticket";
 
@@ -20,7 +21,11 @@ export const OrganizerRoutes = {
     },
     {
       path: "programacao/cursos",
-      element: <EventSession />,
+      element: <EventSessionCursos />,
+    },
+    {
+      path: "programacao/palestras",
+      element: <EventSessionPalestras />,
     },
     {
       path: "ingressos",

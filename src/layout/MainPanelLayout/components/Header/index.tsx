@@ -30,7 +30,7 @@ const Header = ({ handleLeftDrawerToggle }: IHeader) => {
   const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
 
   const { data: event, isLoading: isLoadingEvent } = useEventById(
-    "212fb203-de9a-45a9-9a06-be7379f79fc6"
+    "aec1bd83-6d32-4fa7-9ff7-6ff309517356"
   );
 
   return (

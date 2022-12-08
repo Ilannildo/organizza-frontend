@@ -67,8 +67,6 @@ const Login = () => {
       console.log('Error', error);
       if(error.response) {
         toast.error(error.response.data.error.message);
-      } else {
-        toast.error('Não foi possível realizar o login')
       }
       
     }
@@ -229,7 +227,7 @@ const Login = () => {
               <Typography fontSize={14} variant="h1" mt={1}>
                 Não tem uma conta?{" "}
                 <Link
-                  href="/register"
+                  href="/cadastro"
                   sx={{
                     color: (theme) => theme.palette.primary.main,
                   }}
