@@ -19,7 +19,7 @@ export const OrganizerRoutes = {
       element: <EventPanel />,
     },
     {
-      path: "programacao/cursos",
+      path: "programacao/:sessionId",
       element: <EventSession />,
     },
     {
