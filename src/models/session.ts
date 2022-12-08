@@ -4,6 +4,7 @@ import { ISessionType } from "./sessionType";
 
 export interface ISession {
     id: string;
+    ref_code: string;
     title: string;
     credit_hour?: number;
     summary: string;

@@ -12,13 +12,15 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { PencilSimple, TrashSimple } from "phosphor-react";
 import { useState } from "react";
-import { ITicket } from "../../../../../../models/ticket";
+import { ISession } from "../../../../../../models/session";
 
 interface IColumn {
 
-  id: "id" | "category_title" | "participant_limit" | "sold" | "value";
+  id: "ref_code" | "title";
   label: string;
   minWidth?: number;
   align?: "right" | "center" | "left";
@@ -26,39 +28,44 @@ interface IColumn {
 }
 
 const columns: readonly IColumn[] = [
-  {id: "id", label: "Código", minWidth: 80 },
-  { id: "category_title", label: "Título", minWidth: 250 },
-  {
-    id: "participant_limit",
-    label: "Data e hora",
-    minWidth: 100,
-  },
-  {
-    id: "value",
-    label: "Vagas",
-    minWidth: 100,
-  },
+  { id: "ref_code", label: "Código", minWidth: 80 },
+  { id: "title", label: "Título", minWidth: 250 },
 ];
 
 export const SessionTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const tickets: ITicket[] = [
+  const session: ISession[] = [
     {
-      category_title: "Criando jogos 3D",
-      description: "Teste",
-      due_date: new Date(),
-      due_time: new Date(),
-      event_id: "123",
       id: "1",
-      sold: 10,
-      include_fee: true,
-      participant_limit: 21,
+      ref_code: "121",
+      title: "Criando jogos 3D",
+      summary: "Teste",
+      responsible_name: "Natanel G.",
+      event_id: "123",
+      session_type_id: "555",
+      place: "Laboratório de informática",
       start_date: new Date(),
       start_time: new Date(),
-      ticket_price_type_id: "123",
-      value: 34.0,
+      end_date: new Date(),
+      end_time: new Date(),
+      status: "published",
     },
+    {
+      id: "2",
+      ref_code: "121",
+      title: "Criando jogos 3D",
+      summary: "Teste",
+      responsible_name: "Natanel G.",
+      event_id: "123",
+      session_type_id: "555",
+      place: "Laboratório de informática",
+      start_date: new Date(),
+      start_time: new Date(),
+      end_date: new Date(),
+      end_time: new Date(),
+      status: "published",
+    }
   ];
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -84,7 +91,7 @@ export const SessionTable = () => {
               fontSize: 16,
             }}
           >
-           Cursos
+            Cursos
           </Typography>
         </Grid>
         <Grid
@@ -96,7 +103,7 @@ export const SessionTable = () => {
           justifyContent="center"
         >
           <Stack direction="row" spacing={2} justifyContent="end">
-            <Button variant="contained" disableElevation color="info" size="small" onClick={() => {}}>
+            <Button variant="contained" disableElevation color="info" size="small" onClick={() => { }}>
               Adicionar Curso
             </Button>
           </Stack>
@@ -119,6 +126,9 @@ export const SessionTable = () => {
                   </TableCell>
                 ))}
                 <TableCell style={{ minWidth: 100, fontWeight: 500 }}>
+                  Data e hora
+                </TableCell>
+                <TableCell style={{ minWidth: 100, fontWeight: 500 }}>
                   Valor
                 </TableCell>
                 <TableCell style={{ minWidth: 100, fontWeight: 500 }}>
@@ -127,7 +137,7 @@ export const SessionTable = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tickets.map((row) => {
+              {session.map((row) => {
                 return (
                   <TableRow
                     hover
@@ -146,6 +156,11 @@ export const SessionTable = () => {
                         </TableCell>
                       );
                     })}
+                    <TableCell>
+                      {`${format(row.start_date, "dd 'de' MMM 'de' yyyy", {locale: ptBR})}, 
+                        ${format(row.start_time, "HH:mm", {locale: ptBR})} - 
+                        ${format(row.end_time, "HH:mm", {locale: ptBR})}`}
+                    </TableCell>
                     <TableCell>
                       Grátis
                     </TableCell>
@@ -184,14 +199,13 @@ export const SessionTable = () => {
       <TablePagination
         rowsPerPageOptions={[2, 5, 10]}
         component="div"
-        count={tickets !== undefined ? tickets.length : 0}
+        count={session !== undefined ? session.length : 0}
         rowsPerPage={rowsPerPage}
-        page={tickets !== undefined ? page : 0}
+        page={session !== undefined ? page : 0}
         labelRowsPerPage="Registros por página"
         labelDisplayedRows={({ from, to, count }) => {
-          return `Exibindo de ${from} até ${to} de ${
-            count !== -1 ? count : `mais de ${to}`
-          }`;
+          return `Exibindo de ${from} até ${to} de ${count !== -1 ? count : `mais de ${to}`
+            }`;
         }}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
