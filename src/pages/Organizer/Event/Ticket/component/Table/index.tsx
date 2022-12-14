@@ -77,40 +77,11 @@ export const TicketTable = () => {
 
   return (
     <>
-      <Grid container alignItems="center" rowSpacing={2} mb={2}>
-        <Grid item xl={6} lg={6} xs={6}>
-          <Typography
-            component="h1"
-            variant="h3"
-            sx={{
-              fontWeight: 600,
-              fontSize: 16,
-            }}
-          >
-            Tipos de ingressos
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          xl={6}
-          lg={6}
-          xs={6}
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Stack direction="row" spacing={2} justifyContent="end">
-            <Button variant="contained" disableElevation color="info" size="small" onClick={() => {}}>
-              Adicionar ingresso grátis
-            </Button>
-            <Button variant="contained" disableElevation size="small" onClick={() => {}}>
-              Adicionar ingresso pago
-            </Button>
-          </Stack>
-        </Grid>
-      </Grid>
-      <TableContainer sx={{
-        minHeight: 280
-      }}>
+      <TableContainer
+        sx={{
+          minHeight: 280,
+        }}
+      >
         <Table sx={{ minWidth: 500 }} stickyHeader aria-label="sticky table">
           <>
             <TableHead>
@@ -152,9 +123,7 @@ export const TicketTable = () => {
                         </TableCell>
                       );
                     })}
-                    <TableCell>
-                      R$ 2,50
-                    </TableCell>
+                    <TableCell>R$ 2,50</TableCell>
                     <TableCell>
                       <Stack direction="row" spacing={1}>
                         <IconButton

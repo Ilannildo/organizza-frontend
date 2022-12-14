@@ -9,7 +9,7 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { addDays } from "date-fns";
 import { Navbar } from "../../../../components/Navbar";
 import { StepOne } from "./StepOne";
@@ -19,6 +19,7 @@ import { ICity } from "../../../../models/city";
 import { StepThree } from "./StepThree";
 import Loader from "../../../../layout/Loader";
 import { api } from "../../../../services/api";
+import { toast } from "react-toastify";
 
 const steps = [
   "Informações gerais",
@@ -49,6 +50,7 @@ interface IUploadedCoverImage {
 
 const CreateEvent = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
   const [completed, setCompleted] = useState<{ [k: number]: boolean }>({});
@@ -345,11 +347,18 @@ const CreateEvent = () => {
         responsible_description: responsibleDescription,
       });
 
+      // TO-DO: adicionar upload da capa do evento
+
       if (response.data) {
         setIsCreatingEvent(false);
+        toast.success("Evento criado com sucesso!");
+        navigate("/organizador");
         console.log("Evento criado com sucesso");
       }
     } catch (error: any) {
+      if(error.response) {
+        toast.error(error.response.data.error.message);
+      }
       console.log("Error ao criar evento =>", error);
     }
   };

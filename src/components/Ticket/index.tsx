@@ -16,24 +16,60 @@ import { addDays } from "date-fns";
 
 import BarCodeImg from "../../assets/barcode.png";
 import { useState } from "react";
+import { ITicketPriceType } from "../../models/ticket";
 
+interface ITicket {
+  categoryTitle: string;
+  setCategoryTitle: (value: string) => void;
+  includeFee: boolean;
+  setIncludeFee: (value: boolean) => void;
+  participantLimit: number;
+  setParticipantLimit: (value: number) => void;
+  description: string;
+  setDescription: (value: string) => void;
+  value: number;
+  setValue: (value: number) => void;
+  startDate: Date | null;
+  setStartDate: (value: Date | null) => void;
+  startTime: Date | null;
+  setStartTime: (value: Date | null) => void;
+  dueDate: Date | null;
+  setDueDate: (value: Date | null) => void;
+  dueTime: Date | null;
+  setDueTime: (value: Date | null) => void;
+  ticket_price_type: ITicketPriceType;
+}
 
-
-export const Ticket = () => {
-  const [startDate, setStartDate] = useState<Date | null>(
-    addDays(new Date(), 1)
-  );
-  const [startTime, setStartTime] = useState<Date | null>(null);
-
+export const Ticket = ({
+  categoryTitle,
+  setCategoryTitle,
+  includeFee,
+  setIncludeFee,
+  participantLimit,
+  setParticipantLimit,
+  description,
+  setDescription,
+  value,
+  setValue,
+  startDate,
+  setStartDate,
+  startTime,
+  setStartTime,
+  dueDate,
+  setDueDate,
+  dueTime,
+  setDueTime,
+  ticket_price_type,
+}: ITicket) => {
   return (
     <Box
       sx={{
         width: "100%",
         background: (theme) => theme.palette.background.default,
-        boxShadow: "1px 1px 16px rgba(0, 0, 0, 0.1)",
-        backdropFilter: "blur(22.5px)",
+        borderColor: (theme) => theme.palette.surfaceVariant.main,
+        borderWidth: 1,
         borderRadius: 1,
-        px: 3,
+        px: 2,
         py: 2,
       }}
     >
@@ -125,8 +161,13 @@ export const Ticket = () => {
               </Grid>
             </Grid>
             <Grid item lg={12}>
-              <Accordion variant="elevation" elevation={0}>
+              <Accordion
+                variant="elevation"
+                elevation={0}
+                defaultExpanded={true}
+              >
                 <AccordionSummary
+                  sx={{ px: 0 }}
                   centerRipple={false}
                   expandIcon={<CaretDown />}
                   aria-controls="panel1a-content"
@@ -141,7 +182,7 @@ export const Ticket = () => {
                     Opções avançadas
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails sx={{ px: 0 }}>
                   <Grid container spacing={2}>
                     <Grid
                       item
