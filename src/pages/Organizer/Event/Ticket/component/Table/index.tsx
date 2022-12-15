@@ -1,6 +1,4 @@
 import {
-  Button,
-  Grid,
   IconButton,
   Stack,
   Table,
@@ -10,7 +8,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { PencilSimple, TrashSimple } from "phosphor-react";
 import { useState } from "react";

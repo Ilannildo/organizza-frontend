@@ -29,15 +29,40 @@ export function stringToColor(string: string) {
   return color;
 }
 
-export const getEventStatus = (status: "published" | "started" | "finished") => {
-  if(status === "published") return "Publicado"
-  if(status === "started") return "Cadastrado"
-  if(status === "finished") return "Encerrado"
-}
+export const getEventStatus = (
+  status: "published" | "started" | "finished"
+) => {
+  if (status === "published") return "Publicado";
+  if (status === "started") return "Cadastrado";
+  if (status === "finished") return "Encerrado";
+};
 
-export const getEventStatusColor = (status: "published" | "started" | "finished") => {
-  if(status === "published") return "#A1E3CB"
-  if(status === "started") return "#F19413"
-  if(status === "finished") return "#C2C7CF"
-  return "#00D488"
-}
+export const getEventStatusColor = (
+  status: "published" | "started" | "finished"
+) => {
+  if (status === "published") return "#A1E3CB";
+  if (status === "started") return "#F19413";
+  if (status === "finished") return "#C2C7CF";
+  return "#00D488";
+};
+
+export const currencyMask = (value: number) => {
+  return value.toLocaleString("pt-br", { minimumFractionDigits: 2 });
+};
+
+export const removeCurrencyMask = (value: string) => {
+  return value
+    .replace(/\D/g, "")
+    .replace(/(\d)(\d{2})$/, "$1,$2")
+    .replace(/(?=(\d{3})+(\D))\B/g, "")
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
+    .replace(/[.]/g, "")
+    .replace(/[,]/g, ".");
+};
+
+export const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(amount);
+};

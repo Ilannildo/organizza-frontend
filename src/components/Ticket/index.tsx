@@ -7,20 +7,26 @@ import {
   FormControlLabel,
   Grid,
   InputAdornment,
+  Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { CaretDown } from "phosphor-react";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
-import { addDays } from "date-fns";
+import { CaretDown, Info } from "phosphor-react";
 
-import BarCodeImg from "../../assets/barcode.png";
-import { useState } from "react";
 import { ITicketPriceType } from "../../models/ticket";
+import BarCodeImg from "../../assets/barcode.png";
+import {
+  currencyMask,
+  removeCurrencyMask,
+} from "../../utils/masks";
+import { useState } from "react";
 
 interface ITicket {
   categoryTitle: string;
   setCategoryTitle: (value: string) => void;
+  ticketCodeRef: string;
   includeFee: boolean;
   setIncludeFee: (value: boolean) => void;
   participantLimit: number;
@@ -42,6 +48,7 @@ interface ITicket {
 
 export const Ticket = ({
   categoryTitle,
+  ticketCodeRef,
   setCategoryTitle,
   includeFee,
   setIncludeFee,
@@ -61,6 +68,34 @@ export const Ticket = ({
   setDueTime,
   ticket_price_type,
 }: ITicket) => {
+  const [amount, setAmount] = useState<string>("");
+
+  let ticketValue = value;
+  let ticketValueReceived = 0;
+  let fee = 0;
+  // verificar se o ingresso é gratuito
+  // verificar se a taxa é repassada para o participante
+  if (!ticket_price_type.is_free && ticket_price_type.quote) {
+    // recebe o valor mínimo
+    fee = ticket_price_type.quote.min_base_value;
+    // calcular a taxa
+    if (value >= ticket_price_type.quote.min_value) {
+      fee = value * ticket_price_type.quote.percentage;
+    } else {
+      console.log("Valor mínimo é R$ 2,50");
+    }
+
+    // calcular o valor do ingresso
+    // calcular o valor a receber por ingresso
+    if (includeFee) {
+      ticketValue = value + fee;
+      ticketValueReceived = value;
+    } else {
+      ticketValue = value;
+      ticketValueReceived = value > 0 ? value - fee : value;
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -81,9 +116,12 @@ export const Ticket = ({
                 id="ticket-name"
                 label="Nome do ingresso"
                 variant="outlined"
+                required
                 size="small"
                 fullWidth
                 color="primary"
+                onChange={(e) => setCategoryTitle(e.target.value)}
+                value={categoryTitle}
               />
             </Grid>
             <Grid item lg={12}>
@@ -93,10 +131,15 @@ export const Ticket = ({
                     id="ticket-name"
                     label="Quantidade"
                     type="number"
+                    required
                     variant="outlined"
                     size="small"
                     fullWidth
                     color="primary"
+                    onChange={(e) =>
+                      setParticipantLimit(Number(e.target.value))
+                    }
+                    value={participantLimit}
                   />
                 </Grid>
                 <Grid item lg={6}>
@@ -104,6 +147,7 @@ export const Ticket = ({
                     id="ticket-name"
                     label="Valor"
                     variant="outlined"
+                    required
                     size="small"
                     InputProps={{
                       startAdornment: (
@@ -112,15 +156,33 @@ export const Ticket = ({
                     }}
                     fullWidth
                     color="primary"
+                    placeholder="0,00"
+                    disabled={ticket_price_type.is_free}
+                    onChange={(e) => {
+                      setValue(parseFloat(removeCurrencyMask(e.target.value)));
+                      setAmount(
+                        e.target.value
+                          .replace(/\D/g, "")
+                          .replace(/(\d)(\d{2})$/, "$1,$2")
+                          .replace(/(?=(\d{3})+(\D))\B/g, "")
+                          .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
+                      );
+                    }}
+                    value={ticket_price_type.is_free ? "0,00" : amount}
                   />
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item lg={12}>
+            {!ticket_price_type.is_free && <Grid item lg={12}>
               <Grid container spacing={2}>
                 <Grid item lg={7}>
                   <FormControlLabel
-                    control={<Checkbox />}
+                    control={
+                      <Checkbox
+                        onChange={(e, value) => setIncludeFee(value)}
+                        checked={includeFee}
+                      />
+                    }
                     label={
                       <Typography
                         sx={{
@@ -140,26 +202,31 @@ export const Ticket = ({
                   display="flex"
                   flexDirection="column"
                 >
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Tooltip title={`Taxa: R$ ${currencyMask(fee)}`}>
+                      <Info />
+                    </Tooltip>
+                    <Typography
+                      sx={{
+                        color: (theme) => theme.palette.text.primary,
+                        fontSize: 12,
+                      }}
+                    >
+                      Valor do ingresso: R$ {currencyMask(ticketValue)}
+                    </Typography>
+                  </Stack>
+
                   <Typography
-                    mb={1}
                     sx={{
                       color: (theme) => theme.palette.text.primary,
                       fontSize: 12,
                     }}
                   >
-                    Valor do ingresso: R$ 0,00
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: (theme) => theme.palette.text.primary,
-                      fontSize: 12,
-                    }}
-                  >
-                    Você recebe: R$ 0,00
+                    Você recebe: R$ {currencyMask(ticketValueReceived)}
                   </Typography>
                 </Grid>
               </Grid>
-            </Grid>
+            </Grid>}
             <Grid item lg={12}>
               <Accordion
                 variant="elevation"
@@ -173,14 +240,7 @@ export const Ticket = ({
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography
-                    sx={{
-                      color: (theme) => theme.palette.text.primary,
-                      fontSize: 14,
-                    }}
-                  >
-                    Opções avançadas
-                  </Typography>
+                  Opções avançadas
                 </AccordionSummary>
                 <AccordionDetails sx={{ px: 0 }}>
                   <Grid container spacing={2}>
@@ -206,6 +266,7 @@ export const Ticket = ({
                                 {...params}
                                 variant="outlined"
                                 size="small"
+                                required
                                 fullWidth
                               />
                             )}
@@ -224,6 +285,7 @@ export const Ticket = ({
                                 variant="outlined"
                                 size="small"
                                 fullWidth
+                                required
                               />
                             )}
                           />
@@ -243,9 +305,9 @@ export const Ticket = ({
                         <Grid item lg={6} md={6} xs={12}>
                           <DatePicker
                             label="Data de término das vendas"
-                            value={startDate}
+                            value={dueDate}
                             onChange={(newValue) => {
-                              setStartDate(newValue);
+                              setDueDate(newValue);
                             }}
                             renderInput={(params) => (
                               <TextField
@@ -253,6 +315,7 @@ export const Ticket = ({
                                 variant="outlined"
                                 size="small"
                                 fullWidth
+                                required
                               />
                             )}
                           />
@@ -260,9 +323,9 @@ export const Ticket = ({
                         <Grid item lg={6} md={6} xs={12}>
                           <TimePicker
                             label="Hora de término das vendas"
-                            value={startTime}
+                            value={dueTime}
                             onChange={(newValue) => {
-                              setStartTime(newValue);
+                              setDueTime(newValue);
                             }}
                             renderInput={(params) => (
                               <TextField
@@ -270,6 +333,7 @@ export const Ticket = ({
                                 variant="outlined"
                                 size="small"
                                 fullWidth
+                                required
                               />
                             )}
                           />
@@ -284,6 +348,8 @@ export const Ticket = ({
                             size="small"
                             fullWidth
                             color="primary"
+                            onChange={(e) => setDescription(e.target.value)}
+                            value={description}
                           />
                         </Grid>
                       </Grid>
@@ -317,13 +383,12 @@ export const Ticket = ({
           <Typography
             sx={{
               transform: "rotate(-180deg)",
-              // textOrientation: 'upright',
               writingMode: "vertical-lr",
               color: (theme) => theme.palette.text.primary,
               fontSize: 14,
             }}
           >
-            Ingresso pago
+            Ingresso {ticket_price_type.title.toLowerCase()}
           </Typography>
           <img src={BarCodeImg} alt="barcode" />
         </Grid>

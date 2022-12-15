@@ -223,9 +223,9 @@ const EventTicket = () => {
                         quote: {
                           id: "231",
                           min_base_value: 2.5,
-                          min_value: 5,
+                          min_value: 30,
                           name: "Ingresso Pago",
-                          percentage: 10,
+                          percentage: 0.1,
                         },
                       })
                     }
