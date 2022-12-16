@@ -8,14 +8,20 @@ import {
   useTheme,
 } from "@mui/material";
 import { Ticket as TicketIcon } from "phosphor-react";
+import { Params, useParams } from "react-router-dom";
 
 import { TicketTable } from "./component/Table";
 import { CreateTicketModal } from "./component/CreateTicketModal";
 import { useState } from "react";
 import { ITicketPriceType } from "../../../../models/ticket";
 
+interface IEventTicketParams extends Params{
+  eventId: string;
+}
+
 const EventTicket = () => {
   const theme = useTheme();
+  const { eventId } = useParams<IEventTicketParams>();
   const [selectedCreateTicketType, setSelectedCreateTicketType] =
     useState<ITicketPriceType | null>(null);
 
@@ -193,15 +199,15 @@ const EventTicket = () => {
                     disabled={!!selectedCreateTicketType}
                     onClick={() =>
                       setSelectedCreateTicketType({
-                        id: "123",
+                        id: "5a14ab5a-94b5-4f15-96fa-9e2b18ab5dba",
+                        title: "Gratuito",
                         is_free: true,
-                        quote_id: "321",
-                        title: "Grátis",
+                        quote_id: "809d1936-bab6-46b6-8b5a-3a957d959a59",
                         quote: {
-                          id: "321",
+                          id: "809d1936-bab6-46b6-8b5a-3a957d959a59",
                           min_base_value: 0,
                           min_value: 0,
-                          name: "Ingresso grátis",
+                          name: "Taxa grátis",
                           percentage: 0,
                         },
                       })
@@ -216,15 +222,15 @@ const EventTicket = () => {
                     disabled={!!selectedCreateTicketType}
                     onClick={() =>
                       setSelectedCreateTicketType({
-                        id: "213",
+                        id: "ae9ecea2-8024-4d48-9595-612a552cb5ee",
                         is_free: false,
-                        quote_id: "231",
+                        quote_id: "15f57147-50f9-4712-a5b2-65d623ec1cb6",
                         title: "Pago",
                         quote: {
-                          id: "231",
+                          id: "15f57147-50f9-4712-a5b2-65d623ec1cb6",
                           min_base_value: 2.5,
                           min_value: 30,
-                          name: "Ingresso Pago",
+                          name: "Taxa pago",
                           percentage: 0.1,
                         },
                       })
@@ -241,8 +247,9 @@ const EventTicket = () => {
       </Grid>
 
       {/* create ticket modal */}
-      {selectedCreateTicketType && (
+      {selectedCreateTicketType && eventId && (
         <CreateTicketModal
+          eventId={eventId}
           type={selectedCreateTicketType}
           open={!!selectedCreateTicketType}
           onClose={() => onChangeModalCreateTicket()}

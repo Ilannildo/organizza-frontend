@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -11,17 +12,14 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { CaretDown, Info } from "phosphor-react";
+import Barcode from "react-barcode";
 
+import { currencyMask, removeCurrencyMask } from "../../utils/masks";
 import { ITicketPriceType } from "../../models/ticket";
-import BarCodeImg from "../../assets/barcode.png";
-import {
-  currencyMask,
-  removeCurrencyMask,
-} from "../../utils/masks";
-import { useState } from "react";
 
 interface ITicket {
   categoryTitle: string;
@@ -44,6 +42,20 @@ interface ITicket {
   dueTime: Date | null;
   setDueTime: (value: Date | null) => void;
   ticket_price_type: ITicketPriceType;
+  categoryTitleError: string;
+  participantLimitError: string;
+  valueError: string;
+  startDateError: string;
+  startTimeError: string;
+  dueDateError: string;
+  dueTimeError: string;
+  setCategoryTitleError: (value: string) => void;
+  setParticipantLimitError: (value: string) => void;
+  setValueError: (value: string) => void;
+  setStartDateError: (value: string) => void;
+  setStartTimeError: (value: string) => void;
+  setDueDateError: (value: string) => void;
+  setDueTimeError: (value: string) => void;
 }
 
 export const Ticket = ({
@@ -67,7 +79,22 @@ export const Ticket = ({
   dueTime,
   setDueTime,
   ticket_price_type,
+  categoryTitleError,
+  participantLimitError,
+  valueError,
+  startDateError,
+  startTimeError,
+  dueDateError,
+  dueTimeError,
+  setCategoryTitleError,
+  setParticipantLimitError,
+  setValueError,
+  setStartDateError,
+  setStartTimeError,
+  setDueDateError,
+  setDueTimeError,
 }: ITicket) => {
+  const theme = useTheme();
   const [amount, setAmount] = useState<string>("");
 
   let ticketValue = value;
@@ -105,7 +132,7 @@ export const Ticket = ({
         borderWidth: 1,
         borderRadius: 1,
         px: 2,
-        py: 2,
+        py: 1,
       }}
     >
       <Grid container spacing={2}>
@@ -122,6 +149,9 @@ export const Ticket = ({
                 color="primary"
                 onChange={(e) => setCategoryTitle(e.target.value)}
                 value={categoryTitle}
+                onBlur={() => setCategoryTitleError(" ")}
+                error={categoryTitleError !== " "}
+                helperText={categoryTitleError}
               />
             </Grid>
             <Grid item lg={12}>
@@ -140,6 +170,9 @@ export const Ticket = ({
                       setParticipantLimit(Number(e.target.value))
                     }
                     value={participantLimit}
+                    onBlur={() => setParticipantLimitError(" ")}
+                    error={participantLimitError !== " "}
+                    helperText={participantLimitError}
                   />
                 </Grid>
                 <Grid item lg={6}>
@@ -169,64 +202,69 @@ export const Ticket = ({
                       );
                     }}
                     value={ticket_price_type.is_free ? "0,00" : amount}
+                    onBlur={() => setValueError(" ")}
+                    error={valueError !== " "}
+                    helperText={valueError}
                   />
                 </Grid>
               </Grid>
             </Grid>
-            {!ticket_price_type.is_free && <Grid item lg={12}>
-              <Grid container spacing={2}>
-                <Grid item lg={7}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        onChange={(e, value) => setIncludeFee(value)}
-                        checked={includeFee}
-                      />
-                    }
-                    label={
+            {!ticket_price_type.is_free && (
+              <Grid item lg={12}>
+                <Grid container spacing={2}>
+                  <Grid item lg={7}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          onChange={(e, value) => setIncludeFee(value)}
+                          checked={includeFee}
+                        />
+                      }
+                      label={
+                        <Typography
+                          sx={{
+                            color: (theme) => theme.palette.text.primary,
+                            fontSize: 14,
+                          }}
+                        >
+                          Repassar taxas ao participantes
+                        </Typography>
+                      }
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    lg={5}
+                    alignItems="flex-end"
+                    display="flex"
+                    flexDirection="column"
+                  >
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Tooltip title={`Taxa: R$ ${currencyMask(fee)}`}>
+                        <Info />
+                      </Tooltip>
                       <Typography
                         sx={{
                           color: (theme) => theme.palette.text.primary,
-                          fontSize: 14,
+                          fontSize: 12,
                         }}
                       >
-                        Repassar taxas ao participantes
+                        Valor do ingresso: R$ {currencyMask(ticketValue)}
                       </Typography>
-                    }
-                  />
-                </Grid>
-                <Grid
-                  item
-                  lg={5}
-                  alignItems="flex-end"
-                  display="flex"
-                  flexDirection="column"
-                >
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Tooltip title={`Taxa: R$ ${currencyMask(fee)}`}>
-                      <Info />
-                    </Tooltip>
+                    </Stack>
+
                     <Typography
                       sx={{
                         color: (theme) => theme.palette.text.primary,
                         fontSize: 12,
                       }}
                     >
-                      Valor do ingresso: R$ {currencyMask(ticketValue)}
+                      Você recebe: R$ {currencyMask(ticketValueReceived)}
                     </Typography>
-                  </Stack>
-
-                  <Typography
-                    sx={{
-                      color: (theme) => theme.palette.text.primary,
-                      fontSize: 12,
-                    }}
-                  >
-                    Você recebe: R$ {currencyMask(ticketValueReceived)}
-                  </Typography>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>}
+            )}
             <Grid item lg={12}>
               <Accordion
                 variant="elevation"
@@ -268,6 +306,9 @@ export const Ticket = ({
                                 size="small"
                                 required
                                 fullWidth
+                                onBlur={() => setStartDateError(" ")}
+                                error={startDateError !== " "}
+                                helperText={startDateError}
                               />
                             )}
                           />
@@ -286,6 +327,9 @@ export const Ticket = ({
                                 size="small"
                                 fullWidth
                                 required
+                                onBlur={() => setStartTimeError(" ")}
+                                error={startTimeError !== " "}
+                                helperText={startTimeError}
                               />
                             )}
                           />
@@ -316,6 +360,9 @@ export const Ticket = ({
                                 size="small"
                                 fullWidth
                                 required
+                                onBlur={() => setDueDateError(" ")}
+                                error={dueDateError !== " "}
+                                helperText={dueDateError}
                               />
                             )}
                           />
@@ -334,6 +381,9 @@ export const Ticket = ({
                                 size="small"
                                 fullWidth
                                 required
+                                onBlur={() => setDueTimeError(" ")}
+                                error={dueTimeError !== " "}
+                                helperText={dueTimeError}
                               />
                             )}
                           />
@@ -390,7 +440,22 @@ export const Ticket = ({
           >
             Ingresso {ticket_price_type.title.toLowerCase()}
           </Typography>
-          <img src={BarCodeImg} alt="barcode" />
+          <div
+            style={{
+              display: "inline-block",
+              transform: "rotate(270deg)",
+              position: "absolute",
+            }}
+          >
+            <Barcode
+              value={ticketCodeRef}
+              background={theme.palette.background.default}
+              width={1}
+              height={50}
+              fontSize={12}
+              displayValue={false}
+            />
+          </div>
         </Grid>
       </Grid>
     </Box>
