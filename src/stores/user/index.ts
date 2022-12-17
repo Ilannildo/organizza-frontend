@@ -6,10 +6,10 @@ import { api } from "../../services/api";
 export const useAuthenticatedUser = (options?: UseQueryOptions<IUser>) => {
   return useQuery(
     createUseUserAuthKey(),
-    () => api.get(`/me`).then((res) => res.data.data),
+    () => api.get(`/users/account`).then((res) => res.data.data),
     {
       ...options,
-      retry: 1,
+      retry: 0,
     }
   );
 };

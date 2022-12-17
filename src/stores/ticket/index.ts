@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { ITicket, ITicketForm } from "../../models/ticket";
+import { ITicketForm } from "../../models/ticket";
 import { api } from "../../services/api";
 
 export const useCreateEventTicket = () => {

@@ -121,7 +121,7 @@ export const CreateTicketModal = ({
     if(createEventTicketMutation.isSuccess) {
       onClose();
     }
-  }, [createEventTicketMutation])
+  }, [createEventTicketMutation, onClose])
 
   useEffect(() => {
     handleGenerateTicketCodeRef();
