@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Box,
+  Button,
   Chip,
   ClickAwayListener,
   Divider,
@@ -12,6 +13,7 @@ import {
   Paper,
   Popper,
   Stack,
+  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -37,8 +39,8 @@ const ProfileSection: React.FC = () => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const { signOut } = useAuth();
-  const { data: user } = useAuthenticatedUser();
+  const { signOut, isLoading } = useAuth();
+  const { data: user, isLoading: isLoadingAuthUser } = useAuthenticatedUser();
 
   const handleLogout = async () => {
     await signOut();
@@ -84,39 +86,51 @@ const ProfileSection: React.FC = () => {
         },
       }}
     >
-      <Chip
-        sx={{
-          height: "44px",
-          alignItems: "center",
-          borderRadius: "24px",
-          transition: "all .2s ease-in-out",
-          border: "none",
-        }}
-        icon={
-          <Avatar
-            {...stringAvatar(
-              user !== undefined ? user.name : "Usuário",
-              34,
-              34
-            )}
-            sx={{
-              fontSize: "1.2rem",
-              cursor: "pointer",
-            }}
-            ref={anchorRef}
-            aria-controls={open ? "menu-list-grow" : undefined}
-            aria-haspopup="true"
-            color="inherit"
-          />
-        }
-        label={<CaretDown />}
-        variant="outlined"
-        ref={anchorRef}
-        aria-controls={open ? "menu-list-grow" : undefined}
-        aria-haspopup="true"
-        onClick={handleToggle}
-        color="primary"
-      />
+      {user !== undefined ? (
+        <Chip
+          sx={{
+            height: "44px",
+            alignItems: "center",
+            borderRadius: "24px",
+            transition: "all .2s ease-in-out",
+            border: "none",
+          }}
+          icon={
+            <Avatar
+              {...stringAvatar(user.name, 34, 34)}
+              sx={{
+                fontSize: "1.2rem",
+                cursor: "pointer",
+              }}
+              ref={anchorRef}
+              aria-controls={open ? "menu-list-grow" : undefined}
+              aria-haspopup="true"
+              color="inherit"
+            />
+          }
+          label={<CaretDown />}
+          variant="outlined"
+          ref={anchorRef}
+          aria-controls={open ? "menu-list-grow" : undefined}
+          aria-haspopup="true"
+          onClick={handleToggle}
+          color="primary"
+        />
+      ) : (
+        !isLoadingAuthUser && (
+          <Tooltip title="Entre na sua conta">
+            <Button
+              variant="contained"
+              color="secondary"
+              fullWidth
+              href="/login"
+              disableElevation
+            >
+              Login
+            </Button>
+          </Tooltip>
+        )
+      )}
       <Popper
         placement="bottom-end"
         open={open}
@@ -144,7 +158,7 @@ const ProfileSection: React.FC = () => {
                   elevation={16}
                   content={false}
                   sx={{
-                    height: 350
+                    height: 350,
                   }}
                   boxShadow
                   shadow={theme.shadows[16]}
@@ -243,6 +257,7 @@ const ProfileSection: React.FC = () => {
                         </ListItemButton>
                         <ListItemButton
                           selected={selectedIndex === 4}
+                          disabled={isLoading}
                           onClick={handleLogout}
                         >
                           <ListItemIcon>

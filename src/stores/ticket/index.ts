@@ -1,7 +1,13 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { ITicketForm } from "../../models/ticket";
+import { ITicket, ITicketForm } from "../../models/ticket";
 import { api } from "../../services/api";
+import { createTicketByEventIdKey } from "./keys";
 
 export const useCreateEventTicket = () => {
   const queryClient = useQueryClient();
@@ -22,8 +28,23 @@ export const useCreateEventTicket = () => {
         }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["useFilteredProfessionals"]);
+        queryClient.invalidateQueries(["useTicketByEventIdKey"]);
       },
+    }
+  );
+};
+
+export const useTicketsByEventId = (
+  { eventId }: { eventId?: string },
+  options?: UseQueryOptions<ITicket[]>
+) => {
+  return useQuery(
+    createTicketByEventIdKey(eventId),
+    () =>
+      api.get(`/events/${eventId}/tickets`).then((res) => res.data.data),
+    {
+      ...options,
+      retry: 1,
     }
   );
 };
