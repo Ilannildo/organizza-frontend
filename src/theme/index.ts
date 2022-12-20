@@ -57,6 +57,7 @@ export const theme = createTheme({
     },
     primaryContainer: {
       main: "#D0E4FF",
+      dark: "#9CCAFF",
     },
     secondaryContainer: {
       main: "#FFDCBD",

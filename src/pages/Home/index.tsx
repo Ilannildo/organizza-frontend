@@ -13,6 +13,9 @@ import { Carousel } from "react-responsive-carousel";
 import { SectionMarker } from "../../components/SectionMarker";
 import { HomeEventCard } from "../../components/HomeEventCard";
 import { HomeNavbar } from "./components/HomeNavbar";
+import { HomeCategoryEventCard } from "../../components/HomeCategoryEventCard";
+import { HomeInformatiosEventCard } from "../../components/HomeInformatiosEventCard";
+
 
 const Home = () => {
   const theme = useTheme();
@@ -114,6 +117,54 @@ const Home = () => {
                 <HomeEventCard />
                 <HomeEventCard />
               </Carousel>
+            </Grid>
+          </Grid>
+
+        </Container>
+      </Box>
+
+      <Box>
+        <Container maxWidth='xl'>
+          <Grid container>
+            <Grid
+              container
+              mt={2}
+            >
+              <Grid
+                item
+                lg={12}
+                md={12}
+                sm={12}
+                xl={12}
+              >
+                <HomeInformatiosEventCard />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+
+      <Box>
+        <Container maxWidth='xl'>
+          <Grid container>
+            <Grid
+              mt={2}
+              item>
+              <SectionMarker color="primary" label="Educação" />
+            </Grid>
+            <Grid
+              container
+              mt={2}
+            >
+              <Grid
+                item
+                lg={12}
+                md={12}
+                sm={12}
+                xl={12}
+              >
+                <HomeCategoryEventCard />
+              </Grid>
             </Grid>
           </Grid>
         </Container>
