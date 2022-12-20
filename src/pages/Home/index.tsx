@@ -4,6 +4,8 @@ import { AppBar, Box, Container, Grid, Link, Tooltip, Toolbar, Button, Typograph
 import { useAuthenticatedUser } from '../../stores/user';
 import { SectionMarker } from "../../components/SectionMarker";
 import { HomeEventCard } from "../../components/HomeEventCard";
+import { HomeCategoryEventCard } from "../../components/HomeCategoryEventCard";
+import { HomeInformatiosEventCard } from "../../components/HomeInformatiosEventCard";
 
 
 const Home = () => {
@@ -190,9 +192,6 @@ const Home = () => {
           </Box>
         </Container>
       </Box>
-
-
-
       <Box sx={{
         pt: 3,
         backgroundColor: theme => theme.palette.onSecondary.main
@@ -201,13 +200,10 @@ const Home = () => {
           <Grid container>
             <Grid
               item
-
             >
               <SectionMarker color='primary' label='Eventos em Destaque' />
             </Grid>
-
           </Grid>
-
           <Grid 
           mt={2}
           container>
@@ -221,16 +217,54 @@ const Home = () => {
               <HomeEventCard
               />
             </Grid>
-
           </Grid>
+        </Container>
+      </Box>
 
+      <Box>
+        <Container maxWidth='xl'>
+          <Grid container>
+            <Grid 
+            container
+            mt={2}
+            >
+              <Grid 
+              item
+              lg={12}
+              md={12}
+              sm={12}
+              xl={12}
+              >
+                <HomeInformatiosEventCard />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
 
-
-            
-
-         
-
-
+      <Box>
+        <Container maxWidth='xl'>
+          <Grid container>
+            <Grid
+              mt={2}
+              item>
+              <SectionMarker color="primary" label="Educação" />
+            </Grid>
+            <Grid 
+            container
+            mt={2}
+            >
+              <Grid 
+              item
+              lg={12}
+              md={12}
+              sm={12}
+              xl={12}
+              >
+                <HomeCategoryEventCard />
+              </Grid>
+            </Grid>
+          </Grid>
         </Container>
       </Box>
     </>
