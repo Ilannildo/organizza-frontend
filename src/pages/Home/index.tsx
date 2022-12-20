@@ -5,12 +5,19 @@ import {
   Tooltip,
   Button,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
+import { Carousel } from "react-responsive-carousel";
+
 import { SectionMarker } from "../../components/SectionMarker";
 import { HomeEventCard } from "../../components/HomeEventCard";
 import { HomeNavbar } from "./components/HomeNavbar";
 
 const Home = () => {
+  const theme = useTheme();
+  const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
+
   return (
     <>
       <Box
@@ -34,34 +41,42 @@ const Home = () => {
               display="flex"
               flexDirection="column"
             >
-              <Typography
-                lineHeight={1}
-                p={0}
-                m={0}
-                fontSize={52}
-                fontWeight={"bold"}
-                sx={{ color: "#fff" }}
-              >
-                Tudo que você precisa
-                <br /> para <br />
-                organizar seu evento
-              </Typography>
-              <Grid pb={3} pt={2}>
-                <Typography sx={{ color: "#fff" }} fontSize={18}>
-                  A plataforma feita para facilitar a divulgação e o
-                  gerenciamento do seu evento
+              {matchUpMd ? (
+                <Typography
+                  fontSize={40}
+                  fontWeight="bold"
+                  sx={{ color: theme.palette.onPrimary.main }}
+                >
+                  Tudo que você precisa
+                  <br /> para <br />
+                  organizar seu evento
                 </Typography>
-              </Grid>
+              ) : (
+                <Typography
+                  fontSize={24}
+                  fontWeight="bold"
+                  sx={{ color: theme.palette.onPrimary.main }}
+                >
+                  Tudo que você precisa para organizar seu evento
+                </Typography>
+              )}
+              <Typography
+                sx={{ color: theme.palette.onPrimary.main }}
+                fontSize={matchUpMd ? 16 : 14}
+                mt={2}
+                mb={2}
+              >
+                A plataforma feita para facilitar a divulgação e o gerenciamento
+                do seu evento
+              </Typography>
+
               <Grid>
                 <Tooltip title="Criar Evento">
                   <Button
-                    sx={{
-                      fontWeight: "bold",
-                      color: (theme) => theme.palette.onPrimary.main,
-                      backgroundColor: (theme) => theme.palette.secondary.main,
-                    }}
-                    variant="outlined"
-                    href="/login"
+                    color="secondary"
+                    variant="contained"
+                    href="/organizador/evento"
+                    disableElevation
                   >
                     Criar um evento
                   </Button>
@@ -88,7 +103,17 @@ const Home = () => {
 
           <Grid mt={2} container>
             <Grid item lg={12} md={12} sm={12} xl={12}>
-              <HomeEventCard />
+              <Carousel
+                autoPlay={true}
+                interval={5000}
+                showArrows={false}
+                showStatus={false}
+                swipeable={true}
+                showThumbs={false}
+              >
+                <HomeEventCard />
+                <HomeEventCard />
+              </Carousel>
             </Grid>
           </Grid>
         </Container>

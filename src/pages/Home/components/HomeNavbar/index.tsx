@@ -53,7 +53,7 @@ export const HomeNavbar = () => {
 
   return (
     <AppBar
-      position="static"
+      position="sticky"
       elevation={0}
       sx={{
         backgroundColor: (theme) => theme.palette.primary.main,
