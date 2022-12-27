@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Button,
   Grid,
@@ -12,11 +13,13 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { format } from "date-fns";
 import { PencilSimple, TrashSimple } from "phosphor-react";
-import { useState } from "react";
-import { ISession } from "../../../../../../models/session";
+import { format } from "date-fns";
+
+import { useSessionBySessionTypeId } from "../../../../../../stores/sessionTypes";
 import { ISessionType } from "../../../../../../models/sessionType";
+import config from "../../../../../../config";
+import { Params, useParams } from "react-router-dom";
 
 interface IColumn {
   id: "id" | "title";
@@ -32,14 +35,28 @@ const columns: readonly IColumn[] = [
 ];
 
 interface ISessionTable {
-  session: ISession[];
   sessionType: ISessionType;
 }
 
-export const SessionTable = ({ session, sessionType }: ISessionTable) => {
+interface IParams extends Params {
+  eventId: string;
+}
+
+export const SessionTable = ({ sessionType }: ISessionTable) => {
+  const { eventId } = useParams<IParams>();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
+  const { data: sessionResponse } = useSessionBySessionTypeId(
+    {
+      eventId: eventId || "",
+      sessionTypeId: sessionType?.id || "",
+      limit: rowsPerPage,
+      page,
+    },
+    {
+      enabled: !!sessionType?.id && !!eventId,
+    }
+  );
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -116,73 +133,75 @@ export const SessionTable = ({ session, sessionType }: ISessionTable) => {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {session.map((row) => {
-                return (
-                  <TableRow
-                    hover
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                    }}
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.id}
-                  >
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {value}
-                        </TableCell>
-                      );
-                    })}
-                    <TableCell>
-                      {`${format(
-                        new Date(row.start_date),
-                        "dd 'de' MMM 'de' yyyy"
-                      )}, 
+            {sessionResponse && (
+              <TableBody>
+                {sessionResponse.sessions.map((row) => {
+                  return (
+                    <TableRow
+                      hover
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.id}
+                    >
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {value}
+                          </TableCell>
+                        );
+                      })}
+                      <TableCell>
+                        {`${format(
+                          new Date(row.start_date),
+                          "dd 'de' MMM 'de' yyyy"
+                        )}, 
                         ${format(new Date(row.start_time), "HH:mm")} - 
                         ${format(new Date(row.end_time), "HH:mm")}`}
-                    </TableCell>
-                    <TableCell>Grátis</TableCell>
-                    <TableCell>
-                      <Stack direction="row" spacing={1}>
-                        <IconButton
-                          // disabled={mutation.isLoading}
-                          size="small"
-                          color="warning"
-                          onClick={() => {
-                            // handleToEditUser(row.id)
-                          }}
-                        >
-                          <PencilSimple size={24} />
-                        </IconButton>
-                        <IconButton
-                          // disabled={mutation.isLoading}
-                          size="small"
-                          color="error"
-                          onClick={() => {
-                            // setOpenDeleteUser(row.id);
-                            // mutation.mutate(row.id);
-                          }}
-                        >
-                          <TrashSimple size={24} />
-                        </IconButton>
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
+                      </TableCell>
+                      <TableCell>Grátis</TableCell>
+                      <TableCell>
+                        <Stack direction="row" spacing={1}>
+                          <IconButton
+                            // disabled={mutation.isLoading}
+                            size="small"
+                            color="warning"
+                            onClick={() => {
+                              // handleToEditUser(row.id)
+                            }}
+                          >
+                            <PencilSimple size={24} />
+                          </IconButton>
+                          <IconButton
+                            // disabled={mutation.isLoading}
+                            size="small"
+                            color="error"
+                            onClick={() => {
+                              // setOpenDeleteUser(row.id);
+                              // mutation.mutate(row.id);
+                            }}
+                          >
+                            <TrashSimple size={24} />
+                          </IconButton>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            )}
           </>
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[2, 5, 10]}
+        rowsPerPageOptions={config.rowsPerPage}
         component="div"
-        count={session !== undefined ? session.length : 0}
+        count={sessionResponse !== undefined ? sessionResponse.total : 0}
         rowsPerPage={rowsPerPage}
-        page={session !== undefined ? page : 0}
+        page={sessionResponse !== undefined ? page : 0}
         labelRowsPerPage="Registros por página"
         labelDisplayedRows={({ from, to, count }) => {
           return `Exibindo de ${from} até ${to} de ${

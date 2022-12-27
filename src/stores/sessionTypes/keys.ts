@@ -9,5 +9,8 @@ export const createUseSessionTypeByIdKey = (
 ): QueryKey => ["useSessionTypeByIdKey", sessionTypeId];
 
 export const createUseSessionBySessionTypeIdKey = (
-  sessionTypeId: string
-): QueryKey => ["useSessionBySessionTypeIdKey", sessionTypeId];
+  eventId: string,
+  sessionTypeId: string,
+  limit: number,
+  page: number
+): QueryKey => ["useSessionBySessionTypeIdKey", eventId, sessionTypeId, limit, page];

@@ -15,6 +15,7 @@ import { Params, useParams } from "react-router-dom";
 import { useTicketsByEventId } from "../../../../../../stores/ticket";
 import { formatCurrency } from "../../../../../../utils/masks";
 import { calculateFee } from "../../../../../../utils/roles";
+import config from "../../../../../../config";
 
 interface IColumn {
   id: "category_title" | "participant_limit" | "sold" | "value";
@@ -52,26 +53,16 @@ export const TicketTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { eventId } = useParams<IEventTicketParams>();
-  const { data: tickets } = useTicketsByEventId({
-    eventId,
-  });
-  // const tickets: ITicket[] = [
-  //   {
-  //     category_title: "Alunos",
-  //     description: "Teste",
-  //     due_date: new Date(),
-  //     due_time: new Date(),
-  //     event_id: "123",
-  //     id: "123",
-  //     sold: 10,
-  //     include_fee: true,
-  //     participant_limit: 50,
-  //     start_date: new Date(),
-  //     start_time: new Date(),
-  //     ticket_price_type_id: "123",
-  //     value: 1.0,
-  //   },
-  // ];
+  const { data: ticketsResponse } = useTicketsByEventId(
+    {
+      eventId,
+      limit: rowsPerPage,
+      page,
+    },
+    {
+      enabled: !!eventId,
+    }
+  );
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -112,9 +103,9 @@ export const TicketTable = () => {
                 </TableCell>
               </TableRow>
             </TableHead>
-            {tickets && (
+            {ticketsResponse && (
               <TableBody>
-                {tickets.map((row) => {
+                {ticketsResponse.tickets.map((row) => {
                   return (
                     <TableRow
                       hover
@@ -146,12 +137,14 @@ export const TicketTable = () => {
                       })}
 
                       <TableCell>
-                        {row.ticket_price_type ? formatCurrency(
-                          calculateFee({
-                            ticket_price_type: row.ticket_price_type,
-                            value: row.value,
-                          })
-                        ) : "R$ 0,00"}
+                        {row.ticket_price_type
+                          ? formatCurrency(
+                              calculateFee({
+                                ticket_price_type: row.ticket_price_type,
+                                value: row.value,
+                              })
+                            )
+                          : "R$ 0,00"}
                       </TableCell>
                       <TableCell>
                         <Stack direction="row" spacing={1}>
@@ -187,11 +180,11 @@ export const TicketTable = () => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[2, 5, 10]}
+        rowsPerPageOptions={config.rowsPerPage}
         component="div"
-        count={tickets !== undefined ? tickets.length : 0}
+        count={ticketsResponse !== undefined ? ticketsResponse.total : 0}
         rowsPerPage={rowsPerPage}
-        page={tickets !== undefined ? page : 0}
+        page={ticketsResponse !== undefined ? page : 0}
         labelRowsPerPage="Registros por página"
         labelDisplayedRows={({ from, to, count }) => {
           return `Exibindo de ${from} até ${to} de ${

@@ -15,7 +15,7 @@ import { CreateTicketModal } from "./component/CreateTicketModal";
 import { useState } from "react";
 import { ITicketPriceType } from "../../../../models/ticket";
 
-interface IEventTicketParams extends Params{
+interface IEventTicketParams extends Params {
   eventId: string;
 }
 
@@ -32,11 +32,11 @@ const EventTicket = () => {
   return (
     <Grid container spacing={2}>
       {/* tickets */}
-      <Grid item lg={4} md={4} sm={4} xs={6}>
+      <Grid item lg={4} md={4} sm={6} xs={12}>
         <Card variant="elevation" elevation={0}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item lg={6} md={6} sm={6} xs={6}>
+              <Grid item lg={8} md={8} sm={8} xs={8}>
                 <Typography
                   fontSize={14}
                   sx={{
@@ -49,10 +49,10 @@ const EventTicket = () => {
               </Grid>
               <Grid
                 item
-                lg={6}
-                md={6}
-                sm={6}
-                xs={6}
+                lg={4}
+                md={4}
+                sm={4}
+                xs={4}
                 justifyContent="end"
                 alignItems="center"
                 display="flex"
@@ -76,11 +76,11 @@ const EventTicket = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item lg={4} md={4} sm={4} xs={6}>
+      <Grid item lg={4} md={4} sm={6} xs={12}>
         <Card variant="elevation" elevation={0}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item lg={6} md={6} sm={6} xs={6}>
+              <Grid item lg={8} md={8} sm={8} xs={8}>
                 <Typography
                   fontSize={14}
                   sx={{
@@ -93,10 +93,10 @@ const EventTicket = () => {
               </Grid>
               <Grid
                 item
-                lg={6}
-                md={6}
-                sm={6}
-                xs={6}
+                lg={4}
+                md={4}
+                sm={4}
+                xs={4}
                 justifyContent="end"
                 alignItems="center"
                 display="flex"
@@ -120,11 +120,11 @@ const EventTicket = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item lg={4} md={4} sm={4} xs={6}>
+      <Grid item lg={4} md={4} sm={6} xs={12}>
         <Card variant="elevation" elevation={0}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item lg={6} md={6} sm={6} xs={6}>
+              <Grid item lg={8} md={8} sm={8} xs={8}>
                 <Typography
                   fontSize={14}
                   sx={{
@@ -137,10 +137,10 @@ const EventTicket = () => {
               </Grid>
               <Grid
                 item
-                lg={6}
-                md={6}
-                sm={6}
-                xs={6}
+                lg={4}
+                md={4}
+                sm={4}
+                xs={4}
                 justifyContent="end"
                 alignItems="center"
                 display="flex"

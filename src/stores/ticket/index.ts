@@ -35,13 +35,24 @@ export const useCreateEventTicket = () => {
 };
 
 export const useTicketsByEventId = (
-  { eventId }: { eventId?: string },
-  options?: UseQueryOptions<ITicket[]>
+  {
+    eventId,
+    limit,
+    page = 1,
+  }: { eventId?: string; limit: number; page: number },
+  options?: UseQueryOptions<{
+    tickets: ITicket[];
+    limit: number;
+    page: number;
+    total: number;
+  }>
 ) => {
   return useQuery(
-    createTicketByEventIdKey(eventId),
+    createTicketByEventIdKey(page, limit, eventId),
     () =>
-      api.get(`/events/${eventId}/tickets`).then((res) => res.data.data),
+      api
+        .get(`/events/${eventId}/tickets?page=${page + 1}&limit=${limit}`)
+        .then((res) => res.data.data),
     {
       ...options,
       retry: 1,

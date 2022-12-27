@@ -31,14 +31,28 @@ export const useSessionTypeById = (
 };
 
 export const useSessionBySessionTypeId = (
-  { sessionTypeId }: { sessionTypeId: string },
-  options?: UseQueryOptions<ISession[]>
+  {
+    sessionTypeId,
+    eventId,
+    limit,
+    page = 1,
+  }: { sessionTypeId: string; eventId: string; limit: number; page: number },
+  options?: UseQueryOptions<{
+    sessions: ISession[];
+    limit: number;
+    page: number;
+    total: number;
+  }>
 ) => {
   return useQuery(
-    createUseSessionBySessionTypeIdKey(sessionTypeId),
+    createUseSessionBySessionTypeIdKey(eventId, sessionTypeId, page, limit),
     () =>
       api
-        .get(`/session-types/${sessionTypeId}/sessions`)
+        .get(
+          `/events/${eventId}/session-types/${sessionTypeId}/sessions?page=${
+            page + 1
+          }&limit=${limit}`
+        )
         .then((res) => res.data.data),
     { ...options }
   );

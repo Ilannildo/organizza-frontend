@@ -32,19 +32,10 @@ const EventSession = () => {
       }
     );
 
-  const { data: sessions, isLoading: isLoadingSessions } =
-    useSessionBySessionTypeId(
-      {
-        sessionTypeId: sessionType?.id || "",
-      },
-      {
-        enabled: !!sessionType?.id,
-      }
-    );
   return (
     <Grid container spacing={2}>
       {/* tickets */}
-      {isLoadingSessionType || isLoadingSessions ? (
+      {isLoadingSessionType ? (
         <>
           <Grid item lg={4} md={4} sm={4} xs={6}>
             <Card variant="elevation" elevation={0}>
@@ -173,7 +164,7 @@ const EventSession = () => {
                         fontWeight: 500,
                       }}
                     >
-                      {sessions?.length}
+                      0
                     </Typography>
                   </Grid>
                 </Grid>
@@ -272,11 +263,11 @@ const EventSession = () => {
       )}
 
       {/* table */}
-      {sessionType !== undefined && sessions !== undefined && (
+      {sessionType !== undefined && (
         <Grid item lg={12} md={12} sm={12} xs={12}>
           <Card variant="elevation" elevation={0}>
             <CardContent>
-              <SessionTable session={sessions} sessionType={sessionType} />
+              <SessionTable sessionType={sessionType} />
             </CardContent>
           </Card>
         </Grid>

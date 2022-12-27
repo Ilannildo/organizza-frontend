@@ -1,8 +1,9 @@
-import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Box, Card, CardContent, Grid, Stack, Typography } from "@mui/material";
 import { IEventPageTickets } from "../../models/ticket";
 import CardBorder from "../../assets/ticket-card-border.svg";
 import { formatCurrency } from "../../utils/masks";
 import { BannerTicketButton } from "../BannerTicketButton";
+import { format } from "date-fns";
 interface IBannerTicket {
   ticket: IEventPageTickets;
 }
@@ -12,8 +13,7 @@ export const BannerTicket = ({ ticket }: IBannerTicket) => {
     <Card
       elevation={0}
       sx={{
-        maxHeight: 250,
-        height: 230,
+        height: 300,
         overflow: "none",
         background: `url(${CardBorder})`,
         backgroundRepeat: "no-repeat",
@@ -67,12 +67,25 @@ export const BannerTicket = ({ ticket }: IBannerTicket) => {
             </Grid>
           </Grid>
 
-          <BannerTicketButton
-            label={ticket.status}
-            disabled={!ticket.available}
-            color={ticket.is_free ? "tertiary" : "secondary"}
-            onClick={() => {}}
-          />
+          <Stack>
+            <Typography
+              sx={{
+                fontSize: 10,
+                mt: 2,
+                mb: 1,
+                color: (theme) => theme.palette.onPrimaryContainer.main,
+              }}
+            >
+              Inscrições até {format(new Date(ticket.due_date), "dd/MM/yyyy")} às{" "}
+              {format(new Date(ticket.due_time), "HH:mm")}
+            </Typography>
+            <BannerTicketButton
+              label={ticket.status}
+              disabled={!ticket.available}
+              color={ticket.is_free ? "tertiary" : "secondary"}
+              onClick={() => {}}
+            />
+          </Stack>
         </CardContent>
       </Box>
     </Card>
