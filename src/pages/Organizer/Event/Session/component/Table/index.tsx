@@ -13,14 +13,13 @@ import {
   Typography,
 } from "@mui/material";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { PencilSimple, TrashSimple } from "phosphor-react";
 import { useState } from "react";
 import { ISession } from "../../../../../../models/session";
+import { ISessionType } from "../../../../../../models/sessionType";
 
 interface IColumn {
-
-  id: "ref_code" | "title";
+  id: "id" | "title";
   label: string;
   minWidth?: number;
   align?: "right" | "center" | "left";
@@ -28,45 +27,18 @@ interface IColumn {
 }
 
 const columns: readonly IColumn[] = [
-  { id: "ref_code", label: "Código", minWidth: 80 },
+  { id: "id", label: "Código", minWidth: 80 },
   { id: "title", label: "Título", minWidth: 250 },
 ];
 
-export const SessionTable = () => {
+interface ISessionTable {
+  session: ISession[];
+  sessionType: ISessionType;
+}
+
+export const SessionTable = ({ session, sessionType }: ISessionTable) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const session: ISession[] = [
-    {
-      id: "1",
-      ref_code: "121",
-      title: "Criando jogos 3D",
-      summary: "Teste",
-      responsible_name: "Natanel G.",
-      event_id: "123",
-      session_type_id: "555",
-      place: "Laboratório de informática",
-      start_date: new Date(),
-      start_time: new Date(),
-      end_date: new Date(),
-      end_time: new Date(),
-      status: "published",
-    },
-    {
-      id: "2",
-      ref_code: "121",
-      title: "Criando jogos 3D",
-      summary: "Teste",
-      responsible_name: "Natanel G.",
-      event_id: "123",
-      session_type_id: "555",
-      place: "Laboratório de informática",
-      start_date: new Date(),
-      start_time: new Date(),
-      end_date: new Date(),
-      end_time: new Date(),
-      status: "published",
-    }
-  ];
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -91,7 +63,7 @@ export const SessionTable = () => {
               fontSize: 16,
             }}
           >
-            Cursos
+            {sessionType.title}
           </Typography>
         </Grid>
         <Grid
@@ -103,15 +75,23 @@ export const SessionTable = () => {
           justifyContent="center"
         >
           <Stack direction="row" spacing={2} justifyContent="end">
-            <Button variant="contained" disableElevation color="info" size="small" onClick={() => { }}>
-              Adicionar Curso
+            <Button
+              variant="contained"
+              disableElevation
+              color="info"
+              size="small"
+              onClick={() => {}}
+            >
+              Adicionar {sessionType.title}
             </Button>
           </Stack>
         </Grid>
       </Grid>
-      <TableContainer sx={{
-        minHeight: 280
-      }}>
+      <TableContainer
+        sx={{
+          minHeight: 280,
+        }}
+      >
         <Table sx={{ minWidth: 500 }} stickyHeader aria-label="sticky table">
           <>
             <TableHead>
@@ -157,13 +137,14 @@ export const SessionTable = () => {
                       );
                     })}
                     <TableCell>
-                      {`${format(row.start_date, "dd 'de' MMM 'de' yyyy", {locale: ptBR})}, 
-                        ${format(row.start_time, "HH:mm", {locale: ptBR})} - 
-                        ${format(row.end_time, "HH:mm", {locale: ptBR})}`}
+                      {`${format(
+                        new Date(row.start_date),
+                        "dd 'de' MMM 'de' yyyy"
+                      )}, 
+                        ${format(new Date(row.start_time), "HH:mm")} - 
+                        ${format(new Date(row.end_time), "HH:mm")}`}
                     </TableCell>
-                    <TableCell>
-                      Grátis
-                    </TableCell>
+                    <TableCell>Grátis</TableCell>
                     <TableCell>
                       <Stack direction="row" spacing={1}>
                         <IconButton
@@ -204,8 +185,9 @@ export const SessionTable = () => {
         page={session !== undefined ? page : 0}
         labelRowsPerPage="Registros por página"
         labelDisplayedRows={({ from, to, count }) => {
-          return `Exibindo de ${from} até ${to} de ${count !== -1 ? count : `mais de ${to}`
-            }`;
+          return `Exibindo de ${from} até ${to} de ${
+            count !== -1 ? count : `mais de ${to}`
+          }`;
         }}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
