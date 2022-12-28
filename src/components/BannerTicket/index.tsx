@@ -1,14 +1,30 @@
-import { Box, Card, CardContent, Grid, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { IEventPageTickets } from "../../models/ticket";
 import CardBorder from "../../assets/ticket-card-border.svg";
 import { formatCurrency } from "../../utils/masks";
 import { BannerTicketButton } from "../BannerTicketButton";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
+import { useAuthenticatedUser } from "../../stores/user";
 interface IBannerTicket {
   ticket: IEventPageTickets;
 }
 
 export const BannerTicket = ({ ticket }: IBannerTicket) => {
+  const navigate = useNavigate();
+  const { data: user } = useAuthenticatedUser();
+
+  const handleCheckoutTicket = ({ ticketId }: { ticketId: string }) => {
+    navigate(`checkout/${ticketId}`);
+  };
   return (
     <Card
       elevation={0}
@@ -76,15 +92,35 @@ export const BannerTicket = ({ ticket }: IBannerTicket) => {
                 color: (theme) => theme.palette.onPrimaryContainer.main,
               }}
             >
-              Inscrições até {format(new Date(ticket.due_date), "dd/MM/yyyy")} às{" "}
-              {format(new Date(ticket.due_time), "HH:mm")}
+              Inscrições até {format(new Date(ticket.due_date), "dd/MM/yyyy")}{" "}
+              às {format(new Date(ticket.due_time), "HH:mm")}
             </Typography>
-            <BannerTicketButton
-              label={ticket.status}
-              disabled={!ticket.available}
-              color={ticket.is_free ? "tertiary" : "secondary"}
-              onClick={() => {}}
-            />
+            <Tooltip
+              title={
+                !ticket.available
+                  ? ticket.status
+                  : !user
+                  ? "Faça login para comprar um ingresso"
+                  : "Comprar um ingresso de inscrição do evento"
+              }
+            >
+              <Box
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <BannerTicketButton
+                  label={ticket.status}
+                  disabled={!ticket.available}
+                  color={ticket.is_free ? "tertiary" : "secondary"}
+                  onClick={() =>
+                    handleCheckoutTicket({
+                      ticketId: ticket.ticket_id,
+                    })
+                  }
+                />
+              </Box>
+            </Tooltip>
           </Stack>
         </CardContent>
       </Box>

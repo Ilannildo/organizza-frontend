@@ -13,9 +13,10 @@ import { ptBR } from "date-fns/locale";
 import { NavigationScroll } from "./layout/NavigationScroll";
 import { CustomizationProvider } from "./contexts/CustomizationContext";
 import { setDefaultOptions } from "date-fns";
+import { EventCheckoutProvider } from "./contexts/EventCheckout";
 
 const queryClient = new QueryClient();
-setDefaultOptions({ locale: ptBR })
+setDefaultOptions({ locale: ptBR });
 
 const App = () => {
   return (
@@ -43,7 +44,9 @@ const App = () => {
                   />
                   <WithAxios>
                     <NavigationScroll>
-                      <AppRoutes />
+                      <EventCheckoutProvider>
+                        <AppRoutes />
+                      </EventCheckoutProvider>
                     </NavigationScroll>
                   </WithAxios>
                 </LocalizationProvider>

@@ -20,6 +20,7 @@ import { StepThree } from "./StepThree";
 import Loader from "../../../../layout/Loader";
 import { api } from "../../../../services/api";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const steps = [
   "Informações gerais",
@@ -347,16 +348,38 @@ const CreateEvent = () => {
         responsible_description: responsibleDescription,
       });
 
-      // TO-DO: adicionar upload da capa do evento
-
       if (response.data) {
+        // TO-DO: adicionar upload da capa do evento
+        if (uploadedCoverImage) {
+          const id = toast.loading(
+            "Estamos fazendo o upload da imagem do evento..."
+          );
+          const formData = new FormData();
+          formData.append(
+            "cover",
+            uploadedCoverImage.file,
+            uploadedCoverImage.name
+          );
+          const responseUpload = await api.post("/events/cover", formData, {
+            headers: {
+              "Content-Type": `multipart/form-data`,
+            },
+          });
+          if (responseUpload.data) {
+            toast.update(id, {
+              render: "Capa do evento enviada com sucesso",
+              type: "success",
+              isLoading: false,
+            });
+          }
+        }
+
         setIsCreatingEvent(false);
         toast.success("Evento criado com sucesso!");
         navigate("/organizador");
-        console.log("Evento criado com sucesso");
       }
     } catch (error: any) {
-      if(error.response) {
+      if (error.response) {
         toast.error(error.response.data.error.message);
       }
       console.log("Error ao criar evento =>", error);

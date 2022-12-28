@@ -26,6 +26,7 @@ export const BannerTicketButton = ({
       variant="contained"
       onClick={onClick}
       disabled={disabled}
+      fullWidth
       sx={{
         background: (theme) =>
           !disabled

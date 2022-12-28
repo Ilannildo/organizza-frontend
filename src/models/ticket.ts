@@ -1,5 +1,7 @@
 import { IEvent } from "./event";
 import { IQuote } from "./quote";
+import { ISessionTicket } from "./sessionTickets";
+import { ITicketServiceOrder } from "./ticketServiceOrder";
 
 export interface ITicket {
   id: string;
@@ -18,6 +20,7 @@ export interface ITicket {
 
   event?: IEvent;
   ticket_price_type?: ITicketPriceType;
+  ticket_service_order?: ITicketServiceOrder[];
 }
 
 export interface ITicketForm {
@@ -39,8 +42,11 @@ export interface ITicketPriceType {
   title: string;
   quote_id: string;
   is_free: boolean;
-
+  created_at?: Date;
+  updated_at?: Date;
   quote?: IQuote;
+  tickets?: ITicket[];
+  session_tickets?: ISessionTicket[];
 }
 
 export interface IEventPageTickets {

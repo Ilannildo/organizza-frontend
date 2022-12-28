@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   Grid,
   Step,
   StepLabel,
@@ -61,7 +62,7 @@ const Event = () => {
       eventId: event?.event_id,
     },
     {
-      enabled: !!event?.event_id,
+      enabled: !!event?.event_id && !event.is_finished,
     }
   );
   const handleChangeActiveSession = (
@@ -114,7 +115,56 @@ const Event = () => {
                   alignItems: "end",
                   justifyContent: "end",
                 }}
-              />
+              >
+                <Box
+                  sx={{
+                    width: 315,
+                    height: 120,
+                    background: "rgba(253, 252, 255, 0.1)",
+                    backdropFilter: "blur(25px)",
+                    mr: 4,
+                    borderTopLeftRadius: 1,
+                    borderTopRightRadius: 1,
+                    p: 2,
+                  }}
+                >
+                  <Grid container>
+                    <Grid item textAlign="center" lg={12} xs={12}>
+                      <Typography
+                        sx={{
+                          color: (theme) => theme.palette.onPrimary.main,
+                          mb: 1,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {event.venue_type === "presential"
+                          ? "Evento presencial"
+                          : "Evento online"}
+                      </Typography>
+                    </Grid>
+                    <Grid item textAlign="center" lg={12} xs={12}>
+                      <Divider color="white" />
+                    </Grid>
+                    <Grid item textAlign="center" lg={12} xs={12}>
+                      <Typography
+                        sx={{
+                          color: (theme) => theme.palette.onPrimary.main,
+                          mb: 1,
+                          mt: 2,
+                        }}
+                      >
+                        {`${format(
+                          new Date(event.start_date),
+                          "dd"
+                        )} - ${format(
+                          new Date(event.end_date),
+                          "dd 'de' MMMM 'de' yyyy"
+                        )}`}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Box>
             )}
             {matchesSM && (
               <Box
@@ -132,7 +182,56 @@ const Event = () => {
                   alignItems: "end",
                   justifyContent: "end",
                 }}
-              />
+              >
+                <Box
+                  sx={{
+                    width: 315,
+                    height: 120,
+                    background: "rgba(253, 252, 255, 0.1)",
+                    backdropFilter: "blur(25px)",
+                    mr: 4,
+                    borderTopLeftRadius: 1,
+                    borderTopRightRadius: 1,
+                    p: 2,
+                  }}
+                >
+                  <Grid container>
+                    <Grid item textAlign="center" lg={12} xs={12}>
+                      <Typography
+                        sx={{
+                          color: (theme) => theme.palette.onPrimary.main,
+                          mb: 1,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {event.venue_type === "presential"
+                          ? "Evento presencial"
+                          : "Evento online"}
+                      </Typography>
+                    </Grid>
+                    <Grid item textAlign="center" lg={12} xs={12}>
+                      <Divider color="white" />
+                    </Grid>
+                    <Grid item textAlign="center" lg={12} xs={12}>
+                      <Typography
+                        sx={{
+                          color: (theme) => theme.palette.onPrimary.main,
+                          mb: 1,
+                          mt: 2,
+                        }}
+                      >
+                        {`${format(
+                          new Date(event.start_date),
+                          "dd"
+                        )} - ${format(
+                          new Date(event.end_date),
+                          "dd 'de' MMMM 'de' yyyy"
+                        )}`}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Box>
             )}
             <Container
               maxWidth="xl"
@@ -157,18 +256,24 @@ const Event = () => {
                 }}
               >
                 <Grid item lg={6} md={6} xl={6} xs={12}>
-                  <Typography
-                    sx={{
-                      color: (theme) => theme.palette.secondary.main,
-                      mb: 1,
-                    }}
-                  >
-                    {/* 01 - 10 de novembro de 2022 */}
-                    {`${format(new Date(event.start_date), "dd")} - ${format(
-                      new Date(event.end_date),
-                      "dd 'de' MMM 'de' yyyy"
-                    )}`}
-                  </Typography>
+                  {event.is_finished ? (
+                    <SectionMarker
+                      label="O evento já encerrou"
+                      color="primary"
+                    />
+                  ) : (
+                    <Typography
+                      sx={{
+                        color: (theme) => theme.palette.secondary.main,
+                        mb: 1,
+                      }}
+                    >
+                      {`${format(new Date(event.start_date), "dd")} - ${format(
+                        new Date(event.end_date),
+                        "dd 'de' MMM 'de' yyyy"
+                      )}`}
+                    </Typography>
+                  )}
                   <Typography
                     component="h1"
                     variant="h3"
@@ -192,13 +297,15 @@ const Event = () => {
                   >
                     {event.short_description}
                   </Typography>
-                  <Grid container>
-                    <Grid item lg={6}>
-                      <Button variant="contained" fullWidth>
-                        Realizar inscrição
-                      </Button>
+                  {!event.is_finished && (
+                    <Grid container>
+                      <Grid item lg={6}>
+                        <Button variant="contained" fullWidth>
+                          Realizar inscrição
+                        </Button>
+                      </Grid>
                     </Grid>
-                  </Grid>
+                  )}
                 </Grid>
               </Grid>
             </Container>
@@ -502,7 +609,7 @@ const Event = () => {
               </Grid>
             </Container>
           </Box>
-          {tickets && tickets.length > 0 && (
+          {!event.is_finished && tickets && tickets.length > 0 && (
             <Box
               id="inscrição"
               component="section"

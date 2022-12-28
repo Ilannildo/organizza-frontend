@@ -16,6 +16,10 @@ const CreateEvent = Loadable(
   lazy(() => import("../pages/Organizer/Event/Create"))
 );
 
+const CreateServiceOrder = Loadable(
+  lazy(() => import("../pages/Checkout/CreateServiceOrder"))
+);
+
 export const MainRoutes = {
   path: "",
   element: <MinimalLayout />,
@@ -53,6 +57,21 @@ export const MainRoutes = {
       element: (
         <ProtectedRoute allowedRoles={[AllowedRolesNames["ORGANIZER"]]}>
           <CreateEvent />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "evento/:slug/checkout/:ticketId", //:serviceOrderId/payment
+      element: (
+        <ProtectedRoute
+          allowedRoles={[
+            AllowedRolesNames["PARTICIPANT"],
+            AllowedRolesNames["ADMIN"],
+            AllowedRolesNames["ORGANIZER"],
+          ]}
+          checkout={true}
+        >
+          <CreateServiceOrder />
         </ProtectedRoute>
       ),
     },

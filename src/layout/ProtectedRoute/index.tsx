@@ -11,9 +11,14 @@ export enum AllowedRolesNames {
 interface IProtectedRoutes {
   children: any;
   allowedRoles?: string[];
+  checkout?: boolean;
 }
 
-export const ProtectedRoute = ({ children, allowedRoles }: IProtectedRoutes) => {
+export const ProtectedRoute = ({
+  children,
+  checkout,
+  allowedRoles,
+}: IProtectedRoutes) => {
   const { isLoading, data } = useAuthenticatedUser();
   const location = useLocation();
 
@@ -23,7 +28,7 @@ export const ProtectedRoute = ({ children, allowedRoles }: IProtectedRoutes) => 
         <Navigate
           to={`/login?callback-url=${location.pathname}`}
           replace
-          state={{ from: location }}
+          state={{ from: location, checkout }}
         />
       );
     }

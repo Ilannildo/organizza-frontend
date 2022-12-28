@@ -115,7 +115,7 @@ const Header = ({ handleLeftDrawerToggle, event, isLoadingEvent }: IHeader) => {
               <IconButton
                 component="a"
                 size="small"
-                href={`/evento/preview/${event.slug}`}
+                href={`/evento/${event.slug}`}
                 target="_blank"
               >
                 <ArrowSquareOut />
