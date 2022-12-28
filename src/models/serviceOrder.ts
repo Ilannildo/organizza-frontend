@@ -11,8 +11,9 @@ export interface IServiceOrder {
   reason_canceled: string;
   paid_at: Date;
   created_at?: Date;
+  type: "event" | "session";
+  expires_in: number;
   updated_at?: Date;
-
   ticket_service_order?: ITicketServiceOrder;
   session_ticket_service_order?: ISessionTicketServiceOrder;
   transactions?: ITransaction[];

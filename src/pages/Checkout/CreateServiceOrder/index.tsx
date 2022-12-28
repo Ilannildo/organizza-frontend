@@ -23,7 +23,7 @@ const CreateServiceOrder = () => {
       })
         .then((res) => {
           if (res) {
-            navigate(`/evento/${slug}/checkout/${res.id}/payment`);
+            navigate(`/evento/${slug}/checkout/${res.service_order_id}/payment`);
           }
         })
         .catch((err: any) => {
@@ -32,6 +32,7 @@ const CreateServiceOrder = () => {
           } else {
             toast.error("Ocorreu um problema ao realizar o pagamento");
           }
+          navigate(`/`);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

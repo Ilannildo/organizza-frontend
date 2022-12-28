@@ -1,5 +1,9 @@
 import React, { createContext, useState } from "react";
-import { ITicketServiceOrder } from "../models/ticketServiceOrder";
+import { IPaymentMethod } from "../models/paymentMethod";
+import {
+  ITicketServiceOrder,
+  ITicketServiceOrderForm,
+} from "../models/ticketServiceOrder";
 import { api } from "../services/api";
 
 interface IEventCheckoutContext {
@@ -8,7 +12,19 @@ interface IEventCheckoutContext {
   }: {
     ticketId: string;
   }) => Promise<ITicketServiceOrder>;
+  handleGetServiceOrder: ({
+    serviceOrderId,
+  }: {
+    serviceOrderId: string;
+  }) => Promise<ITicketServiceOrderForm>;
   isCreatingServiceOrder: boolean;
+  isFetchingServiceOrder: boolean;
+  isExpired: boolean;
+  serviceOrder: ITicketServiceOrderForm | null;
+  handleChangeExpired: (value: boolean) => void;
+  handleResetServiceOrder: () => void;
+  paymentMethod: IPaymentMethod | null;
+  handleChangePaymentMethod: (value: IPaymentMethod) => void;
 }
 
 export const EventCheckoutContext = createContext<IEventCheckoutContext>(
@@ -22,7 +38,51 @@ type IEventCheckoutProvider = {
 export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
   children,
 }) => {
+  const [isExpired, setIsExpired] = useState(false);
   const [isCreatingServiceOrder, setIsCreatingServiceOrder] = useState(false);
+  const [isFetchingServiceOrder, setIsFetchingServiceOrder] = useState(false);
+  const [serviceOrder, setServiceOrder] =
+    useState<ITicketServiceOrderForm | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<IPaymentMethod | null>(
+    null
+  );
+
+  const handleChangeExpired = (value: boolean) => {
+    setIsExpired(value);
+  };
+
+  const handleChangePaymentMethod = (value: IPaymentMethod) => {
+    setPaymentMethod(value);
+  };
+
+  const handleResetServiceOrder = () => {
+    setIsExpired(true);
+    setServiceOrder(null);
+    setPaymentMethod(null);
+  };
+
+  const handleGetServiceOrder = async ({
+    serviceOrderId,
+  }: {
+    serviceOrderId: string;
+  }) => {
+    return new Promise<ITicketServiceOrderForm>(async (resolve, reject) => {
+      if (serviceOrder) {
+        resolve(serviceOrder);
+      } else {
+        try {
+          setIsFetchingServiceOrder(true);
+          const res = await api.get(`/service-orders/${serviceOrderId}`);
+          setIsFetchingServiceOrder(false);
+          setServiceOrder(res.data.data);
+          resolve(res.data.data);
+        } catch (error: any) {
+          setIsFetchingServiceOrder(false);
+          reject(error);
+        }
+      }
+    });
+  };
 
   const handleCreateServiceOrder = async ({
     ticketId,
@@ -47,7 +107,18 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
 
   return (
     <EventCheckoutContext.Provider
-      value={{ handleCreateServiceOrder, isCreatingServiceOrder }}
+      value={{
+        handleCreateServiceOrder,
+        isCreatingServiceOrder,
+        handleGetServiceOrder,
+        isFetchingServiceOrder,
+        serviceOrder,
+        isExpired,
+        handleChangeExpired,
+        handleResetServiceOrder,
+        handleChangePaymentMethod,
+        paymentMethod
+      }}
     >
       {children}
     </EventCheckoutContext.Provider>
