@@ -2,8 +2,18 @@ import { ITransaction } from "./transaction";
 
 export interface IPaymentMethod {
   id: string;
-  payment_form: "open" | "processing" | "settled" | "closed" | "canceled";
+  payment_form:
+    | "credit"
+    | "debit"
+    | "check"
+    | "bank_slip"
+    | "cash"
+    | "deposit"
+    | "wallet"
+    | "transfer"
+    | "pix";
   name: string;
+  informations?: string;
   fee: number;
   installments: number;
   status: boolean;

@@ -10,8 +10,21 @@ import {
   Radio,
   Typography,
 } from "@mui/material";
+import { useEventCheckout } from "../../../hooks/useEventCheckout";
+import { useAllPaymentMethods } from "../../../stores/paymentMethods";
+import { useAuthenticatedUser } from "../../../stores/user";
 
 const CheckoutPaymentMethod = () => {
+  const { serviceOrder, paymentMethod, handleChangePaymentMethod } =
+    useEventCheckout();
+  const {data: user} = useAuthenticatedUser();
+  const { data: paymentMethods } = useAllPaymentMethods(
+    serviceOrder?.service_order_id || "",
+    {
+      enabled: !!serviceOrder,
+    }
+  );
+
   return (
     <Grid container sx={{ py: 3, px: 1 }}>
       <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -46,7 +59,7 @@ const CheckoutPaymentMethod = () => {
                         color: (theme) => theme.palette.onPrimaryContainer.main,
                       }}
                     >
-                      Ilannildo Viana da Cruz
+                      {user?.name}
                     </Typography>
                   </Grid>
                   <Grid item lg={4} md={4} xs={12}>
@@ -64,7 +77,7 @@ const CheckoutPaymentMethod = () => {
                         color: (theme) => theme.palette.onPrimaryContainer.main,
                       }}
                     >
-                      ilannildoviana12@gmail.com
+                      {user?.email}
                     </Typography>
                   </Grid>
                   <Grid
@@ -98,62 +111,48 @@ const CheckoutPaymentMethod = () => {
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <List>
                   <Grid container spacing={2}>
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                      <Card variant="outlined">
-                        <ListItemButton
-                          sx={{
-                            borderWidth: 1,
-                          }}
+                    {paymentMethods &&
+                      paymentMethods.map((payment) => (
+                        <Grid
+                          item
+                          lg={12}
+                          md={12}
+                          sm={12}
+                          xs={12}
+                          key={payment.id}
                         >
-                          <ListItemIcon>
-                            <Radio
-                              edge="start"
-                              checked
-                              disableRipple
-                              tabIndex={-1}
-                            />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary="Cartão de crédito"
-                            secondary="Pague em até 12x sem juros"
-                          />
-                        </ListItemButton>
-                      </Card>
-                    </Grid>
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                      <Card variant="outlined">
-                        <ListItemButton
-                          sx={{
-                            borderWidth: 1,
-                          }}
-                        >
-                          <ListItemIcon>
-                            <Radio edge="start" disableRipple tabIndex={-1} />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary="Pix"
-                            secondary="Aprovação imediata"
-                          />
-                        </ListItemButton>
-                      </Card>
-                    </Grid>
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                      <Card variant="outlined">
-                        <ListItemButton
-                          sx={{
-                            borderWidth: 1,
-                          }}
-                        >
-                          <ListItemIcon>
-                            <Radio edge="start" disableRipple tabIndex={-1} />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary="Boleto"
-                            secondary="Será aprovado em 1 ou 2 dias"
-                          />
-                        </ListItemButton>
-                      </Card>
-                    </Grid>
+                          <Card variant="outlined">
+                            <ListItemButton
+                              onClick={() => handleChangePaymentMethod(payment)}
+                              selected={
+                                paymentMethod
+                                  ? paymentMethod.id === payment.id
+                                  : false
+                              }
+                              sx={{
+                                borderWidth: 1,
+                              }}
+                            >
+                              <ListItemIcon>
+                                <Radio
+                                  edge="start"
+                                  checked={
+                                    paymentMethod
+                                      ? paymentMethod.id === payment.id
+                                      : false
+                                  }
+                                  disableRipple
+                                  tabIndex={-1}
+                                />
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={payment.name}
+                                secondary={payment.informations}
+                              />
+                            </ListItemButton>
+                          </Card>
+                        </Grid>
+                      ))}
                   </Grid>
                 </List>
               </Grid>
@@ -165,9 +164,11 @@ const CheckoutPaymentMethod = () => {
                   display="flex"
                 >
                   <Grid item lg={3} md={4} sm={6} xs={12}>
-                    <Button variant="contained" fullWidth>
-                      Continuar
-                    </Button>
+                    {paymentMethod && (
+                      <Button variant="contained" fullWidth>
+                        Continuar
+                      </Button>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
