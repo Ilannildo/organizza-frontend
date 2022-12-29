@@ -19,6 +19,9 @@ const CreateEvent = Loadable(
 const CreateServiceOrder = Loadable(
   lazy(() => import("../pages/Checkout/CreateServiceOrder"))
 );
+const CheckoutExpired = Loadable(
+  lazy(() => import("../pages/Checkout/Expired"))
+);
 
 export const MainRoutes = {
   path: "",
@@ -72,6 +75,21 @@ export const MainRoutes = {
           checkout={true}
         >
           <CreateServiceOrder />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "evento/:slug/checkout/expired", //:serviceOrderId/payment
+      element: (
+        <ProtectedRoute
+          allowedRoles={[
+            AllowedRolesNames["PARTICIPANT"],
+            AllowedRolesNames["ADMIN"],
+            AllowedRolesNames["ORGANIZER"],
+          ]}
+          checkout={true}
+        >
+          <CheckoutExpired />
         </ProtectedRoute>
       ),
     },

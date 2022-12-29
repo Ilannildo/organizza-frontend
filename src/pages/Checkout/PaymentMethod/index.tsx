@@ -10,20 +10,40 @@ import {
   Radio,
   Typography,
 } from "@mui/material";
+import { Params, useNavigate, useParams } from "react-router-dom";
 import { useEventCheckout } from "../../../hooks/useEventCheckout";
 import { useAllPaymentMethods } from "../../../stores/paymentMethods";
 import { useAuthenticatedUser } from "../../../stores/user";
 
+interface IParams extends Params {
+  serviceOrderId: string;
+  slug: string;
+}
+
 const CheckoutPaymentMethod = () => {
   const { serviceOrder, paymentMethod, handleChangePaymentMethod } =
     useEventCheckout();
-  const {data: user} = useAuthenticatedUser();
+  const navigate = useNavigate();
+  const { serviceOrderId, slug } = useParams<IParams>();
+  const { data: user } = useAuthenticatedUser();
   const { data: paymentMethods } = useAllPaymentMethods(
     serviceOrder?.service_order_id || "",
     {
       enabled: !!serviceOrder,
     }
   );
+
+  const goToPaymentCardForm = () => {
+    if (paymentMethod) {
+      if (paymentMethod.payment_type === "credit") {
+        return navigate(
+          `/evento/${slug}/checkout/${serviceOrderId}/payment/${paymentMethod.payment_id}/card-form`
+        );
+      }
+
+      return navigate(`/evento/${slug}/checkout/${serviceOrderId}/shipping`);
+    }
+  };
 
   return (
     <Grid container sx={{ py: 3, px: 1 }}>
@@ -119,14 +139,14 @@ const CheckoutPaymentMethod = () => {
                           md={12}
                           sm={12}
                           xs={12}
-                          key={payment.id}
+                          key={payment.payment_id}
                         >
                           <Card variant="outlined">
                             <ListItemButton
                               onClick={() => handleChangePaymentMethod(payment)}
                               selected={
                                 paymentMethod
-                                  ? paymentMethod.id === payment.id
+                                  ? paymentMethod.payment_id === payment.payment_id
                                   : false
                               }
                               sx={{
@@ -138,7 +158,7 @@ const CheckoutPaymentMethod = () => {
                                   edge="start"
                                   checked={
                                     paymentMethod
-                                      ? paymentMethod.id === payment.id
+                                      ? paymentMethod.payment_id === payment.payment_id
                                       : false
                                   }
                                   disableRipple
@@ -146,8 +166,8 @@ const CheckoutPaymentMethod = () => {
                                 />
                               </ListItemIcon>
                               <ListItemText
-                                primary={payment.name}
-                                secondary={payment.informations}
+                                primary={payment.payment_title}
+                                secondary={payment.information}
                               />
                             </ListItemButton>
                           </Card>
@@ -165,7 +185,11 @@ const CheckoutPaymentMethod = () => {
                 >
                   <Grid item lg={3} md={4} sm={6} xs={12}>
                     {paymentMethod && (
-                      <Button variant="contained" fullWidth>
+                      <Button
+                        variant="contained"
+                        fullWidth
+                        onClick={() => goToPaymentCardForm()}
+                      >
                         Continuar
                       </Button>
                     )}

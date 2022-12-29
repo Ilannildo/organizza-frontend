@@ -97,6 +97,7 @@ export const CheckoutSidebar = () => {
                     sx={{
                       color: (theme) => theme.palette.onPrimaryContainer.main,
                       fontWeight: 500,
+                      width: 16
                     }}
                   >
                     {isExpired ? "00:00" : `${minutes}:${seconds}`}

@@ -13,16 +13,17 @@ import { CheckoutSidebar } from "./components/Sidebar";
 import { useEventCheckout } from "../../hooks/useEventCheckout";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { Codes } from "../../utils/codes";
 
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme }) => ({
-    backgroundColor: theme.palette.background.default,
-    width: "100%",
-    minHeight: "calc(100vh - 56px)",
-    flexGrow: 1,
-    marginTop: "56px",
-  })
-);
+export const Main = styled("main", {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  width: "100%",
+  minHeight: "calc(100vh - 56px)",
+  flexGrow: 1,
+  marginTop: "56px",
+}));
 
 interface IParams extends Params {
   serviceOrderId: string;
@@ -45,15 +46,23 @@ const CheckoutLayout = () => {
     if (serviceOrderId) {
       handleGetServiceOrder({ serviceOrderId }).catch((err) => {
         if (err.response) {
-          toast.error(err.response.data.error.message);
+          if (err.response.data.error.code === Codes.EXPIRED_TIME) {
+            toast.error(err.response.data.error.message);
+            navigate(`/evento/${slug}/checkout/expired`, {
+              replace: true,
+            });
+          } else {
+            navigate(`/evento/${slug}`, {
+              replace: true,
+            });
+          }
         } else {
           toast.error("Ocorreu um problema ao realizar o pagamento");
         }
-        navigate(`/evento/${slug}`);
         console.log("error");
       });
     } else {
-      navigate("/");
+      navigate("/", { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serviceOrderId, navigate, slug]);
@@ -63,11 +72,13 @@ const CheckoutLayout = () => {
       toast.info("O tempo que tinha para fazer a compra acabou");
       setTimeout(() => {
         handleChangeExpired(false);
-        navigate(`/evento/${slug}`);
+        navigate(`/evento/${slug}/checkout/expired`, {
+          replace: true,
+        });
       }, 300);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isExpired, serviceOrder, navigate, slug]);
+  }, [isExpired, serviceOrder, navigate, slug, serviceOrderId]);
 
   return (
     <Box sx={{ display: "flex" }}>

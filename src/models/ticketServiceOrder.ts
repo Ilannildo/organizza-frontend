@@ -11,7 +11,7 @@ export interface ITicketServiceOrder {
   subscription?: ISubscription;
 }
 
-export interface ITicketServiceOrderForm {
+export interface ITicketServiceOrderResponse {
   service_order_id: string;
   total: number;
   subtotal: number;

@@ -21,3 +21,19 @@ export interface IPaymentMethod {
   updated_at?: Date;
   transactions?: ITransaction[];
 }
+
+export interface IPaymentMethodResponse {
+  payment_id: string;
+  payment_title: string;
+  payment_type:
+    | "credit"
+    | "debit"
+    | "check"
+    | "bank_slip"
+    | "cash"
+    | "deposit"
+    | "wallet"
+    | "transfer"
+    | "pix";
+  information: string;
+}
