@@ -17,7 +17,6 @@ import { useAllPaymentMethods } from "../../../stores/paymentMethods";
 import { useAuthenticatedUser } from "../../../stores/user";
 
 interface IParams extends Params {
-  serviceOrderId: string;
   slug: string;
 }
 
@@ -25,7 +24,7 @@ const CheckoutPaymentMethod = () => {
   const { serviceOrder, paymentMethod, handleChangePaymentMethod } =
     useEventCheckout();
   const navigate = useNavigate();
-  const { serviceOrderId, slug } = useParams<IParams>();
+  const { slug } = useParams<IParams>();
   const { data: user } = useAuthenticatedUser();
   const { data: paymentMethods, isLoading: isLoadingPaymentMethods } =
     useAllPaymentMethods(serviceOrder?.service_order_id || "", {

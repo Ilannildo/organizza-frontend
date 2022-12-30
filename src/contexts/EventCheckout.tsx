@@ -27,6 +27,7 @@ interface IEventCheckoutContext {
   handleChangeExpired: (value: boolean) => void;
   handleResetServiceOrder: () => void;
   paymentMethod: IPaymentMethodResponse | null;
+  paymentCardForm: IPaymentCardForm | null;
   handleChangePaymentMethod: (value: IPaymentMethodResponse) => void;
   handleChangePaymentCardForm: (value: IPaymentCardForm) => void;
 }
@@ -128,7 +129,8 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
         handleResetServiceOrder,
         handleChangePaymentMethod,
         paymentMethod,
-        handleChangePaymentCardForm
+        handleChangePaymentCardForm,
+        paymentCardForm
       }}
     >
       {children}

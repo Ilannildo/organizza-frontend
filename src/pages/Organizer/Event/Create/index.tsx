@@ -20,7 +20,6 @@ import { StepThree } from "./StepThree";
 import Loader from "../../../../layout/Loader";
 import { api } from "../../../../services/api";
 import { toast } from "react-toastify";
-import axios from "axios";
 
 const steps = [
   "Informações gerais",

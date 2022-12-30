@@ -45,3 +45,7 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
 }
+
+.credit-card-logo {
+  transition: all 0.5s ease;
+}

@@ -67,7 +67,7 @@ export const CheckoutSidebar = () => {
     <Box
       sx={{
         flexShrink: { md: 0 },
-        width: matchUpMd ? 350 : "auto",
+        width: matchUpMd ? 320 : "auto",
         backgroundColor: "rgba(0,98,161, 0.05)",
         ml: 2,
         py: 3,

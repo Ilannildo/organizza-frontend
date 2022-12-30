@@ -7,12 +7,20 @@ import {
   Typography,
 } from "@mui/material";
 import { useEventCheckout } from "../../../hooks/useEventCheckout";
-import CardImg from "../../../assets/card.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatExpirationDate, validateCpf } from "../../../utils/roles";
-import { maskCpf, maskCreditCard, maskPhoneNumber, removeMaskCpf } from "../../../utils/masks";
+import {
+  maskCpf,
+  maskCreditCard,
+  maskPhoneNumber,
+  removeMaskCpf,
+} from "../../../utils/masks";
+import creditCardType from "credit-card-type";
+import { CreditCard } from "../../../components/CreditCard";
+import { Params, useNavigate, useParams } from "react-router-dom";
 
 const CARD_NUMBER_MAX_LENGTH = 19;
+const CARD_NUMBER_MIN_LENGTH_TYPE = 4;
 const CARD_NUMBER_MIN_LENGTH = 12;
 const EXPIRATION_DATE_MAX_LENGTH = 9;
 const EXPIRATION_DATE_MIN_LENGTH = 5;
@@ -21,15 +29,43 @@ const SECURITY_CODE_MIN_LENGTH = 3;
 const USER_DOCUMENT_MAX_LENGTH = 11;
 const PHONE_NUMBER_MAX_LENGTH = 11;
 
-const CheckoutPaymentCardForm = () => {
-  const { paymentMethod } = useEventCheckout();
+interface IParams extends Params {
+  slug: string;
+}
 
-  const [cardNumber, setCardNumber] = useState<string>("");
-  const [cardOwnerName, setCardOwnerName] = useState<string>("");
-  const [expirationDate, setExpirationDate] = useState<string>("");
-  const [securityCode, setSecurityCode] = useState<string>("");
-  const [userDocument, setUserDocument] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
+const CheckoutPaymentCardForm = () => {
+  const {
+    paymentMethod,
+    paymentCardForm,
+    serviceOrder,
+    handleChangePaymentCardForm,
+  } = useEventCheckout();
+  const { slug } = useParams<IParams>();
+  const navigate = useNavigate();
+  const [cardNumber, setCardNumber] = useState<string>(
+    paymentCardForm?.cardNumber || ""
+  );
+  const [cardOwnerName, setCardOwnerName] = useState<string>(
+    paymentCardForm?.cardOwnerName || ""
+  );
+  const [expirationDate, setExpirationDate] = useState<string>(
+    paymentCardForm?.expirationDate || ""
+  );
+  const [securityCode, setSecurityCode] = useState<string>(
+    paymentCardForm?.securityCode || ""
+  );
+  const [userDocument, setUserDocument] = useState<string>(
+    paymentCardForm?.userDocument || ""
+  );
+  const [phoneNumber, setPhoneNumber] = useState<string>(
+    paymentCardForm?.phoneNumber || ""
+  );
+
+  const [cardType, setCardType] = useState<string>(
+    paymentCardForm?.cardNumber
+      ? creditCardType(paymentCardForm.cardNumber)[0].type
+      : ""
+  );
 
   const [cardNumberError, setCardNumberError] = useState<string>(" ");
   const [cardOwnerNameError, setCardOwnerNameError] = useState<string>(" ");
@@ -37,9 +73,9 @@ const CheckoutPaymentCardForm = () => {
   const [securityCodeError, setSecurityCodeError] = useState<string>(" ");
   const [userDocumentError, setUserDocumentError] = useState<string>(" ");
   const [phoneNumberError, setPhoneNumberError] = useState<string>(" ");
+  const [cvvFocus, setCvvFocus] = useState<boolean>(false);
 
   const onChangeCardNumber = (value: string) => {
-    
     if (value.length > CARD_NUMBER_MAX_LENGTH) {
       return;
     }
@@ -47,13 +83,20 @@ const CheckoutPaymentCardForm = () => {
     const regex = /^([0-9 ]+)+$/;
     setCardNumber(maskCreditCard(value));
     setCardNumberError(" ");
-
+    setCardType("");
     if (!value) {
       return setCardNumberError("O número do cartão é obrigatório");
     }
 
     if (!regex.test(value)) {
       return setCardNumberError("Revise esse dado");
+    }
+
+    if (value.length >= CARD_NUMBER_MIN_LENGTH_TYPE) {
+      const creditCard = creditCardType(value);
+      if (creditCard.length > 0) {
+        setCardType(creditCard[0].type);
+      }
     }
 
     if (value.length < CARD_NUMBER_MIN_LENGTH) {
@@ -151,7 +194,6 @@ const CheckoutPaymentCardForm = () => {
     }
     setUserDocument(maskCpf(value));
     setUserDocumentError(" ");
-    console.log("CPF", value);
 
     if (!value) {
       return setUserDocumentError("O CPF é obrigatório");
@@ -175,7 +217,6 @@ const CheckoutPaymentCardForm = () => {
     setPhoneNumber(maskPhoneNumber(value));
     setPhoneNumberError(" ");
 
-    console.log("Phone number", value);
     if (!value) {
       return setPhoneNumberError("O número de telefone é obrigatório");
     }
@@ -185,8 +226,37 @@ const CheckoutPaymentCardForm = () => {
     }
   };
 
+  const handleSubmitPaymentCardForm = () => {
+    if (serviceOrder && paymentMethod) {
+      handleChangePaymentCardForm({
+        cardNumber,
+        cardOwnerName,
+        documentType: "cpf",
+        expirationDate,
+        phoneNumber,
+        securityCode,
+        userDocument,
+      });
+      navigate(
+        `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment/${paymentMethod.payment_id}/installments`
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (serviceOrder) {
+      if (!paymentMethod || paymentMethod.payment_type !== "credit") {
+        navigate(
+          `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment`
+        );
+      }
+    } else {
+      navigate(`/evento/${slug}`);
+    }
+  }, [paymentMethod, serviceOrder, slug, navigate]);
+
   return (
-    <Grid container sx={{ py: 3, px: 1 }}>
+    <Grid container sx={{ py: 3 }}>
       <Grid item lg={12} md={12} sm={12} xs={12}>
         <Grid container spacing={2}>
           <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -253,7 +323,7 @@ const CheckoutPaymentCardForm = () => {
                 <Card variant="outlined">
                   <CardContent>
                     <Grid container spacing={3}>
-                      <Grid item lg={8} md={8} sm={12} xs={12}>
+                      <Grid item lg={7} md={7} sm={12} xs={12}>
                         <Grid container spacing={2}>
                           <Grid item lg={12} md={12} xs={12}>
                             <TextField
@@ -321,6 +391,8 @@ const CheckoutPaymentCardForm = () => {
                               }
                               error={securityCodeError !== " "}
                               helperText={securityCodeError}
+                              onFocus={() => setCvvFocus(true)}
+                              onBlur={() => setCvvFocus(false)}
                             />
                           </Grid>
                           <Grid item lg={6} md={6} xs={12}>
@@ -359,14 +431,22 @@ const CheckoutPaymentCardForm = () => {
                       </Grid>
                       <Grid
                         item
-                        lg={4}
-                        md={4}
+                        lg={5}
+                        md={5}
                         sm={12}
                         xs={12}
                         display="flex"
                         alignItems="center"
                       >
-                        <img src={CardImg} alt="" width="100%" />
+                        <CreditCard
+                          cardNumber={cardNumber}
+                          cardOwnerName={cardOwnerName}
+                          cardType={cardType}
+                          expirationDate={expirationDate}
+                          securityCode={securityCode}
+                          userDocument={userDocument}
+                          cvvFocus={cvvFocus}
+                        />
                       </Grid>
                     </Grid>
                   </CardContent>
@@ -380,9 +460,22 @@ const CheckoutPaymentCardForm = () => {
                   display="flex"
                 >
                   <Grid item lg={3} md={4} sm={6} xs={12}>
-                    <Button variant="contained" fullWidth>
-                      Continuar
-                    </Button>
+                    {(
+                      cardNumberError === " " &&
+                      cardOwnerNameError === " " &&
+                      expirationDateError === " " &&
+                      securityCodeError === " " &&
+                      userDocumentError === " " &&
+                      phoneNumberError === " "
+                    ) && (
+                      <Button
+                        variant="contained"
+                        fullWidth
+                        onClick={() => handleSubmitPaymentCardForm()}
+                      >
+                        Continuar
+                      </Button>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
