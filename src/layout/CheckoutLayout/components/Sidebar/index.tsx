@@ -67,7 +67,7 @@ export const CheckoutSidebar = () => {
     <Box
       sx={{
         flexShrink: { md: 0 },
-        width: matchUpMd ? 450 : "auto",
+        width: matchUpMd ? 350 : "auto",
         backgroundColor: "rgba(0,98,161, 0.05)",
         ml: 2,
         py: 3,
@@ -75,7 +75,12 @@ export const CheckoutSidebar = () => {
       }}
     >
       {serviceOrder && !isFetchingServiceOrder && (
-        <>
+        <div
+          style={{
+            position: "sticky",
+            top: 24
+          }}
+        >
           <Grid container>
             <Grid item lg={6} xs={6}>
               <Typography
@@ -97,7 +102,7 @@ export const CheckoutSidebar = () => {
                     sx={{
                       color: (theme) => theme.palette.onPrimaryContainer.main,
                       fontWeight: 500,
-                      width: 16
+                      width: 16,
                     }}
                   >
                     {isExpired ? "00:00" : `${minutes}:${seconds}`}
@@ -223,7 +228,7 @@ export const CheckoutSidebar = () => {
               </Grid>
             )}
           </Grid>
-        </>
+        </div>
       )}
     </Box>
   );

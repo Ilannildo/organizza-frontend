@@ -37,3 +37,13 @@ export interface IPaymentMethodResponse {
     | "pix";
   information: string;
 }
+
+export interface IPaymentCardForm {
+  cardNumber: string;
+  cardOwnerName: string;
+  expirationDate: string;
+  securityCode: string;
+  userDocument: string;
+  documentType: string;
+  phoneNumber: string;
+}

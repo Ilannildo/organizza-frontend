@@ -1,5 +1,8 @@
 import React, { createContext, useState } from "react";
-import { IPaymentMethodResponse } from "../models/paymentMethod";
+import {
+  IPaymentCardForm,
+  IPaymentMethodResponse,
+} from "../models/paymentMethod";
 import {
   ITicketServiceOrder,
   ITicketServiceOrderResponse,
@@ -25,6 +28,7 @@ interface IEventCheckoutContext {
   handleResetServiceOrder: () => void;
   paymentMethod: IPaymentMethodResponse | null;
   handleChangePaymentMethod: (value: IPaymentMethodResponse) => void;
+  handleChangePaymentCardForm: (value: IPaymentCardForm) => void;
 }
 
 export const EventCheckoutContext = createContext<IEventCheckoutContext>(
@@ -46,8 +50,15 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
   const [paymentMethod, setPaymentMethod] =
     useState<IPaymentMethodResponse | null>(null);
 
+  const [paymentCardForm, setPaymentCardForm] =
+    useState<IPaymentCardForm | null>(null);
+
   const handleChangeExpired = (value: boolean) => {
     setIsExpired(value);
+  };
+
+  const handleChangePaymentCardForm = (value: IPaymentCardForm) => {
+    setPaymentCardForm(value);
   };
 
   const handleChangePaymentMethod = (value: IPaymentMethodResponse) => {
@@ -117,6 +128,7 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
         handleResetServiceOrder,
         handleChangePaymentMethod,
         paymentMethod,
+        handleChangePaymentCardForm
       }}
     >
       {children}

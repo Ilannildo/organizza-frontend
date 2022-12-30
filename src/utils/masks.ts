@@ -9,6 +9,34 @@ export function stringAvatar(name: string, width: number, height: number) {
   };
 }
 
+export const maskCpf = (value: string) => {
+  return value
+    .replace(/\D/g, "")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d{1,2})/, "$1-$2")
+    .replace(/(-\d{2})\d+?$/, "$1");
+};
+
+export const maskPhoneNumber = (value: string) => {
+  return value
+    .replace(/\D/g, "")
+    .replace(/(\d{2})(\d)/, "($1) $2")
+    .replace(/(\d)(\d{4})$/, "$1-$2");
+};
+
+export function removeMaskCpf(value: string) {
+  return value.replace(/[^\d]+/g, "");
+}
+
+export function maskCreditCard(value: string) {
+  return value
+    .replace(/\D/g, "")
+    .replace(/(\d{4})(\d)/, "$1 $2")
+    .replace(/(\d{4})(\d)/, "$1 $2")
+    .replace(/(\d{4})(\d{1,2})/, "$1 $2")
+}
+
 export function stringToColor(string: string) {
   let hash = 0;
   let i;
@@ -75,6 +103,6 @@ export const getReturnValuesCounter = (countDown: number) => {
   );
   const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((countDown % (1000 * 60)) / 1000);
-  
+
   return [days, hours, minutes, seconds];
 };

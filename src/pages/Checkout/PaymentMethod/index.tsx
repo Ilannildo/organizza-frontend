@@ -8,6 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
   Radio,
+  Skeleton,
   Typography,
 } from "@mui/material";
 import { Params, useNavigate, useParams } from "react-router-dom";
@@ -26,22 +27,20 @@ const CheckoutPaymentMethod = () => {
   const navigate = useNavigate();
   const { serviceOrderId, slug } = useParams<IParams>();
   const { data: user } = useAuthenticatedUser();
-  const { data: paymentMethods } = useAllPaymentMethods(
-    serviceOrder?.service_order_id || "",
-    {
+  const { data: paymentMethods, isLoading: isLoadingPaymentMethods } =
+    useAllPaymentMethods(serviceOrder?.service_order_id || "", {
       enabled: !!serviceOrder,
-    }
-  );
+    });
 
   const goToPaymentCardForm = () => {
-    if (paymentMethod) {
+    if (paymentMethod && serviceOrder) {
       if (paymentMethod.payment_type === "credit") {
         return navigate(
-          `/evento/${slug}/checkout/${serviceOrderId}/payment/${paymentMethod.payment_id}/card-form`
+          `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment/${paymentMethod.payment_id}/card-form`
         );
       }
 
-      return navigate(`/evento/${slug}/checkout/${serviceOrderId}/shipping`);
+      return navigate(`/evento/${slug}/checkout/${serviceOrder.service_order_id}/shipping`);
     }
   };
 
@@ -130,9 +129,9 @@ const CheckoutPaymentMethod = () => {
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <List>
-                  <Grid container spacing={2}>
-                    {paymentMethods &&
-                      paymentMethods.map((payment) => (
+                  {!isLoadingPaymentMethods && paymentMethods && (
+                    <Grid container spacing={2}>
+                      {paymentMethods.map((payment) => (
                         <Grid
                           item
                           lg={12}
@@ -146,7 +145,8 @@ const CheckoutPaymentMethod = () => {
                               onClick={() => handleChangePaymentMethod(payment)}
                               selected={
                                 paymentMethod
-                                  ? paymentMethod.payment_id === payment.payment_id
+                                  ? paymentMethod.payment_id ===
+                                    payment.payment_id
                                   : false
                               }
                               sx={{
@@ -158,7 +158,8 @@ const CheckoutPaymentMethod = () => {
                                   edge="start"
                                   checked={
                                     paymentMethod
-                                      ? paymentMethod.payment_id === payment.payment_id
+                                      ? paymentMethod.payment_id ===
+                                        payment.payment_id
                                       : false
                                   }
                                   disableRipple
@@ -173,7 +174,48 @@ const CheckoutPaymentMethod = () => {
                           </Card>
                         </Grid>
                       ))}
-                  </Grid>
+                    </Grid>
+                  )}
+                  {isLoadingPaymentMethods && (
+                    <Grid container spacing={2}>
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Card variant="outlined">
+                          <ListItemButton disabled>
+                            <ListItemIcon>
+                              <Radio
+                                edge="start"
+                                disabled
+                                disableRipple
+                                tabIndex={-1}
+                              />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={<Skeleton width={300} height={24} />}
+                              secondary={<Skeleton width={350} height={24} />}
+                            />
+                          </ListItemButton>
+                        </Card>
+                      </Grid>
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Card variant="outlined">
+                          <ListItemButton disabled>
+                            <ListItemIcon>
+                              <Radio
+                                edge="start"
+                                disabled
+                                disableRipple
+                                tabIndex={-1}
+                              />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={<Skeleton width={280} height={24} />}
+                              secondary={<Skeleton width={320} height={24} />}
+                            />
+                          </ListItemButton>
+                        </Card>
+                      </Grid>
+                    </Grid>
+                  )}
                 </List>
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>

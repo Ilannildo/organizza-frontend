@@ -79,7 +79,7 @@ export const MainRoutes = {
       ),
     },
     {
-      path: "evento/:slug/checkout/expired", //:serviceOrderId/payment
+      path: "evento/:slug/checkout/buy/expired", //:serviceOrderId/payment
       element: (
         <ProtectedRoute
           allowedRoles={[

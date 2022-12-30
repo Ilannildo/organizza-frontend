@@ -1,9 +1,7 @@
 import { Outlet, Params, useNavigate, useParams } from "react-router-dom";
 import {
   AppBar,
-  Box,
   Container,
-  CssBaseline,
   styled,
   Toolbar,
   useTheme,
@@ -20,9 +18,8 @@ export const Main = styled("main", {
 })(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   width: "100%",
-  minHeight: "calc(100vh - 56px)",
+  height: "100%",
   flexGrow: 1,
-  marginTop: "56px",
 }));
 
 interface IParams extends Params {
@@ -47,8 +44,8 @@ const CheckoutLayout = () => {
       handleGetServiceOrder({ serviceOrderId }).catch((err) => {
         if (err.response) {
           if (err.response.data.error.code === Codes.EXPIRED_TIME) {
-            toast.error(err.response.data.error.message);
-            navigate(`/evento/${slug}/checkout/expired`, {
+            toast.info(err.response.data.error.message);
+            navigate(`/evento/${slug}/checkout/buy/expired`, {
               replace: true,
             });
           } else {
@@ -72,7 +69,7 @@ const CheckoutLayout = () => {
       toast.info("O tempo que tinha para fazer a compra acabou");
       setTimeout(() => {
         handleChangeExpired(false);
-        navigate(`/evento/${slug}/checkout/expired`, {
+        navigate(`/evento/${slug}/checkout/buy/expired`, {
           replace: true,
         });
       }, 300);
@@ -81,12 +78,11 @@ const CheckoutLayout = () => {
   }, [isExpired, serviceOrder, navigate, slug, serviceOrderId]);
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+    <>
       <AppBar
-        position="fixed"
         color="inherit"
         elevation={0}
+        position="relative"
         sx={{
           bgcolor: theme.palette.primary.main,
         }}
@@ -106,18 +102,18 @@ const CheckoutLayout = () => {
       </AppBar>
       <Main theme={theme}>
         <Container
-          maxWidth="xl"
+          maxWidth="lg"
           sx={{
             display: "flex",
             flexDirection: "row",
-            minHeight: "calc(100vh - 56px)",
+            height: "calc(100vh - 50px)",
           }}
         >
           <Outlet />
           <CheckoutSidebar />
         </Container>
       </Main>
-    </Box>
+    </>
   );
 };
 

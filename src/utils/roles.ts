@@ -61,16 +61,30 @@ export const calculateFee = ({
     if (value >= ticket_price_type.quote.min_value) {
       fee = value * ticket_price_type.quote.percentage;
     }
-
-    // calcular o valor do ingresso
-    // calcular o valor a receber por ingresso
-    // if (includeFee) {
-    //   ticketValue = value + fee;
-    //   ticketValueReceived = value;
-    // } else {
-    //   ticketValue = value;
-    //   ticketValueReceived = value > 0 ? value - fee : value;
-    // }
   }
   return fee;
+};
+
+export const formatExpirationDate = (value: string) => {
+  return value
+    .replace(
+      /[^0-9]/g,
+      "" // To allow only numbers
+    )
+    .replace(
+      /^([2-9])$/g,
+      "0$1" // To handle 3 > 03
+    )
+    .replace(
+      /^(1{1})([3-9]{1})$/g,
+      "0$1/$2" // 13 > 01/3
+    )
+    .replace(
+      /^0{1,}/g,
+      "0" // To handle 00 > 0
+    )
+    .replace(
+      /^([0-1]{1}[0-9]{1})([0-9]{1,4}).*/g,
+      "$1/$2" // To handle 113 > 11/3
+    );
 };
