@@ -26,7 +26,7 @@ export const CheckoutSidebar = () => {
     isExpired,
     isFetchingServiceOrder,
     handleResetServiceOrder,
-    paymentMethod,
+    finalize,
   } = useEventCheckout();
 
   const [counter, setCounter] = useState(0);
@@ -78,7 +78,7 @@ export const CheckoutSidebar = () => {
         <div
           style={{
             position: "sticky",
-            top: 24
+            top: 24,
           }}
         >
           <Grid container>
@@ -220,7 +220,7 @@ export const CheckoutSidebar = () => {
                 </Grid>
               </Grid>
             </Grid>
-            {serviceOrder && paymentMethod && (
+            {finalize && (
               <Grid item lg={12} xs={12} mt={5}>
                 <Button fullWidth variant="contained" disabled={isExpired}>
                   Finalizar a compra

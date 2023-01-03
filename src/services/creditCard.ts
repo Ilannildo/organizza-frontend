@@ -45,13 +45,13 @@ const luhnCheck = (val: string) => {
 export const checkCreditCard = (firstSixDigits: string) => {
   //Error messages
   const ccErrors = [];
-  ccErrors[0] = "Unknown card type";
-  ccErrors[1] = "No card number provided";
-  ccErrors[2] = "Credit card number is in invalid format";
-  ccErrors[3] = "Credit card number is invalid";
-  ccErrors[4] = "Credit card number has an inappropriate number of digits";
+  ccErrors[0] = "Tipo de cartão desconhecido";
+  ccErrors[1] = "Nenhum número de cartão fornecido";
+  ccErrors[2] = "Número do cartão de crédito está em formato inválido";
+  ccErrors[3] = "O número do cartão de crédito é inválido";
+  ccErrors[4] = "O número do cartão de crédito tem um número inadequado de dígitos";
   ccErrors[5] =
-    "Warning! This credit card number is associated with a scam attempt";
+    "Aviso! Este número de cartão de crédito está associado a uma tentativa de golpe";
 
   //Response format
   const response = (

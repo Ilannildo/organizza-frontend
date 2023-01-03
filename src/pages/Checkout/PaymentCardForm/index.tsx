@@ -18,6 +18,7 @@ import {
 import creditCardType from "credit-card-type";
 import { CreditCard } from "../../../components/CreditCard";
 import { Params, useNavigate, useParams } from "react-router-dom";
+import { checkCreditCard } from "../../../services/creditCard";
 
 const CARD_NUMBER_MAX_LENGTH = 19;
 const CARD_NUMBER_MIN_LENGTH_TYPE = 4;
@@ -39,6 +40,7 @@ const CheckoutPaymentCardForm = () => {
     paymentCardForm,
     serviceOrder,
     handleChangePaymentCardForm,
+    handleChangeFinalize,
   } = useEventCheckout();
   const { slug } = useParams<IParams>();
   const navigate = useNavigate();
@@ -104,6 +106,13 @@ const CheckoutPaymentCardForm = () => {
         "A quantidade de caracteres digitados é inválida"
       );
     }
+
+    const checked = checkCreditCard(value);
+    if (!checked.success) {
+      return setCardNumberError(
+        checked.message || "Número do cartão é inválido"
+      );
+    }
   };
 
   const onChangeCardOwnerName = (value: string) => {
@@ -156,7 +165,7 @@ const CheckoutPaymentCardForm = () => {
     }
 
     const source_date = new Date();
-    if (year <= source_date.getFullYear()) {
+    if (year < source_date.getFullYear()) {
       return setExpirationDateError("Insira uma data válida");
     }
   };
@@ -243,6 +252,13 @@ const CheckoutPaymentCardForm = () => {
     }
   };
 
+  const goToPayment = () => {
+    handleChangePaymentCardForm(null);
+    return navigate(
+      `/evento/${slug}/checkout/${serviceOrder?.service_order_id}/payment`
+    );
+  };
+
   useEffect(() => {
     if (serviceOrder) {
       if (!paymentMethod || paymentMethod.payment_type !== "credit") {
@@ -254,6 +270,11 @@ const CheckoutPaymentCardForm = () => {
       navigate(`/evento/${slug}`);
     }
   }, [paymentMethod, serviceOrder, slug, navigate]);
+
+  useEffect(() => {
+    handleChangeFinalize(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Grid container sx={{ py: 3 }}>
@@ -300,7 +321,7 @@ const CheckoutPaymentCardForm = () => {
                     alignItems="center"
                     display="flex"
                   >
-                    <Button>Alterar</Button>
+                    <Button onClick={() => goToPayment()}>Alterar</Button>
                   </Grid>
                 </Grid>
               </CardContent>
@@ -460,22 +481,26 @@ const CheckoutPaymentCardForm = () => {
                   display="flex"
                 >
                   <Grid item lg={3} md={4} sm={6} xs={12}>
-                    {(
+                    {cardNumber &&
+                      cardOwnerName &&
+                      expirationDate &&
+                      securityCode &&
+                      userDocument &&
+                      phoneNumber &&
                       cardNumberError === " " &&
                       cardOwnerNameError === " " &&
                       expirationDateError === " " &&
                       securityCodeError === " " &&
                       userDocumentError === " " &&
-                      phoneNumberError === " "
-                    ) && (
-                      <Button
-                        variant="contained"
-                        fullWidth
-                        onClick={() => handleSubmitPaymentCardForm()}
-                      >
-                        Continuar
-                      </Button>
-                    )}
+                      phoneNumberError === " " && (
+                        <Button
+                          variant="contained"
+                          fullWidth
+                          onClick={() => handleSubmitPaymentCardForm()}
+                        >
+                          Continuar
+                        </Button>
+                      )}
                   </Grid>
                 </Grid>
               </Grid>

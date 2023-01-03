@@ -1,11 +1,5 @@
 import { Outlet, Params, useNavigate, useParams } from "react-router-dom";
-import {
-  AppBar,
-  Container,
-  styled,
-  Toolbar,
-  useTheme,
-} from "@mui/material";
+import { AppBar, Container, styled, Toolbar, useTheme } from "@mui/material";
 import LogoSection from "../MainPanelLayout/components/LogoSection";
 import { CheckoutSidebar } from "./components/Sidebar";
 import { useEventCheckout } from "../../hooks/useEventCheckout";
@@ -44,11 +38,11 @@ const CheckoutLayout = () => {
       handleGetServiceOrder({ serviceOrderId }).catch((err) => {
         if (err.response) {
           if (err.response.data.error.code === Codes.EXPIRED_TIME) {
-            toast.info(err.response.data.error.message);
             navigate(`/evento/${slug}/checkout/buy/expired`, {
               replace: true,
             });
           } else {
+            toast.info(err.response.data.error.message);
             navigate(`/evento/${slug}`, {
               replace: true,
             });
@@ -66,7 +60,6 @@ const CheckoutLayout = () => {
 
   useEffect(() => {
     if (!serviceOrder && isExpired) {
-      toast.info("O tempo que tinha para fazer a compra acabou");
       setTimeout(() => {
         handleChangeExpired(false);
         navigate(`/evento/${slug}/checkout/buy/expired`, {
@@ -106,7 +99,7 @@ const CheckoutLayout = () => {
           sx={{
             display: "flex",
             flexDirection: "row",
-            height: "calc(100vh - 50px)",
+            // height: "calc(100vh - 50px)",
           }}
         >
           <Outlet />

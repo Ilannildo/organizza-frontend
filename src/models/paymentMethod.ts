@@ -1,3 +1,4 @@
+import { IInstallment } from "./installments";
 import { ITransaction } from "./transaction";
 
 export interface IPaymentMethod {
@@ -14,12 +15,11 @@ export interface IPaymentMethod {
     | "pix";
   name: string;
   informations?: string;
-  fee: number;
-  installments: number;
   status: boolean;
   created_at?: Date;
   updated_at?: Date;
   transactions?: ITransaction[];
+  installments?: IInstallment[];
 }
 
 export interface IPaymentMethodResponse {

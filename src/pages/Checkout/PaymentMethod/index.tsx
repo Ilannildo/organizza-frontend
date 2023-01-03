@@ -11,6 +11,7 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
+import { useEffect } from "react";
 import { Params, useNavigate, useParams } from "react-router-dom";
 import { useEventCheckout } from "../../../hooks/useEventCheckout";
 import { useAllPaymentMethods } from "../../../stores/paymentMethods";
@@ -21,8 +22,12 @@ interface IParams extends Params {
 }
 
 const CheckoutPaymentMethod = () => {
-  const { serviceOrder, paymentMethod, handleChangePaymentMethod } =
-    useEventCheckout();
+  const {
+    serviceOrder,
+    paymentMethod,
+    handleChangePaymentMethod,
+    handleChangeFinalize,
+  } = useEventCheckout();
   const navigate = useNavigate();
   const { slug } = useParams<IParams>();
   const { data: user } = useAuthenticatedUser();
@@ -39,9 +44,16 @@ const CheckoutPaymentMethod = () => {
         );
       }
 
-      return navigate(`/evento/${slug}/checkout/${serviceOrder.service_order_id}/shipping`);
+      return navigate(
+        `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment/${paymentMethod.payment_id}/pay`
+      );
     }
   };
+
+  useEffect(() => {
+    handleChangeFinalize(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Grid container sx={{ py: 3, px: 1 }}>

@@ -34,7 +34,24 @@ export function maskCreditCard(value: string) {
     .replace(/\D/g, "")
     .replace(/(\d{4})(\d)/, "$1 $2")
     .replace(/(\d{4})(\d)/, "$1 $2")
-    .replace(/(\d{4})(\d{1,2})/, "$1 $2")
+    .replace(/(\d{4})(\d{1,2})/, "$1 $2");
+}
+
+export function maskCreditCardText(value: string) {
+  // return value
+  //   .replace(/\D/g, "")
+  //   .replace(/(\d{4})(\d)/, "****")
+  //   .replace(/(\d{4})(\d)/, "****")
+  //   .replace(/(\d{4})(\d)/, "$1 $2");
+  let hideNum = [];
+	for(let i = 0; i < value.length; i++){
+    if(i < value.length-4){
+      hideNum.push("*");
+    }else{
+      hideNum.push(value[i]);
+    }
+  }
+  return hideNum.slice(11, hideNum.length).join("");
 }
 
 export function stringToColor(string: string) {

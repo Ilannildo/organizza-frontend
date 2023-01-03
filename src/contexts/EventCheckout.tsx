@@ -1,4 +1,5 @@
 import React, { createContext, useState } from "react";
+import { IInstallmentResponse } from "../models/installments";
 import {
   IPaymentCardForm,
   IPaymentMethodResponse,
@@ -21,15 +22,23 @@ interface IEventCheckoutContext {
     serviceOrderId: string;
   }) => Promise<ITicketServiceOrderResponse>;
   isCreatingServiceOrder: boolean;
+  isFinishingServiceOrder: boolean;
   isFetchingServiceOrder: boolean;
+  finalize: boolean;
   isExpired: boolean;
   serviceOrder: ITicketServiceOrderResponse | null;
   handleChangeExpired: (value: boolean) => void;
+  handleChangeFinalize: (value: boolean) => void;
   handleResetServiceOrder: () => void;
+  handleFinalizeServiceOrder: () => void;
   paymentMethod: IPaymentMethodResponse | null;
   paymentCardForm: IPaymentCardForm | null;
   handleChangePaymentMethod: (value: IPaymentMethodResponse) => void;
-  handleChangePaymentCardForm: (value: IPaymentCardForm) => void;
+  paymentCardInstallment: IInstallmentResponse | null;
+  handleChangePaymentCardInstallment: (
+    value: IInstallmentResponse | null
+  ) => void;
+  handleChangePaymentCardForm: (value: IPaymentCardForm | null) => void;
 }
 
 export const EventCheckoutContext = createContext<IEventCheckoutContext>(
@@ -45,7 +54,9 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
 }) => {
   const [isExpired, setIsExpired] = useState(false);
   const [isCreatingServiceOrder, setIsCreatingServiceOrder] = useState(false);
+  const [isFinishingServiceOrder, setIsFinishingServiceOrder] = useState(false);
   const [isFetchingServiceOrder, setIsFetchingServiceOrder] = useState(false);
+  const [finalize, setFinalize] = useState(false);
   const [serviceOrder, setServiceOrder] =
     useState<ITicketServiceOrderResponse | null>(null);
   const [paymentMethod, setPaymentMethod] =
@@ -54,12 +65,25 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
   const [paymentCardForm, setPaymentCardForm] =
     useState<IPaymentCardForm | null>(null);
 
+  const [paymentCardInstallment, setPaymentCardInstallment] =
+    useState<IInstallmentResponse | null>(null);
+
   const handleChangeExpired = (value: boolean) => {
     setIsExpired(value);
   };
 
-  const handleChangePaymentCardForm = (value: IPaymentCardForm) => {
+  const handleChangeFinalize = (value: boolean) => {
+    setFinalize(value);
+  };
+
+  const handleChangePaymentCardForm = (value: IPaymentCardForm | null) => {
     setPaymentCardForm(value);
+  };
+
+  const handleChangePaymentCardInstallment = (
+    value: IInstallmentResponse | null
+  ) => {
+    setPaymentCardInstallment(value);
   };
 
   const handleChangePaymentMethod = (value: IPaymentMethodResponse) => {
@@ -116,21 +140,42 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
     });
   };
 
+  const handleFinalizeServiceOrder = async () => {
+    return new Promise<ITicketServiceOrder>(async (resolve, reject) => {
+      try {
+        setIsFinishingServiceOrder(true);
+        const res = await api.post("/service-orders/tickets", {});
+
+        setIsFinishingServiceOrder(false);
+        resolve(res.data.data);
+      } catch (error: any) {
+        setIsFinishingServiceOrder(false);
+        reject(error);
+      }
+    });
+  };
+
   return (
     <EventCheckoutContext.Provider
       value={{
-        handleCreateServiceOrder,
-        isCreatingServiceOrder,
-        handleGetServiceOrder,
-        isFetchingServiceOrder,
-        serviceOrder,
-        isExpired,
-        handleChangeExpired,
-        handleResetServiceOrder,
-        handleChangePaymentMethod,
-        paymentMethod,
+        handleChangePaymentCardInstallment,
         handleChangePaymentCardForm,
-        paymentCardForm
+        handleChangePaymentMethod,
+        handleFinalizeServiceOrder,
+        handleCreateServiceOrder,
+        handleResetServiceOrder,
+        handleGetServiceOrder,
+        handleChangeFinalize,
+        handleChangeExpired,
+        isFinishingServiceOrder,
+        isCreatingServiceOrder,
+        isFetchingServiceOrder,
+        isExpired,
+        serviceOrder,
+        finalize,
+        paymentMethod,
+        paymentCardForm,
+        paymentCardInstallment,
       }}
     >
       {children}

@@ -1,5 +1,6 @@
 html {
   scroll-behavior: smooth;
+  height: 100vh;
 }
 
 
@@ -7,6 +8,7 @@ body {
   margin: 0;
   font-family: "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
+  height: 100%;
 }
 
 a {

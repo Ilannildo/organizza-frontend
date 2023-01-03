@@ -1,8 +1,10 @@
 import { AllowedRolesNames, ProtectedRoute } from "../layout/ProtectedRoute";
 
-import CheckoutLayout from "../layout/CheckoutLayout";
-import CheckoutPaymentMethod from "../pages/Checkout/PaymentMethod";
+import CheckoutPaymentCardInstallments from "../pages/Checkout/PaymentCardInstallments";
 import CheckoutPaymentCardForm from "../pages/Checkout/PaymentCardForm";
+import CheckoutPaymentMethod from "../pages/Checkout/PaymentMethod";
+import CheckoutLayout from "../layout/CheckoutLayout";
+import CheckoutPay from "../pages/Checkout/Pay";
 
 export const CheckoutRoutes = {
   path: "evento/:slug/checkout/:serviceOrderId",
@@ -26,6 +28,14 @@ export const CheckoutRoutes = {
     {
       path: "payment/:paymentMethodId/card-form",
       element: <CheckoutPaymentCardForm />,
+    },
+    {
+      path: "payment/:paymentMethodId/installments",
+      element: <CheckoutPaymentCardInstallments />,
+    },
+    {
+      path: "payment/:paymentMethodId/pay",
+      element: <CheckoutPay />,
     },
   ],
 };
