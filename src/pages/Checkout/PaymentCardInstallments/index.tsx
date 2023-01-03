@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import {
+  Avatar,
   Button,
   Card,
   CardContent,
@@ -18,6 +19,7 @@ import creditCardType from "credit-card-type";
 import { useEventCheckout } from "../../../hooks/useEventCheckout";
 import { useAllPaymentInstallments } from "../../../stores/paymentMethods";
 import { formatCurrency } from "../../../utils/masks";
+import { paymentMethodIcons } from "../PaymentMethod";
 
 interface IParams extends Params {
   slug: string;
@@ -98,12 +100,31 @@ const CheckoutPaymentCardInstallments = () => {
               Forma de pagamento
             </Typography>
           </Grid>
-          {paymentCardForm && (
+          {paymentCardForm && paymentMethod && (
             <Grid item lg={12} md={12} sm={12} xs={12}>
               <Card variant="outlined">
                 <CardContent>
                   <Grid container>
-                    <Grid item lg={8} md={8} xs={12}>
+                    <Grid item lg={1} md={1} xs={1}>
+                      <Avatar
+                        sx={{
+                          bgcolor: (theme) =>
+                            theme.palette.primaryContainer.main,
+                        }}
+                      >
+                        <img
+                          src={
+                            paymentMethodIcons.find(
+                              (item) => item.name === paymentMethod.payment_type
+                            )?.icon
+                          }
+                          alt="teste"
+                          width={24}
+                          height={24}
+                        />
+                      </Avatar>
+                    </Grid>
+                    <Grid item lg={7} md={7} xs={11}>
                       <Typography
                         fontSize={16}
                         sx={{
@@ -137,7 +158,9 @@ const CheckoutPaymentCardInstallments = () => {
                       alignItems="center"
                       display="flex"
                     >
-                      <Button onClick={() => goToPaymentCardForm()}>Alterar</Button>
+                      <Button onClick={() => goToPaymentCardForm()}>
+                        Alterar
+                      </Button>
                     </Grid>
                   </Grid>
                 </CardContent>
@@ -175,7 +198,7 @@ const CheckoutPaymentCardInstallments = () => {
                               onClick={() => {
                                 handleChangePaymentCardInstallment(installment);
                                 window.scrollTo({
-                                  top: 2000,
+                                  top: 1024,
                                   behavior: "smooth",
                                 });
                               }}

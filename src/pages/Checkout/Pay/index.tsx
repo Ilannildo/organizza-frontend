@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Card,
   CardContent,
@@ -20,6 +21,7 @@ import {
   removeMaskCpf,
 } from "../../../utils/masks";
 import { validateCpf } from "../../../utils/roles";
+import { paymentMethodIcons } from "../PaymentMethod";
 
 interface IParams extends Params {
   slug: string;
@@ -38,6 +40,7 @@ const CheckoutPay = () => {
     handleChangeFinalize,
     handleChangePaymentCardForm,
     handleChangePaymentCardInstallment,
+    isFinishingServiceOrder,
   } = useEventCheckout();
   const { slug } = useParams<IParams>();
   const [userDocument, setUserDocument] = useState<string>("");
@@ -238,7 +241,28 @@ const CheckoutPay = () => {
                         <Card variant="outlined">
                           <CardContent>
                             <Grid container>
-                              <Grid item lg={8} md={8} xs={12}>
+                              <Grid item lg={1} md={1} xs={1}>
+                                <Avatar
+                                  sx={{
+                                    bgcolor: (theme) =>
+                                      theme.palette.primaryContainer.main,
+                                  }}
+                                >
+                                  <img
+                                    src={
+                                      paymentMethodIcons.find(
+                                        (item) =>
+                                          item.name ===
+                                          paymentMethod.payment_type
+                                      )?.icon
+                                    }
+                                    alt="teste"
+                                    width={24}
+                                    height={24}
+                                  />
+                                </Avatar>
+                              </Grid>
+                              <Grid item lg={7} md={7} xs={11}>
                                 <Typography
                                   fontSize={16}
                                   sx={{
@@ -274,19 +298,21 @@ const CheckoutPay = () => {
                                   </Typography>
                                 )}
                               </Grid>
-                              <Grid
-                                item
-                                lg={4}
-                                md={4}
-                                xs={12}
-                                justifyContent="flex-end"
-                                alignItems="center"
-                                display="flex"
-                              >
-                                <Button onClick={() => goToPaymentMethod()}>
-                                  Alterar
-                                </Button>
-                              </Grid>
+                              {!isFinishingServiceOrder && (
+                                <Grid
+                                  item
+                                  lg={4}
+                                  md={4}
+                                  xs={12}
+                                  justifyContent="flex-end"
+                                  alignItems="center"
+                                  display="flex"
+                                >
+                                  <Button onClick={() => goToPaymentMethod()}>
+                                    Alterar
+                                  </Button>
+                                </Grid>
+                              )}
                             </Grid>
                           </CardContent>
                         </Card>
@@ -296,7 +322,28 @@ const CheckoutPay = () => {
                         <Card variant="outlined">
                           <CardContent>
                             <Grid container>
-                              <Grid item lg={8} md={8} xs={12}>
+                              <Grid item lg={1} md={1} xs={1}>
+                                <Avatar
+                                  sx={{
+                                    bgcolor: (theme) =>
+                                      theme.palette.primaryContainer.main,
+                                  }}
+                                >
+                                  <img
+                                    src={
+                                      paymentMethodIcons.find(
+                                        (item) =>
+                                          item.name ===
+                                          paymentMethod.payment_type
+                                      )?.icon
+                                    }
+                                    alt="teste"
+                                    width={24}
+                                    height={24}
+                                  />
+                                </Avatar>
+                              </Grid>
+                              <Grid item lg={7} md={7} xs={11}>
                                 <Typography
                                   fontSize={16}
                                   sx={{
@@ -317,19 +364,21 @@ const CheckoutPay = () => {
                                   for aprovado
                                 </Typography>
                               </Grid>
-                              <Grid
-                                item
-                                lg={4}
-                                md={4}
-                                xs={12}
-                                justifyContent="flex-end"
-                                alignItems="center"
-                                display="flex"
-                              >
-                                <Button onClick={() => goToPaymentMethod()}>
-                                  Alterar
-                                </Button>
-                              </Grid>
+                              {!isFinishingServiceOrder && (
+                                <Grid
+                                  item
+                                  lg={4}
+                                  md={4}
+                                  xs={12}
+                                  justifyContent="flex-end"
+                                  alignItems="center"
+                                  display="flex"
+                                >
+                                  <Button onClick={() => goToPaymentMethod()}>
+                                    Alterar
+                                  </Button>
+                                </Grid>
+                              )}
                             </Grid>
                           </CardContent>
                         </Card>
@@ -392,21 +441,25 @@ const CheckoutPay = () => {
                               {maskPhoneNumber(paymentCardForm.phoneNumber)}
                             </Typography>
                           </Grid>
-                          <Grid
-                            item
-                            lg={4}
-                            md={4}
-                            xs={12}
-                            justifyContent="flex-end"
-                            alignItems="center"
-                            display="flex"
-                          >
-                            <Button
-                              onClick={() => handleChangePaymentCardForm(null)}
+                          {!isFinishingServiceOrder && (
+                            <Grid
+                              item
+                              lg={4}
+                              md={4}
+                              xs={12}
+                              justifyContent="flex-end"
+                              alignItems="center"
+                              display="flex"
                             >
-                              Alterar
-                            </Button>
-                          </Grid>
+                              <Button
+                                onClick={() =>
+                                  handleChangePaymentCardForm(null)
+                                }
+                              >
+                                Alterar
+                              </Button>
+                            </Grid>
+                          )}
                         </Grid>
                       </CardContent>
                     </Card>
@@ -448,19 +501,21 @@ const CheckoutPay = () => {
                                 } ${maskZipCode(paymentAddress.zipcode)}`}
                               </Typography>
                             </Grid>
-                            <Grid
-                              item
-                              lg={4}
-                              md={4}
-                              xs={12}
-                              justifyContent="flex-end"
-                              alignItems="center"
-                              display="flex"
-                            >
-                              <Button onClick={() => goToPaymentAddress()}>
-                                Alterar
-                              </Button>
-                            </Grid>
+                            {!isFinishingServiceOrder && (
+                              <Grid
+                                item
+                                lg={4}
+                                md={4}
+                                xs={12}
+                                justifyContent="flex-end"
+                                alignItems="center"
+                                display="flex"
+                              >
+                                <Button onClick={() => goToPaymentAddress()}>
+                                  Alterar
+                                </Button>
+                              </Grid>
+                            )}
                           </Grid>
                         </CardContent>
                       </Card>

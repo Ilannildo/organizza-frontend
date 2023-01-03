@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Card,
   CardContent,
@@ -19,6 +20,7 @@ import creditCardType from "credit-card-type";
 import { CreditCard } from "../../../components/CreditCard";
 import { Params, useNavigate, useParams } from "react-router-dom";
 import { checkCreditCard } from "../../../services/creditCard";
+import { paymentMethodIcons } from "../PaymentMethod";
 
 const CARD_NUMBER_MAX_LENGTH = 19;
 const CARD_NUMBER_MIN_LENGTH_TYPE = 4;
@@ -291,42 +293,64 @@ const CheckoutPaymentCardForm = () => {
               Forma de pagamento
             </Typography>
           </Grid>
-          <Grid item lg={12} md={12} sm={12} xs={12}>
-            <Card variant="outlined">
-              <CardContent>
-                <Grid container>
-                  <Grid
-                    item
-                    lg={8}
-                    md={8}
-                    xs={12}
-                    alignItems="center"
-                    display="flex"
-                  >
-                    <Typography
-                      fontSize={16}
-                      sx={{
-                        color: (theme) => theme.palette.onPrimaryContainer.main,
-                      }}
+          {paymentMethod && (
+            <Grid item lg={12} md={12} sm={12} xs={12}>
+              <Card variant="outlined">
+                <CardContent>
+                  <Grid container>
+                    <Grid item lg={1} md={1} xs={1}>
+                      <Avatar
+                        sx={{
+                          bgcolor: (theme) =>
+                            theme.palette.primaryContainer.main,
+                        }}
+                      >
+                        <img
+                          src={
+                            paymentMethodIcons.find(
+                              (item) => item.name === paymentMethod.payment_type
+                            )?.icon
+                          }
+                          alt="teste"
+                          width={24}
+                          height={24}
+                        />
+                      </Avatar>
+                    </Grid>
+                    <Grid
+                      item
+                      lg={7}
+                      md={7}
+                      xs={11}
+                      alignItems="center"
+                      display="flex"
                     >
-                      {paymentMethod?.payment_title}
-                    </Typography>
+                      <Typography
+                        fontSize={16}
+                        sx={{
+                          color: (theme) =>
+                            theme.palette.onPrimaryContainer.main,
+                        }}
+                      >
+                        {paymentMethod?.payment_title}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      lg={4}
+                      md={4}
+                      xs={12}
+                      justifyContent="flex-end"
+                      alignItems="center"
+                      display="flex"
+                    >
+                      <Button onClick={() => goToPayment()}>Alterar</Button>
+                    </Grid>
                   </Grid>
-                  <Grid
-                    item
-                    lg={4}
-                    md={4}
-                    xs={12}
-                    justifyContent="flex-end"
-                    alignItems="center"
-                    display="flex"
-                  >
-                    <Button onClick={() => goToPayment()}>Alterar</Button>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
           <Grid item lg={12} md={12} sm={12} xs={12}>
             <Grid container spacing={2}>
               <Grid item lg={12} md={12} sm={12} xs={12}>

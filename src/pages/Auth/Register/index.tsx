@@ -1,3 +1,4 @@
+import { FormEvent, useState } from "react";
 import {
   Box,
   Button,
@@ -11,20 +12,19 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { FormEvent, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import Logo from "../../../assets/images/logo-color.svg";
 import { api } from "../../../services/api";
 import { validateEmail } from "../../../utils/roles";
+import Logo from "../../../assets/images/logo-color.svg";
 
 const Register = () => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const [searchparams] = useSearchParams();
   const navigate = useNavigate();
-
+  const location = useLocation();
   // states
   const [isLoading, setIsLoading] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
@@ -155,6 +155,17 @@ const Register = () => {
               <Typography fontSize={16} variant="h1" fontWeight="500">
                 Deixando o seu evento melhor!
               </Typography>
+              {location.state.checkout && (
+                <Typography
+                  fontSize={16}
+                  variant="h1"
+                  mt={2}
+                  fontWeight="500"
+                  color="secondary"
+                >
+                  Realize seu cadastro para continuar a inscrição
+                </Typography>
+              )}
             </Grid>
           </Grid>
           <Grid container justifyContent="center" mt={2}>
@@ -324,7 +335,11 @@ const Register = () => {
                   mb: 2,
                 }}
               >
-                {isLoading ? <CircularProgress color="inherit" size={26} /> : `Cadastrar`}
+                {isLoading ? (
+                  <CircularProgress color="inherit" size={26} />
+                ) : (
+                  `Cadastrar`
+                )}
               </Button>
               <Typography fontSize={14} variant="h1" mb={2}>
                 Já tem uma conta?{" "}

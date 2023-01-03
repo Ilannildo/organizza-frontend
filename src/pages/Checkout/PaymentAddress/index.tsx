@@ -25,7 +25,6 @@ interface IParams extends Params {
 const CheckoutPaymentAddress = () => {
   const {
     serviceOrder,
-    isFetchingServiceOrder,
     handleChangeFinalize,
     handleChangePaymentAddress,
     paymentAddress,
@@ -132,12 +131,6 @@ const CheckoutPaymentAddress = () => {
   };
 
   useEffect(() => {
-    if (!serviceOrder && !isFetchingServiceOrder) {
-      navigate(`/evento/${slug}`);
-    }
-  }, [isFetchingServiceOrder, serviceOrder, slug, navigate]);
-
-  useEffect(() => {
     handleChangeFinalize(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -156,8 +149,6 @@ const CheckoutPaymentAddress = () => {
   };
 
   useEffect(() => {
-    console.log("lenght", zipCode.length);
-
     if (zipCode.length >= ZIPCODE_MIN_LENGTH) {
       handleGetZipCode(zipCode);
     }

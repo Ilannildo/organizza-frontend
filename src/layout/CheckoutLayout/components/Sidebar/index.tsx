@@ -26,6 +26,7 @@ export const CheckoutSidebar = () => {
     isExpired,
     isFetchingServiceOrder,
     handleResetServiceOrder,
+    isFinishingServiceOrder,
     finalize,
   } = useEventCheckout();
 
@@ -222,7 +223,11 @@ export const CheckoutSidebar = () => {
             </Grid>
             {finalize && (
               <Grid item lg={12} xs={12} mt={5}>
-                <Button fullWidth variant="contained" disabled={isExpired}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  disabled={isExpired || isFinishingServiceOrder}
+                >
                   Finalizar a compra
                 </Button>
               </Grid>

@@ -1,9 +1,11 @@
 import {
+  Avatar,
   Button,
   Card,
   CardContent,
   Grid,
   List,
+  ListItemAvatar,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -17,9 +19,23 @@ import { useEventCheckout } from "../../../hooks/useEventCheckout";
 import { useAllPaymentMethods } from "../../../stores/paymentMethods";
 import { useAuthenticatedUser } from "../../../stores/user";
 
+import PixIcon from "../../../assets/pix.png";
+import CreditIcon from "../../../assets/card.png";
+
 interface IParams extends Params {
   slug: string;
 }
+
+export const paymentMethodIcons = [
+  {
+    name: "credit",
+    icon: CreditIcon,
+  },
+  {
+    name: "pix",
+    icon: PixIcon,
+  },
+];
 
 const CheckoutPaymentMethod = () => {
   const {
@@ -177,6 +193,27 @@ const CheckoutPaymentMethod = () => {
                                   tabIndex={-1}
                                 />
                               </ListItemIcon>
+                              <ListItemAvatar>
+                                <Avatar
+                                  sx={{
+                                    bgcolor: (theme) =>
+                                      theme.palette.primaryContainer.main,
+                                  }}
+                                >
+                                  {/* <FolderIcon /> */}
+                                  <img
+                                    src={
+                                      paymentMethodIcons.find(
+                                        (item) =>
+                                          item.name === payment.payment_type
+                                      )?.icon
+                                    }
+                                    alt="teste"
+                                    width={24}
+                                    height={24}
+                                  />
+                                </Avatar>
+                              </ListItemAvatar>
                               <ListItemText
                                 primary={payment.payment_title}
                                 secondary={payment.information}
