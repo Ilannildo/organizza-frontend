@@ -23,7 +23,7 @@ const CreateServiceOrder = () => {
       })
         .then((res) => {
           if (res) {
-            navigate(`/evento/${slug}/checkout/${res.service_order_id}/payment`);
+            navigate(`/evento/${slug}/checkout/${res.service_order_id}/address`);
           }
         })
         .catch((err: any) => {

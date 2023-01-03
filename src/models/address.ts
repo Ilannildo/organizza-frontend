@@ -17,3 +17,12 @@ export interface IAddress {
   user_has_address?: IUserHasAddress;
   event_has_address?: IEventHasAddress;
 }
+
+export interface IAddressForm {
+  street: string;
+  neighborhood: string;
+  number: string;
+  city: string;
+  state: string;
+  zipcode: string;
+}

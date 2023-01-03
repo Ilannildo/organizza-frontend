@@ -5,6 +5,7 @@ import CheckoutPaymentCardForm from "../pages/Checkout/PaymentCardForm";
 import CheckoutPaymentMethod from "../pages/Checkout/PaymentMethod";
 import CheckoutLayout from "../layout/CheckoutLayout";
 import CheckoutPay from "../pages/Checkout/Pay";
+import CheckoutPaymentAddress from "../pages/Checkout/PaymentAddress";
 
 export const CheckoutRoutes = {
   path: "evento/:slug/checkout/:serviceOrderId",
@@ -21,6 +22,10 @@ export const CheckoutRoutes = {
     </ProtectedRoute>
   ),
   children: [
+    {
+      path: "address",
+      element: <CheckoutPaymentAddress />,
+    },
     {
       path: "payment",
       element: <CheckoutPaymentMethod />,

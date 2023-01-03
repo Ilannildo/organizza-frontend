@@ -1,4 +1,5 @@
 import React, { createContext, useState } from "react";
+import { IAddressForm } from "../models/address";
 import { IInstallmentResponse } from "../models/installments";
 import {
   IPaymentCardForm,
@@ -39,6 +40,8 @@ interface IEventCheckoutContext {
     value: IInstallmentResponse | null
   ) => void;
   handleChangePaymentCardForm: (value: IPaymentCardForm | null) => void;
+  handleChangePaymentAddress: (value: IAddressForm | null) => void;
+  paymentAddress: IAddressForm | null;
 }
 
 export const EventCheckoutContext = createContext<IEventCheckoutContext>(
@@ -67,6 +70,9 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
 
   const [paymentCardInstallment, setPaymentCardInstallment] =
     useState<IInstallmentResponse | null>(null);
+  const [paymentAddress, setPaymentAddress] = useState<IAddressForm | null>(
+    null
+  );
 
   const handleChangeExpired = (value: boolean) => {
     setIsExpired(value);
@@ -78,6 +84,10 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
 
   const handleChangePaymentCardForm = (value: IPaymentCardForm | null) => {
     setPaymentCardForm(value);
+  };
+
+  const handleChangePaymentAddress = (value: IAddressForm | null) => {
+    setPaymentAddress(value);
   };
 
   const handleChangePaymentCardInstallment = (
@@ -176,6 +186,8 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
         paymentMethod,
         paymentCardForm,
         paymentCardInstallment,
+        handleChangePaymentAddress,
+        paymentAddress,
       }}
     >
       {children}

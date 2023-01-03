@@ -16,6 +16,7 @@ import {
   formatCurrency,
   maskCpf,
   maskPhoneNumber,
+  maskZipCode,
   removeMaskCpf,
 } from "../../../utils/masks";
 import { validateCpf } from "../../../utils/roles";
@@ -32,6 +33,7 @@ const CheckoutPay = () => {
     paymentMethod,
     paymentCardForm,
     serviceOrder,
+    paymentAddress,
     paymentCardInstallment,
     handleChangeFinalize,
     handleChangePaymentCardForm,
@@ -91,6 +93,12 @@ const CheckoutPay = () => {
     handleChangePaymentCardForm(null);
     return navigate(
       `/evento/${slug}/checkout/${serviceOrder?.service_order_id}/payment`
+    );
+  };
+
+  const goToPaymentAddress = () => {
+    return navigate(
+      `/evento/${slug}/checkout/${serviceOrder?.service_order_id}/address`
     );
   };
 
@@ -318,7 +326,9 @@ const CheckoutPay = () => {
                                 alignItems="center"
                                 display="flex"
                               >
-                                <Button onClick={() => goToPaymentMethod()}>Alterar</Button>
+                                <Button onClick={() => goToPaymentMethod()}>
+                                  Alterar
+                                </Button>
                               </Grid>
                             </Grid>
                           </CardContent>
@@ -401,6 +411,61 @@ const CheckoutPay = () => {
                       </CardContent>
                     </Card>
                   </Grid>
+                  <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <Typography
+                      fontSize={14}
+                      sx={{
+                        color: (theme) => theme.palette.onPrimaryContainer.main,
+                        fontWeight: 500,
+                      }}
+                    >
+                      Endereço de cobrança
+                    </Typography>
+                  </Grid>
+                  {paymentAddress && (
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                      <Card variant="outlined">
+                        <CardContent>
+                          <Grid container>
+                            <Grid item lg={8} md={8} xs={12}>
+                              <Typography
+                                fontSize={16}
+                                sx={{
+                                  color: (theme) =>
+                                    theme.palette.onPrimaryContainer.main,
+                                }}
+                              >
+                                {`${paymentAddress.street}, ${paymentAddress.number}`}
+                              </Typography>
+                              <Typography
+                                fontSize={12}
+                                sx={{
+                                  color: (theme) => theme.palette.text.disabled,
+                                }}
+                              >
+                                {`${paymentAddress.city}, ${
+                                  paymentAddress.state
+                                } ${maskZipCode(paymentAddress.zipcode)}`}
+                              </Typography>
+                            </Grid>
+                            <Grid
+                              item
+                              lg={4}
+                              md={4}
+                              xs={12}
+                              justifyContent="flex-end"
+                              alignItems="center"
+                              display="flex"
+                            >
+                              <Button onClick={() => goToPaymentAddress()}>
+                                Alterar
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
             </>

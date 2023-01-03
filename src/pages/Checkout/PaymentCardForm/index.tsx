@@ -353,6 +353,7 @@ const CheckoutPaymentCardForm = () => {
                               name="cardNumber"
                               label="Número do cartão"
                               size="small"
+                              placeholder="0000 0000 0000 0000"
                               autoFocus
                               value={cardNumber}
                               type="tel"
@@ -404,7 +405,7 @@ const CheckoutPaymentCardForm = () => {
                               label="CVV"
                               size="small"
                               fullWidth
-                              placeholder="Números no verso do cartão"
+                              placeholder="000"
                               value={securityCode}
                               type="tel"
                               onChange={(e) =>
@@ -421,6 +422,7 @@ const CheckoutPaymentCardForm = () => {
                               id="cpf"
                               name="cpf"
                               label="CPF do titular"
+                              placeholder="000.000.000-00"
                               size="small"
                               fullWidth
                               value={userDocument}
@@ -438,6 +440,7 @@ const CheckoutPaymentCardForm = () => {
                               name="phoneNumber"
                               label="Número de telefone"
                               size="small"
+                              placeholder="(91) 00000-0000"
                               fullWidth
                               value={phoneNumber}
                               type="tel"

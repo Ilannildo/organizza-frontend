@@ -18,6 +18,10 @@ export const maskCpf = (value: string) => {
     .replace(/(-\d{2})\d+?$/, "$1");
 };
 
+export const maskZipCode = (value: string) => {
+  return value.replace(/^(\d{5})(\d)/,"$1-$2")
+};
+
 export const maskPhoneNumber = (value: string) => {
   return value
     .replace(/\D/g, "")
