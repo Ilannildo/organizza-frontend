@@ -99,7 +99,7 @@ const CheckoutLayout = () => {
           sx={{
             display: "flex",
             flexDirection: "row",
-            // height: "calc(100vh - 50px)",
+            height: "100%"
           }}
         >
           <Outlet />

@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import {
+  Alert,
+  AlertTitle,
   Box,
   Button,
+  CircularProgress,
   Divider,
   Grid,
+  Snackbar,
   Stack,
   Typography,
   useMediaQuery,
@@ -16,16 +20,26 @@ import { useEventCheckout } from "../../../../hooks/useEventCheckout";
 import {
   formatCurrency,
   getReturnValuesCounter,
+  padTo2Digits,
 } from "../../../../utils/masks";
+import { Params, useNavigate, useParams } from "react-router-dom";
+
+
+interface IParams extends Params {
+  slug: string;
+}
 
 export const CheckoutSidebar = () => {
   const theme = useTheme();
   const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
+  const { slug } = useParams<IParams>();
+  const navigate = useNavigate();
   const {
     serviceOrder,
     isExpired,
     isFetchingServiceOrder,
     handleResetServiceOrder,
+    handleFinalizeServiceOrder,
     isFinishingServiceOrder,
     finalize,
   } = useEventCheckout();
@@ -33,6 +47,7 @@ export const CheckoutSidebar = () => {
   const [counter, setCounter] = useState(0);
   const [stated, setStarted] = useState(false);
   const [days, hours, minutes, seconds] = getReturnValuesCounter(counter);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (serviceOrder) {
@@ -63,6 +78,54 @@ export const CheckoutSidebar = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [days, hours, minutes, seconds, serviceOrder, stated]);
+
+  const onFinalize = async () => {
+    try {
+      setErrorMessage("");
+      const response = await handleFinalizeServiceOrder();
+      if (response.status === "pending") {
+        handleResetServiceOrder()
+        navigate(`/evento/${slug}/checkout/buy/order-pending`, {
+          state: {
+            order: response,
+            ammout: serviceOrder?.total
+          },
+          replace: true
+        });
+      }
+      if (response.status === "approved") {
+        handleResetServiceOrder()
+        navigate(`/evento/${slug}/checkout/buy/order-approved`, {
+          state: {
+            order: response,
+          },
+          replace: true
+        });
+      }
+      if (response.status === "processing") {
+        handleResetServiceOrder()
+        navigate(`/evento/${slug}/checkout/buy/order-processing`, {
+          state: {
+            order: response,
+          },
+          replace: true
+        });
+      }
+      if (response.status === "error") {
+        setErrorMessage(
+          "Não foi possível finalizar a sua inscrição. Verifique os dados e tente novamente!"
+        );
+      }
+    } catch (error: any) {
+      if (error.response) {
+        setErrorMessage(error.response.data.error.message);
+      } else {
+        setErrorMessage(
+          "Não foi possível finalizar a sua inscrição. Verifique os dados e tente novamente!"
+        );
+      }
+    }
+  };
 
   return (
     <Box
@@ -106,7 +169,7 @@ export const CheckoutSidebar = () => {
                       width: 16,
                     }}
                   >
-                    {isExpired ? "00:00" : `${minutes}:${seconds}`}
+                    {isExpired ? "00:00" : `${padTo2Digits(minutes)}:${padTo2Digits(seconds)}`}
                   </Typography>
                 </Stack>
               </Grid>
@@ -227,14 +290,31 @@ export const CheckoutSidebar = () => {
                   fullWidth
                   variant="contained"
                   disabled={isExpired || isFinishingServiceOrder}
+                  disableElevation
+                  onClick={() => onFinalize()}
                 >
-                  Finalizar a compra
+                  {isFinishingServiceOrder ? (
+                    <CircularProgress color="inherit" size={26} />
+                  ) : (
+                    `Finalizar a compra`
+                  )}
                 </Button>
               </Grid>
             )}
           </Grid>
         </div>
       )}
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={errorMessage !== ""}
+        onClose={() => setErrorMessage("")}
+        autoHideDuration={5000}
+      >
+        <Alert severity="error" sx={{ width: "100%" }}>
+          <AlertTitle>Error</AlertTitle>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

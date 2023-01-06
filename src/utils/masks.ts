@@ -19,7 +19,7 @@ export const maskCpf = (value: string) => {
 };
 
 export const maskZipCode = (value: string) => {
-  return value.replace(/^(\d{5})(\d)/,"$1-$2")
+  return value.replace(/^(\d{5})(\d)/, "$1-$2");
 };
 
 export const maskPhoneNumber = (value: string) => {
@@ -48,10 +48,10 @@ export function maskCreditCardText(value: string) {
   //   .replace(/(\d{4})(\d)/, "****")
   //   .replace(/(\d{4})(\d)/, "$1 $2");
   let hideNum = [];
-	for(let i = 0; i < value.length; i++){
-    if(i < value.length-4){
+  for (let i = 0; i < value.length; i++) {
+    if (i < value.length - 4) {
       hideNum.push("*");
-    }else{
+    } else {
       hideNum.push(value[i]);
     }
   }
@@ -122,8 +122,16 @@ export const getReturnValuesCounter = (countDown: number) => {
   const hours = Math.floor(
     (countDown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
   );
-  const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((countDown % (1000 * 60)) / 1000);
+  let minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
+  let seconds = Math.floor((countDown % (1000 * 60)) / 1000);
+  
+  minutes = seconds >= 30 ? minutes + 1 : minutes;
+
+  minutes = minutes % 60;
 
   return [days, hours, minutes, seconds];
 };
+
+export function padTo2Digits(num: number) {
+  return num.toString().padStart(2, "0");
+}

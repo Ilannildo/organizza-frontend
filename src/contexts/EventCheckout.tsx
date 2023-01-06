@@ -5,6 +5,7 @@ import {
   IPaymentCardForm,
   IPaymentMethodResponse,
 } from "../models/paymentMethod";
+import { IPayServiceOrderResponse } from "../models/serviceOrder";
 import {
   ITicketServiceOrder,
   ITicketServiceOrderResponse,
@@ -31,7 +32,7 @@ interface IEventCheckoutContext {
   handleChangeExpired: (value: boolean) => void;
   handleChangeFinalize: (value: boolean) => void;
   handleResetServiceOrder: () => void;
-  handleFinalizeServiceOrder: () => void;
+  handleFinalizeServiceOrder: () => Promise<IPayServiceOrderResponse>;
   paymentMethod: IPaymentMethodResponse | null;
   paymentCardForm: IPaymentCardForm | null;
   handleChangePaymentMethod: (value: IPaymentMethodResponse) => void;
@@ -104,6 +105,9 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
     setIsExpired(true);
     setServiceOrder(null);
     setPaymentMethod(null);
+    setPaymentAddress(null);
+    setPaymentCardForm(null);
+    setPaymentCardInstallment(null);
   };
 
   const handleGetServiceOrder = async ({
@@ -151,10 +155,40 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
   };
 
   const handleFinalizeServiceOrder = async () => {
-    return new Promise<ITicketServiceOrder>(async (resolve, reject) => {
+    return new Promise<IPayServiceOrderResponse>(async (resolve, reject) => {
       try {
         setIsFinishingServiceOrder(true);
-        const res = await api.post("/service-orders/tickets", {});
+        let body;
+        if (paymentMethod?.payment_type === "credit") {
+          body = {
+            credit_card_number: paymentCardForm?.cardNumber,
+            credit_card_owner_name: paymentCardForm?.cardOwnerName,
+            credit_card_expiration_date: paymentCardForm?.expirationDate,
+            credit_card_cvv: paymentCardForm?.securityCode,
+          };
+        }
+        const res = await api.post<{
+          data: IPayServiceOrderResponse;
+          sucess: boolean;
+        }>(`/service-orders/${serviceOrder?.service_order_id}/pay`, {
+          payment_method_id: paymentMethod?.payment_id,
+          payment_type: paymentMethod?.payment_type,
+          installments:
+            paymentMethod?.payment_type === "pix"
+              ? 1
+              : paymentCardInstallment?.number,
+          customer_document: paymentCardForm?.userDocument,
+          customer_phone_number: paymentCardForm?.phoneNumber,
+          billing_city: paymentAddress?.city,
+          billing_address: paymentAddress?.street,
+          billing_number: paymentAddress?.number,
+          billing_neighborhood: paymentAddress?.neighborhood,
+          billing_state: paymentAddress?.state,
+          billing_zipcode: paymentAddress?.zipcode,
+          ...body,
+        });
+
+        console.log("RESPONSE PAYMENT ::", res.data);
 
         setIsFinishingServiceOrder(false);
         resolve(res.data.data);

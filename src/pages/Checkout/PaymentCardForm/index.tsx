@@ -85,7 +85,7 @@ const CheckoutPaymentCardForm = () => {
     }
     value = value.replace(" ", "");
     const regex = /^([0-9 ]+)+$/;
-    setCardNumber(maskCreditCard(value));
+    setCardNumber(value);
     setCardNumberError(" ");
     setCardType("");
     if (!value) {
@@ -203,7 +203,7 @@ const CheckoutPaymentCardForm = () => {
     if (value.length > USER_DOCUMENT_MAX_LENGTH) {
       return;
     }
-    setUserDocument(maskCpf(value));
+    setUserDocument(value);
     setUserDocumentError(" ");
 
     if (!value) {
@@ -225,7 +225,7 @@ const CheckoutPaymentCardForm = () => {
     if (value.length > PHONE_NUMBER_MAX_LENGTH) {
       return;
     }
-    setPhoneNumber(maskPhoneNumber(value));
+    setPhoneNumber(value);
     setPhoneNumberError(" ");
 
     if (!value) {
@@ -379,7 +379,7 @@ const CheckoutPaymentCardForm = () => {
                               size="small"
                               placeholder="0000 0000 0000 0000"
                               autoFocus
-                              value={cardNumber}
+                              value={maskCreditCard(cardNumber)}
                               type="tel"
                               onChange={(e) =>
                                 onChangeCardNumber(e.target.value)
@@ -449,7 +449,7 @@ const CheckoutPaymentCardForm = () => {
                               placeholder="000.000.000-00"
                               size="small"
                               fullWidth
-                              value={userDocument}
+                              value={maskCpf(userDocument)}
                               type="tel"
                               onChange={(e) =>
                                 onChangeUserDocument(e.target.value)
@@ -466,7 +466,7 @@ const CheckoutPaymentCardForm = () => {
                               size="small"
                               placeholder="(91) 00000-0000"
                               fullWidth
-                              value={phoneNumber}
+                              value={maskPhoneNumber(phoneNumber)}
                               type="tel"
                               onChange={(e) =>
                                 onChangePhoneNumber(e.target.value)

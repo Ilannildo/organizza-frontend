@@ -2,6 +2,8 @@ import { lazy } from "react";
 import { Loadable } from "../layout/Loadable";
 import MinimalLayout from "../layout/MinimalLayout";
 import { AllowedRolesNames, ProtectedRoute } from "../layout/ProtectedRoute";
+import CheckoutOrderCreatedPending from "../pages/Checkout/OrderCreatedPending";
+import CheckoutOrderCreatedProcessing from "../pages/Checkout/OrderCreatedProcessing";
 // import pages with lazy load
 const Login = Loadable(lazy(() => import("../pages/Auth/Login")));
 const Register = Loadable(lazy(() => import("../pages/Auth/Register")));
@@ -21,6 +23,9 @@ const CreateServiceOrder = Loadable(
 );
 const CheckoutExpired = Loadable(
   lazy(() => import("../pages/Checkout/Expired"))
+);
+const CheckoutOrderCreatedApproved = Loadable(
+  lazy(() => import("../pages/Checkout/OrderCreatedApproved"))
 );
 
 export const MainRoutes = {
@@ -90,6 +95,51 @@ export const MainRoutes = {
           checkout={true}
         >
           <CheckoutExpired />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "evento/:slug/checkout/buy/order-approved", //:serviceOrderId/payment
+      element: (
+        <ProtectedRoute
+          allowedRoles={[
+            AllowedRolesNames["PARTICIPANT"],
+            AllowedRolesNames["ADMIN"],
+            AllowedRolesNames["ORGANIZER"],
+          ]}
+          checkout={true}
+        >
+          <CheckoutOrderCreatedApproved />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "evento/:slug/checkout/buy/order-pending", //:serviceOrderId/payment
+      element: (
+        <ProtectedRoute
+          allowedRoles={[
+            AllowedRolesNames["PARTICIPANT"],
+            AllowedRolesNames["ADMIN"],
+            AllowedRolesNames["ORGANIZER"],
+          ]}
+          checkout={true}
+        >
+          <CheckoutOrderCreatedPending />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "evento/:slug/checkout/buy/order-processing", //:serviceOrderId/payment
+      element: (
+        <ProtectedRoute
+          allowedRoles={[
+            AllowedRolesNames["PARTICIPANT"],
+            AllowedRolesNames["ADMIN"],
+            AllowedRolesNames["ORGANIZER"],
+          ]}
+          checkout={true}
+        >
+          <CheckoutOrderCreatedProcessing />
         </ProtectedRoute>
       ),
     },

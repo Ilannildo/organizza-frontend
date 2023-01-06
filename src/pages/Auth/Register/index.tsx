@@ -155,7 +155,7 @@ const Register = () => {
               <Typography fontSize={16} variant="h1" fontWeight="500">
                 Deixando o seu evento melhor!
               </Typography>
-              {location.state.checkout && (
+              {location.state && location.state.checkout && (
                 <Typography
                   fontSize={16}
                   variant="h1"

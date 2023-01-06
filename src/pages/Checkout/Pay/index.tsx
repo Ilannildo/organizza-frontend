@@ -34,6 +34,7 @@ const CheckoutPay = () => {
   const {
     paymentMethod,
     paymentCardForm,
+    isFetchingServiceOrder,
     serviceOrder,
     paymentAddress,
     paymentCardInstallment,
@@ -57,7 +58,7 @@ const CheckoutPay = () => {
     if (value.length > USER_DOCUMENT_MAX_LENGTH) {
       return;
     }
-    setUserDocument(maskCpf(value));
+    setUserDocument(value);
     setUserDocumentError(" ");
 
     if (!value) {
@@ -79,7 +80,7 @@ const CheckoutPay = () => {
     if (value.length > PHONE_NUMBER_MAX_LENGTH) {
       return;
     }
-    setPhoneNumber(maskPhoneNumber(value));
+    setPhoneNumber(value);
     setPhoneNumberError(" ");
 
     if (!value) {
@@ -120,10 +121,10 @@ const CheckoutPay = () => {
   };
 
   useEffect(() => {
-    if (serviceOrder && paymentMethod) {
+    if (serviceOrder && paymentMethod && !isFetchingServiceOrder) {
       if (paymentMethod.payment_type === "credit" && !paymentCardInstallment) {
         return navigate(
-          `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment`
+          `/evento/${slug}/checkout/${serviceOrder.service_order_id}/address`
         );
       } else {
         if (paymentCardForm) {
@@ -143,6 +144,7 @@ const CheckoutPay = () => {
     slug,
     navigate,
     paymentCardInstallment,
+    isFetchingServiceOrder
   ]);
 
   return (
@@ -551,7 +553,7 @@ const CheckoutPay = () => {
                                 label="CPF do titular"
                                 size="small"
                                 fullWidth
-                                value={userDocument}
+                                value={maskCpf(userDocument)}
                                 type="tel"
                                 onChange={(e) =>
                                   onChangeUserDocument(e.target.value)
@@ -567,7 +569,7 @@ const CheckoutPay = () => {
                                 label="Número de telefone"
                                 size="small"
                                 fullWidth
-                                value={phoneNumber}
+                                value={maskPhoneNumber(phoneNumber)}
                                 type="tel"
                                 onChange={(e) =>
                                   onChangePhoneNumber(e.target.value)

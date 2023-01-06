@@ -138,7 +138,7 @@ const Login = () => {
               <Typography fontSize={16} variant="h1" fontWeight="500">
                 Deixando o seu evento melhor!
               </Typography>
-              {location.state.checkout && (
+              {location.state && location.state.checkout && (
                 <Typography
                   fontSize={16}
                   variant="h1"
@@ -242,7 +242,13 @@ const Login = () => {
               <Typography fontSize={14} variant="h1" mt={1}>
                 Não tem uma conta?{" "}
                 <Link
-                  href="/cadastro"
+                  href={
+                    searchparams.get("callback-url")
+                      ? `/cadastro?callbak-url=${searchparams.get(
+                          "callback-url"
+                        )}`
+                      : `/cadastro`
+                  }
                   sx={{
                     color: (theme) => theme.palette.primary.main,
                   }}
