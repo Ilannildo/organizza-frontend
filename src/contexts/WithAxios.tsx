@@ -14,8 +14,11 @@ export const WithAxios = ({ children }: any) => {
         const _token = Cookies.get("__token");
         if (typeof _token === "string") {
           if (_token) {
-            if (config.headers)
-              config.headers.Authorization = `Bearer ${_token}`;
+            config.headers
+              ? (config.headers.Authorization = `Bearer ${_token}`)
+              : (config.headers = { Authorization: `Bearer ${_token}` });
+            // if (config.headers)
+            //   config.headers.Authorization = `Bearer ${_token}`;
           }
         }
         return config;
