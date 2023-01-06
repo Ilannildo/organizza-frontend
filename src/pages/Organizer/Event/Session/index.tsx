@@ -8,10 +8,7 @@ import {
 } from "@mui/material";
 import { Checks, UserList, ChalkboardTeacher } from "phosphor-react";
 import { Params, useParams } from "react-router-dom";
-import {
-  useSessionBySessionTypeId,
-  useSessionTypeById,
-} from "../../../../stores/sessionTypes";
+import { useSessionTypeById } from "../../../../stores/sessionTypes";
 import { SessionTable } from "./component/Table";
 
 interface IParams extends Params {
