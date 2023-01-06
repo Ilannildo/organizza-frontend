@@ -29,7 +29,7 @@ export const WithAxios = ({ children }: any) => {
         return response;
       },
       (error) => {
-        if(error.response) {
+        if (error.response) {
           if (error.response.status === 423 || error.response.status === 401) {
             if (
               error.response.data?.error.code ===

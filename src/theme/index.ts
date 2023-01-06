@@ -5,10 +5,12 @@ export const theme = createTheme({
     primary: {
       main: "#00497A",
       light: "#0062A1",
+      contrastText: "#FDFCFF"
     },
     secondary: {
       main: "#F19413",
       light: "#895100",
+      contrastText: "#FDFCFF"
     },
     tertiary: {
       main: "#9A405A",
@@ -18,8 +20,8 @@ export const theme = createTheme({
       paper: "#FDFCFF",
     },
     success: {
-      // main: "#00D488",
-      main: "#A1E3CB",
+      main: "#65A300",
+      // main: "#A1E3CB",
     },
     error: {
       main: "#BA1A1A",
@@ -55,6 +57,7 @@ export const theme = createTheme({
     },
     primaryContainer: {
       main: "#D0E4FF",
+      dark: "#9CCAFF",
     },
     secondaryContainer: {
       main: "#FFDCBD",

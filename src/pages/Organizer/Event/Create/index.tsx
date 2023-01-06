@@ -9,7 +9,7 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { addDays } from "date-fns";
 import { Navbar } from "../../../../components/Navbar";
 import { StepOne } from "./StepOne";
@@ -19,6 +19,7 @@ import { ICity } from "../../../../models/city";
 import { StepThree } from "./StepThree";
 import Loader from "../../../../layout/Loader";
 import { api } from "../../../../services/api";
+import { toast } from "react-toastify";
 
 const steps = [
   "Informações gerais",
@@ -49,6 +50,7 @@ interface IUploadedCoverImage {
 
 const CreateEvent = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
   const [completed, setCompleted] = useState<{ [k: number]: boolean }>({});
@@ -346,10 +348,39 @@ const CreateEvent = () => {
       });
 
       if (response.data) {
+        // TO-DO: adicionar upload da capa do evento
+        if (uploadedCoverImage) {
+          const id = toast.loading(
+            "Estamos fazendo o upload da imagem do evento..."
+          );
+          const formData = new FormData();
+          formData.append(
+            "cover",
+            uploadedCoverImage.file,
+            uploadedCoverImage.name
+          );
+          const responseUpload = await api.post("/events/cover", formData, {
+            headers: {
+              "Content-Type": `multipart/form-data`,
+            },
+          });
+          if (responseUpload.data) {
+            toast.update(id, {
+              render: "Capa do evento enviada com sucesso",
+              type: "success",
+              isLoading: false,
+            });
+          }
+        }
+
         setIsCreatingEvent(false);
-        console.log("Evento criado com sucesso");
+        toast.success("Evento criado com sucesso!");
+        navigate("/organizador");
       }
     } catch (error: any) {
+      if (error.response) {
+        toast.error(error.response.data.error.message);
+      }
       console.log("Error ao criar evento =>", error);
     }
   };

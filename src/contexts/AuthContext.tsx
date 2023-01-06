@@ -61,9 +61,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return new Promise<void>((resolve, reject) => {
       setIsLoading(true);
       setInitialized(false);
-
+      
       Cookies.remove("__token");
       setIsLoading(false);
+      window.location.reload();
       resolve();
     });
   };

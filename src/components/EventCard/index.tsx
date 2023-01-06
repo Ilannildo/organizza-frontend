@@ -91,7 +91,7 @@ export const EventCard = ({ event }: IEventCard) => {
                 ? "O seu evento está publicado"
                 : event.status === "started"
                 ? "O seu evento está criado, mas não está publicado"
-                : "O seu evento está pendente de informações"
+                : "O seu evento está encerrado"
             }
           >
             <Badge

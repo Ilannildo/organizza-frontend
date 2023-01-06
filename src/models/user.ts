@@ -1,4 +1,9 @@
+import { IEmailToken } from "./emailToken";
+import { IEvent } from "./event";
 import { IRole } from "./role";
+import { IServiceOrder } from "./serviceOrder";
+import { ISessionSubscription } from "./sessionSubscription";
+import { ISubscription } from "./subscription";
 
 export interface IUser {
   uid: string;
@@ -14,6 +19,10 @@ export interface IUser {
   created_at?: Date;
   updated_at?: Date;
   deleted_at?: Date;
-
   role?: IRole;
+  email_token?: IEmailToken;
+  events?: IEvent[];
+  subscriptions?: ISubscription[];
+  session_subscriptions?: ISessionSubscription[];
+  service_orders?: IServiceOrder[];
 }

@@ -54,6 +54,7 @@ export enum Codes {
    * unknown code
    */
   UNKNOWN_ERROR = "unknown_error",
+  EXPIRED_TIME = "expired_time",
 
   /**
    * Request Codes

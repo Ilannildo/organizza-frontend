@@ -25,6 +25,7 @@ import {
   UserCirclePlus,
   UsersThree,
 } from "phosphor-react";
+import { useAllSessionTypesMenu } from "../../stores/sessionTypes";
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open: boolean;
@@ -85,11 +86,16 @@ interface IParams extends Params {
 const MainPanelLayout = () => {
   const theme = useTheme();
   const { eventId } = useParams<IParams>();
+  const { opened, setMenu } = useCustomization();
 
   const { data: event, isLoading: isLoadingEvent } = useEventById(eventId);
   const matchDownMd = useMediaQuery(theme.breakpoints.down("lg"));
-  const { opened, setMenu } = useCustomization();
   const navigate = useNavigate();
+
+  const { data: sessionItems, isLoading: isLoadingSessionItens } =
+    useAllSessionTypesMenu({
+      enabled: !!event,
+    });
 
   const sidebarItems = {
     id: "pages",
@@ -110,29 +116,7 @@ const MainPanelLayout = () => {
         url: "programacao",
         icon: ChalkboardTeacher,
         breadcrumbs: false,
-        children: [
-          {
-            id: "cursos",
-            title: "Cursos",
-            type: "item",
-            url: "programacao/cursos",
-            breadcrumbs: false,
-          },
-          {
-            id: "palestras",
-            title: "Palestras",
-            type: "item",
-            url: "programacao/palestras",
-            breadcrumbs: false,
-          },
-          {
-            id: "certificados",
-            title: "Certificados",
-            type: "item",
-            url: "programacao/certificados",
-            breadcrumbs: false,
-          },
-        ],
+        children: sessionItems,
       },
       {
         id: "ingressos",
@@ -280,7 +264,7 @@ const MainPanelLayout = () => {
         drawerOpen={opened}
         drawerToggle={handleLeftDrawerToggle}
         event={event}
-        isLoadingEvent={isLoadingEvent}
+        isLoadingEvent={isLoadingEvent || isLoadingSessionItens}
         items={[sidebarItems]}
       />
 

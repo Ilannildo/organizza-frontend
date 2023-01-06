@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { FormEvent, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import Logo from "../../../assets/images/logo-color.svg";
@@ -22,6 +22,7 @@ const Login = () => {
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const [searchparams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { signIn, isLoading } = useAuth();
 
   // states
@@ -64,13 +65,10 @@ const Login = () => {
         }
       }
     } catch (error: any) {
-      console.log('Error', error);
-      if(error.response) {
+      console.log("Error", error);
+      if (error.response) {
         toast.error(error.response.data.error.message);
-      } else {
-        toast.error('Não foi possível realizar o login')
       }
-      
     }
   };
 
@@ -140,6 +138,17 @@ const Login = () => {
               <Typography fontSize={16} variant="h1" fontWeight="500">
                 Deixando o seu evento melhor!
               </Typography>
+              {location.state && location.state.checkout && (
+                <Typography
+                  fontSize={16}
+                  variant="h1"
+                  mt={2}
+                  fontWeight="500"
+                  color="secondary"
+                >
+                  Realize seu login para continuar a inscrição
+                </Typography>
+              )}
             </Grid>
           </Grid>
           <Grid container justifyContent="center" mt={2}>
@@ -224,12 +233,22 @@ const Login = () => {
                   mb: 2,
                 }}
               >
-                {isLoading ? <CircularProgress color="inherit" size={26} /> : `Entrar`}
+                {isLoading ? (
+                  <CircularProgress color="inherit" size={26} />
+                ) : (
+                  `Entrar`
+                )}
               </Button>
               <Typography fontSize={14} variant="h1" mt={1}>
                 Não tem uma conta?{" "}
                 <Link
-                  href="/register"
+                  href={
+                    searchparams.get("callback-url")
+                      ? `/cadastro?callbak-url=${searchparams.get(
+                          "callback-url"
+                        )}`
+                      : `/cadastro`
+                  }
                   sx={{
                     color: (theme) => theme.palette.primary.main,
                   }}
@@ -240,7 +259,13 @@ const Login = () => {
             </Grid>
           </Grid>
         </Box>
-        <Box position="absolute" left={0} bottom={0} width="100%" display={matchesSM ? "none" : "block"}>
+        <Box
+          position="absolute"
+          left={0}
+          bottom={0}
+          width="100%"
+          display={matchesSM ? "none" : "block"}
+        >
           <Grid container px={2} py={1}>
             <Grid item lg={6} xs={false}>
               <Typography fontSize={16} variant="h4" color="#C2C7CF">
