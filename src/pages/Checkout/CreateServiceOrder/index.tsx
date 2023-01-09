@@ -32,7 +32,7 @@ const CreateServiceOrder = () => {
           } else {
             toast.error("Ocorreu um problema ao realizar o pagamento");
           }
-          navigate(`/`);
+          navigate(`/evento/${slug}`);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

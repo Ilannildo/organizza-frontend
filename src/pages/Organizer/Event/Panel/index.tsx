@@ -2,6 +2,7 @@ import {
   Button,
   Card,
   CardContent,
+  CardHeader,
   Grid,
   Skeleton,
   Stack,
@@ -15,6 +16,7 @@ import {
   DiamondsFour,
   GraduationCap,
   Info,
+  PencilSimple,
   Ticket,
   UsersThree,
   Wallet,
@@ -35,20 +37,23 @@ const EventPanel = () => {
       {isLoadingEvent && (
         <Grid item lg={12} md={12} sm={12} xs={12}>
           <Card variant="elevation" elevation={0}>
+            <CardHeader
+              sx={{
+                backgroundColor: theme.palette.neutral.main,
+              }}
+              title={
+                <Typography
+                  fontSize={14}
+                  sx={{
+                    color: (theme) => theme.palette.onSurfaceVariant.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  Detalhes do evento
+                </Typography>
+              }
+            />
             <CardContent>
-              <Grid container spacing={2}>
-                <Grid item lg={6} md={6} sm={6} xs={6}>
-                  <Typography
-                    fontSize={14}
-                    sx={{
-                      color: (theme) => theme.palette.onSurfaceVariant.main,
-                      fontWeight: 500,
-                    }}
-                  >
-                    Detalhes do evento
-                  </Typography>
-                </Grid>
-              </Grid>
               <Grid container mt={1} spacing={2}>
                 <Grid item lg={4} md={4} xs={12}>
                   <Skeleton variant="rectangular" width={300} height={21} />
@@ -86,38 +91,45 @@ const EventPanel = () => {
       {!isLoadingEvent && event && (
         <Grid item lg={12} md={12} sm={12} xs={12}>
           <Card variant="elevation" elevation={0}>
+            <CardHeader
+              sx={{
+                backgroundColor: theme.palette.neutral.main,
+              }}
+              title={
+                <Typography
+                  fontSize={14}
+                  sx={{
+                    color: (theme) => theme.palette.onSurfaceVariant.main,
+                    fontWeight: 500,
+                  }}
+                >
+                  Detalhes do evento
+                </Typography>
+              }
+              action={
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  justifyContent="end"
+                  alignItems="center"
+                >
+                  {event.status === "started" && (
+                    <Button variant="text" size="small">
+                      Publicar
+                    </Button>
+                  )}
+                  <Button
+                    variant="contained"
+                    size="small"
+                    startIcon={<PencilSimple size={16} />}
+                  >
+                    Editar
+                  </Button>
+                </Stack>
+              }
+            />
             <CardContent>
               <Grid container spacing={2}>
-                <Grid item lg={6} md={6} sm={6} xs={6}>
-                  <Typography
-                    fontSize={14}
-                    sx={{
-                      color: (theme) => theme.palette.onSurfaceVariant.main,
-                      fontWeight: 500,
-                    }}
-                  >
-                    Detalhes do evento
-                  </Typography>
-                </Grid>
-                <Grid item lg={6} md={6} sm={6} xs={6}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="end"
-                    alignItems="center"
-                  >
-                    {event.status === "started" && (
-                      <Button variant="text" size="small">
-                        Publicar
-                      </Button>
-                    )}
-                    <Button variant="contained" size="small">
-                      Editar
-                    </Button>
-                  </Stack>
-                </Grid>
-              </Grid>
-              <Grid container mt={1} spacing={2}>
                 <Grid item lg={4} md={4} xs={12}>
                   <Typography
                     fontSize={12}
@@ -219,7 +231,7 @@ const EventPanel = () => {
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <DiamondsFour
                       color={getEventStatusColor(event.status)}
-                      size={12}
+                      size={14}
                     />
                     <Typography
                       fontSize={14}
@@ -299,7 +311,7 @@ const EventPanel = () => {
         <Card variant="elevation" elevation={0}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item lg={6} md={6} sm={6} xs={6}>
+              <Grid item lg={10} md={10} sm={10} xs={10}>
                 <Typography
                   fontSize={14}
                   sx={{
@@ -312,10 +324,10 @@ const EventPanel = () => {
               </Grid>
               <Grid
                 item
-                lg={6}
-                md={6}
-                sm={6}
-                xs={6}
+                lg={2}
+                md={2}
+                sm={2}
+                xs={2}
                 justifyContent="end"
                 alignItems="center"
                 display="flex"
@@ -339,11 +351,12 @@ const EventPanel = () => {
           </CardContent>
         </Card>
       </Grid>
+
       <Grid item lg={4} md={4} sm={4} xs={6}>
         <Card variant="elevation" elevation={0}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item lg={6} md={6} sm={6} xs={6}>
+              <Grid item lg={10} md={10} sm={10} xs={10}>
                 <Typography
                   fontSize={14}
                   sx={{
@@ -356,10 +369,10 @@ const EventPanel = () => {
               </Grid>
               <Grid
                 item
-                lg={6}
-                md={6}
-                sm={6}
-                xs={6}
+                lg={2}
+                md={2}
+                sm={3}
+                xs={4}
                 justifyContent="end"
                 alignItems="center"
                 display="flex"
@@ -388,7 +401,7 @@ const EventPanel = () => {
         <Card variant="elevation" elevation={0}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item lg={6} md={6} sm={6} xs={6}>
+              <Grid item lg={10} md={10} sm={10} xs={10}>
                 <Typography
                   fontSize={14}
                   sx={{
@@ -401,10 +414,10 @@ const EventPanel = () => {
               </Grid>
               <Grid
                 item
-                lg={6}
-                md={6}
-                sm={6}
-                xs={6}
+                lg={2}
+                md={2}
+                sm={2}
+                xs={2}
                 justifyContent="end"
                 alignItems="center"
                 display="flex"
@@ -428,6 +441,7 @@ const EventPanel = () => {
           </CardContent>
         </Card>
       </Grid>
+
       <Grid item lg={6} md={6} sm={6} xs={12}>
         <Card variant="elevation" elevation={0}>
           <CardContent>

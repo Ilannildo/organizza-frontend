@@ -3,24 +3,24 @@ import { createTheme } from "@mui/material/styles";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: "#00497A",
+      main: "#00658F",
       light: "#0062A1",
-      contrastText: "#FDFCFF"
+      contrastText: "#FFFFFF",
     },
     secondary: {
-      main: "#F19413",
-      light: "#895100",
-      contrastText: "#FDFCFF"
+      main: "#138E9C",
+      contrastText: "#FFFFFF",
     },
     tertiary: {
-      main: "#9A405A",
+      main: "#FF7D10",
+      contrastText: "#FFFFFF",
     },
     background: {
-      default: "#FDFCFF",
-      paper: "#FDFCFF",
+      default: "#FEFEFF",
+      paper: "#FEFEFF",
     },
     success: {
-      main: "#65A300",
+      main: "#55DAD2",
       // main: "#A1E3CB",
     },
     error: {
@@ -28,51 +28,62 @@ export const theme = createTheme({
       light: "#FF4F4F",
     },
     text: {
-      primary: "#001D35",
-      disabled: "#42474E",
+      primary: "#001E2E",
+      disabled: "#8B9198",
     },
     onPrimary: {
       main: "#FFFFFF",
     },
     onPrimaryContainer: {
-      main: "#001D35",
+      main: "#001E2E",
     },
     onSecondary: {
       main: "#FFFFFF",
     },
     onSecondaryContainer: {
-      main: "#2C1600",
+      main: "#001F24",
     },
     onSurface: {
-      main: "#1A1C1E",
+      main: "#1B0161",
     },
     onSurfaceVariant: {
-      main: "#C2C7CF",
+      main: "#41484D",
     },
     onTertiary: {
       main: "#FFFFFF",
     },
     onTertiaryContainer: {
-      main: "#3F0019",
+      main: "#321300",
     },
     primaryContainer: {
-      main: "#D0E4FF",
-      dark: "#9CCAFF",
+      main: "#C7E7FF",
+      dark: "#004C6D",
     },
     secondaryContainer: {
-      main: "#FFDCBD",
+      main: "#95F1FF",
     },
     surfaceVariant: {
-      main: "#DFE3EB",
+      main: "#DDE3EA",
     },
     tertiaryContainer: {
-      main: "#FFD9E0",
+      main: "#FFDBC8",
+    },
+    neutral: {
+      main: "#DDE3EA",
     },
   },
   typography: {
-    fontFamily: "Inter",
+    fontFamily: "Poppins",
     h1: {
-      color: "#42474E",
+      color: "#001E2E",
+    },
+  },
+  components: {
+    // Name of the component
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
     },
   },
 });
@@ -92,6 +103,7 @@ declare module "@mui/material/styles" {
     onSurface: PaletteOptions["primary"];
     onSurfaceVariant: PaletteOptions["primary"];
     surfaceVariant: PaletteOptions["primary"];
+    neutral: PaletteOptions["primary"];
   }
 
   interface Palette {
@@ -108,5 +120,6 @@ declare module "@mui/material/styles" {
     onSurface: Palette["primary"];
     onSurfaceVariant: Palette["primary"];
     surfaceVariant: Palette["primary"];
+    neutral: Palette["primary"];
   }
 }

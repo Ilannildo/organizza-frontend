@@ -13,7 +13,8 @@ import { FormEvent, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import Logo from "../../../assets/images/logo-color.svg";
+import Logo from "../../../assets/images/logo-text.svg";
+import BackgroundLoginImage from "../../../assets/images/background-login.png";
 import { useAuth } from "../../../hooks/useAuth";
 import { validateEmail } from "../../../utils/roles";
 
@@ -76,48 +77,29 @@ const Login = () => {
     <Grid container component="main" minHeight="100vh">
       <Grid
         item
-        xs={false}
-        md={5}
-        lg={4}
-        xl={4}
-        sx={{
-          backgroundColor: (theme) => theme.palette.primary.main,
-          alignItems: "center",
-          justifyContent: "center",
-          display: "flex",
-        }}
-      >
-        <Box mt={4} p={3} display={matchesSM ? "none" : "block"}>
-          <Typography fontSize={42} variant="h3" color="Background">
-            Vamos construir relacionamentos, não apenas eventos.
-          </Typography>
-          <Typography fontSize={16} variant="h4" mt={2} color="Background">
-            — I. Viana, CEO & Co-Founder Organizza
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid
-        item
         xs={12}
-        sm={12}
-        md={7}
-        lg={8}
-        xl={7}
-        p={2}
+        md={5}
+        lg={5}
+        xl={4}
         sx={{
           backgroundColor: (theme) => theme.palette.background.default,
           position: "relative",
+          alignItems: "center",
+          justifyContent: "center",
+          display: "flex",
+          p: 2,
+          maxWidth: 640,
         }}
       >
         <Box
           sx={{
-            // backgroundColor: (theme) => theme.palette.primary.main,
             alignItems: "center",
             height: "100%",
             width: "100%",
             justifyContent: "center",
             display: "flex",
             flexDirection: "column",
+            maxWidth: 375,
           }}
           onSubmit={handleSubmit}
           component="form"
@@ -126,16 +108,21 @@ const Login = () => {
             <Grid
               item
               sx={{ userSelect: "none" }}
-              lg={6}
-              xl={4}
+              lg={12}
+              xl={12}
               xs={12}
               display="flex"
               justifyContent="center"
               alignItems="center"
               flexDirection="column"
             >
-              <img src={Logo} alt="Logo Organizza" draggable="false" />
-              <Typography fontSize={16} variant="h1" fontWeight="500">
+              <img
+                src={Logo}
+                alt="Logo Organizza"
+                draggable="false"
+                width="256"
+              />
+              <Typography fontSize={16} variant="h1" fontWeight="500" mt={2}>
                 Deixando o seu evento melhor!
               </Typography>
               {location.state && location.state.checkout && (
@@ -151,11 +138,11 @@ const Login = () => {
               )}
             </Grid>
           </Grid>
-          <Grid container justifyContent="center" mt={2}>
+          <Grid container justifyContent="center" mt={4}>
             <Grid
               item
-              lg={6}
-              xl={4}
+              lg={12}
+              xl={12}
               xs={12}
               display="flex"
               justifyContent="center"
@@ -167,6 +154,8 @@ const Login = () => {
                 fullWidth
                 id="email"
                 label="E-mail"
+                size="medium"
+                required
                 name="email"
                 autoComplete="email"
                 value={email}
@@ -175,12 +164,10 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
-          </Grid>
-          <Grid container justifyContent="center">
             <Grid
               item
-              lg={6}
-              xl={4}
+              lg={12}
+              xl={12}
               xs={12}
               display="flex"
               justifyContent="center"
@@ -193,6 +180,8 @@ const Login = () => {
                 name="password"
                 label="Senha"
                 type="password"
+                size="medium"
+                required
                 id="password"
                 autoComplete="current-password"
                 value={password}
@@ -202,6 +191,8 @@ const Login = () => {
               />
               <Link
                 href="/forgot-password"
+                fontSize={14}
+                variant="h1"
                 sx={{
                   color: (theme) => theme.palette.primary.main,
                 }}
@@ -209,12 +200,10 @@ const Login = () => {
                 Esqueci minha senha
               </Link>
             </Grid>
-          </Grid>
-          <Grid container justifyContent="center">
             <Grid
               item
-              lg={6}
-              xl={4}
+              lg={12}
+              xl={12}
               xs={12}
               display="flex"
               justifyContent="center"
@@ -259,6 +248,28 @@ const Login = () => {
             </Grid>
           </Grid>
         </Box>
+      </Grid>
+      <Grid
+        item
+        xs={false}
+        sm={12}
+        md={7}
+        lg={7}
+        xl={8}
+        p={2}
+        sx={{
+          backgroundColor: (theme) => theme.palette.primary.main,
+          background: `url(${BackgroundLoginImage})`,
+          backgroundRepeat: "no-repeat",
+          backgroundBlendMode: "multiply",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          position: "relative",
+          alignItems: "center",
+          justifyContent: "center",
+          display: "flex",
+        }}
+      >
         <Box
           position="absolute"
           left={0}
@@ -280,19 +291,6 @@ const Login = () => {
           </Grid>
         </Box>
       </Grid>
-      <Grid
-        item
-        xs={false}
-        md={false}
-        lg={false}
-        xl={1}
-        sx={{
-          backgroundColor: (theme) => theme.palette.secondary.main,
-          alignItems: "center",
-          justifyContent: "center",
-          display: "flex",
-        }}
-      ></Grid>
     </Grid>
   );
 };

@@ -89,7 +89,7 @@ export const getEventStatus = (
 export const getEventStatusColor = (
   status: "published" | "started" | "finished"
 ) => {
-  if (status === "published") return "#A1E3CB";
+  if (status === "published") return "#55DAD2";
   if (status === "started") return "#F19413";
   if (status === "finished") return "#C2C7CF";
   return "#00D488";
@@ -124,10 +124,6 @@ export const getReturnValuesCounter = (countDown: number) => {
   );
   let minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
   let seconds = Math.floor((countDown % (1000 * 60)) / 1000);
-  
-  minutes = seconds >= 30 ? minutes + 1 : minutes;
-
-  minutes = minutes % 60;
 
   return [days, hours, minutes, seconds];
 };

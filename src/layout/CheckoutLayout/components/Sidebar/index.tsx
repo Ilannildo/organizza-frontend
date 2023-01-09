@@ -42,6 +42,7 @@ export const CheckoutSidebar = () => {
     handleFinalizeServiceOrder,
     isFinishingServiceOrder,
     finalize,
+    handleChangeExpired
   } = useEventCheckout();
 
   const [counter, setCounter] = useState(0);
@@ -85,6 +86,7 @@ export const CheckoutSidebar = () => {
       const response = await handleFinalizeServiceOrder();
       if (response.status === "pending") {
         handleResetServiceOrder()
+        handleChangeExpired(false);
         navigate(`/evento/${slug}/checkout/buy/order-pending`, {
           state: {
             order: response,
@@ -95,6 +97,7 @@ export const CheckoutSidebar = () => {
       }
       if (response.status === "approved") {
         handleResetServiceOrder()
+        handleChangeExpired(false);
         navigate(`/evento/${slug}/checkout/buy/order-approved`, {
           state: {
             order: response,
@@ -104,6 +107,7 @@ export const CheckoutSidebar = () => {
       }
       if (response.status === "processing") {
         handleResetServiceOrder()
+        handleChangeExpired(false);
         navigate(`/evento/${slug}/checkout/buy/order-processing`, {
           state: {
             order: response,
@@ -132,7 +136,7 @@ export const CheckoutSidebar = () => {
       sx={{
         flexShrink: { md: 0 },
         width: matchUpMd ? 320 : "auto",
-        backgroundColor: "rgba(0,98,161, 0.05)",
+        backgroundColor: "rgba(221,227,234, 0.4)",
         ml: 2,
         py: 3,
         px: 5,
@@ -190,10 +194,11 @@ export const CheckoutSidebar = () => {
                   <img
                     src={serviceOrder.ticket.icon_url || Logo}
                     alt=""
-                    width="68"
+                    width="56"
                   />
                   <Typography
                     fontSize={18}
+                    mt={1}
                     sx={{
                       color: (theme) => theme.palette.onPrimaryContainer.main,
                       fontWeight: 500,
@@ -205,7 +210,6 @@ export const CheckoutSidebar = () => {
                     fontSize={14}
                     sx={{
                       color: (theme) => theme.palette.onPrimaryContainer.main,
-
                       mt: 1,
                     }}
                   >
@@ -275,7 +279,6 @@ export const CheckoutSidebar = () => {
                       fontSize={16}
                       sx={{
                         color: (theme) => theme.palette.onPrimaryContainer.main,
-                        fontWeight: "bold",
                       }}
                     >
                       {formatCurrency(serviceOrder.total)}

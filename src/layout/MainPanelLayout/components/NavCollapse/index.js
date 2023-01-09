@@ -33,9 +33,18 @@ const NavCollapse = ({ menu, level, event }) => {
   const menus = menu.children?.map((item) => {
     switch (item.type) {
       case "collapse":
-        return <NavCollapse key={item.id} menu={item} level={level + 1} event={event} />;
+        return (
+          <NavCollapse
+            key={item.id}
+            menu={item}
+            level={level + 1}
+            event={event}
+          />
+        );
       case "item":
-        return <NavItem key={item.id} item={item} level={level + 1} event={event} />;
+        return (
+          <NavItem key={item.id} item={item} level={level + 1} event={event} />
+        );
       default:
         return (
           <Typography key={item.id} variant="h6" color="error" align="center">
@@ -54,17 +63,17 @@ const NavCollapse = ({ menu, level, event }) => {
     />
   );
 
-    // active menu item on page load
-    useEffect(() => {
-      const currentIndex = document.location.pathname
-        .toString()
-        .split("/")
-        .findIndex((id) => id === menu.id);
-      if (currentIndex > -1) {
-        handleClick();
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  // active menu item on page load
+  useEffect(() => {
+    const currentIndex = document.location.pathname
+      .toString()
+      .split("/")
+      .findIndex((id) => id === menu.id);
+    if (currentIndex > -1) {
+      handleClick();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -74,7 +83,6 @@ const NavCollapse = ({ menu, level, event }) => {
           alignItems: "flex-start",
           backgroundColor: level > 1 ? "transparent !important" : "inherit",
           pl: `${level * 24}px`,
-          opacity: selected === menu.id ? 1 : 0.8,
         }}
         selected={selected === menu.id}
         onClick={handleClick}
@@ -83,7 +91,10 @@ const NavCollapse = ({ menu, level, event }) => {
           sx={{
             my: "auto",
             minWidth: !menu.icon ? 18 : 36,
-            color: theme.palette.primaryContainer.main,
+            color:
+              selected === menu.id
+                ? theme.palette.onPrimary.main
+                : theme.palette.primaryContainer.main,
           }}
         >
           {menuIcon}
@@ -91,7 +102,11 @@ const NavCollapse = ({ menu, level, event }) => {
         <ListItemText
           primary={
             <Typography
-              color={theme.palette.primaryContainer.main}
+              color={
+                selected === menu.id
+                  ? theme.palette.onPrimary.main
+                  : theme.palette.primaryContainer.main
+              }
               sx={{ my: "auto" }}
             >
               {menu.title}
@@ -138,16 +153,6 @@ const NavCollapse = ({ menu, level, event }) => {
           disablePadding
           sx={{
             position: "relative",
-            "&:after": {
-              content: "''",
-              position: "absolute",
-              left: "32px",
-              top: 0,
-              height: "100%",
-              width: "1px",
-              opacity: 0.2,
-              background: '#F5F7FC',
-            },
           }}
         >
           {menus}

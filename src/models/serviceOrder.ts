@@ -42,5 +42,6 @@ export interface IPayServiceOrderResponse {
     | "error";
   qr_code_url?: string;
   qr_code?: string;
+  order_id: string;
   expires_at?: Date;
 }
