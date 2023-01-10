@@ -45,3 +45,8 @@ export interface IPayServiceOrderResponse {
   order_id: string;
   expires_at?: Date;
 }
+
+export interface IEventPanelSalesResponse {
+  total: number;
+  processing: number;
+}

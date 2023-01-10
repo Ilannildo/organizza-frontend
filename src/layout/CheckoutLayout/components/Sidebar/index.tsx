@@ -75,6 +75,7 @@ export const CheckoutSidebar = () => {
   useEffect(() => {
     if (serviceOrder && days + hours + minutes + seconds <= 0 && stated) {
       handleResetServiceOrder();
+      handleChangeExpired(true);
       setStarted(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,8 +117,9 @@ export const CheckoutSidebar = () => {
         });
       }
       if (response.status === "error") {
+        handleResetServiceOrder()
         setErrorMessage(
-          "Não foi possível finalizar a sua inscrição. Verifique os dados e tente novamente!"
+          "Não foi possível finalizar o seu pagamento. Tente novamente mais tarde!"
         );
       }
     } catch (error: any) {

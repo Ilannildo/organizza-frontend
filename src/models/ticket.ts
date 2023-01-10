@@ -60,3 +60,9 @@ export interface IEventPageTickets {
   due_date: Date;
   due_time: Date;
 }
+
+export interface IEventPanelTicketInformationResponse {
+  sold: number;
+  canceled: number;
+  remaining: number;
+}

@@ -102,7 +102,7 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
   };
 
   const handleResetServiceOrder = () => {
-    setIsExpired(true);
+    // setIsExpired(true);
     setServiceOrder(null);
     setPaymentMethod(null);
     setPaymentAddress(null);

@@ -58,3 +58,13 @@ export interface IEventPage {
   instagram_url?: string;
   twitter_url?: string;
 }
+
+export interface IEventPanelResponse {
+  place: string;
+  type: "presential" | "online";
+  category: string;
+  main_subject: string;
+  status: "published" | "started" | "finished";
+  is_private: boolean;
+  views: number;
+}
