@@ -84,17 +84,19 @@ export const BannerTicket = ({ ticket }: IBannerTicket) => {
           </Grid>
 
           <Stack>
-            <Typography
-              sx={{
-                fontSize: 10,
-                mt: 2,
-                mb: 1,
-                color: (theme) => theme.palette.onPrimaryContainer.main,
-              }}
-            >
-              Inscrições até {format(new Date(ticket.due_date), "dd/MM/yyyy")}{" "}
-              às {format(new Date(ticket.due_time), "HH:mm")}
-            </Typography>
+            {ticket.available && (
+              <Typography
+                sx={{
+                  fontSize: 10,
+                  mt: 2,
+                  mb: 1,
+                  color: (theme) => theme.palette.onPrimaryContainer.main,
+                }}
+              >
+                Inscrições até{" "}
+                {format(new Date(ticket.due_date), "dd/MM/yyyy 'às' HH:mm")}
+              </Typography>
+            )}
             <Tooltip
               title={
                 !ticket.available

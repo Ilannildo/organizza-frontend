@@ -83,6 +83,12 @@ const Event = () => {
     }
   }, [event, isLoadingEvent, navigate]);
 
+  useEffect(() => {
+    if (event && !isLoadingEvent) {
+      document.title = event.title;
+    }
+  }, [event, isLoadingEvent, navigate]);
+
   return (
     <>
       {isLoadingEvent ? (
@@ -98,7 +104,7 @@ const Event = () => {
               backgroundColor: (theme) => theme.palette.background.default,
             }}
           >
-            <Navbar />
+            <Navbar logo_url={event.logo_url} />
             {!matchesSM && (
               <Box
                 height="100vh"

@@ -666,6 +666,7 @@ const EventPanel = () => {
         </Grid>
       )}
 
+      {/* mostrando informações sobre vendas */}
       {eventSales && !isLoadingEventSales && (
         <Grid item lg={12} xs={12} md={12} sm={12}>
           <Grid container spacing={2}>

@@ -10,7 +10,11 @@ import {
 } from "@mui/material";
 import Logo from "../../../../assets/images/logo.svg";
 
-export const Navbar = () => {
+interface INavbar {
+  logo_url?: string;
+}
+
+export const Navbar = ({logo_url}: INavbar) => {
   const pages = ["Inscrição", "Programação", "Sobre"];
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -33,7 +37,7 @@ export const Navbar = () => {
               href="/evento/meu-evento-123"
               sx={{ display: "flex", alignItems: "center", mr: 5 }}
             >
-              <img src={Logo} alt="" width="45" />
+              <img src={logo_url || Logo} alt="" width="32" />
             </Link>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (

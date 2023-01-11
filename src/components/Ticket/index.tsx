@@ -14,7 +14,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import { CaretDown, Info } from "phosphor-react";
 import Barcode from "react-barcode";
 
@@ -35,27 +35,19 @@ interface ITicket {
   setValue: (value: number) => void;
   startDate: Date | null;
   setStartDate: (value: Date | null) => void;
-  startTime: Date | null;
-  setStartTime: (value: Date | null) => void;
   dueDate: Date | null;
   setDueDate: (value: Date | null) => void;
-  dueTime: Date | null;
-  setDueTime: (value: Date | null) => void;
   ticket_price_type: ITicketPriceType;
   categoryTitleError: string;
   participantLimitError: string;
   valueError: string;
   startDateError: string;
-  startTimeError: string;
   dueDateError: string;
-  dueTimeError: string;
   setCategoryTitleError: (value: string) => void;
   setParticipantLimitError: (value: string) => void;
   setValueError: (value: string) => void;
   setStartDateError: (value: string) => void;
-  setStartTimeError: (value: string) => void;
   setDueDateError: (value: string) => void;
-  setDueTimeError: (value: string) => void;
 }
 
 export const Ticket = ({
@@ -72,27 +64,19 @@ export const Ticket = ({
   setValue,
   startDate,
   setStartDate,
-  startTime,
-  setStartTime,
   dueDate,
   setDueDate,
-  dueTime,
-  setDueTime,
   ticket_price_type,
   categoryTitleError,
   participantLimitError,
   valueError,
   startDateError,
-  startTimeError,
   dueDateError,
-  dueTimeError,
   setCategoryTitleError,
   setParticipantLimitError,
   setValueError,
   setStartDateError,
-  setStartTimeError,
   setDueDateError,
-  setDueTimeError,
 }: ITicket) => {
   const theme = useTheme();
   const [amount, setAmount] = useState<string>("");
@@ -293,7 +277,7 @@ export const Ticket = ({
                     >
                       <Grid container spacing={2}>
                         <Grid item lg={6} md={6} xs={12}>
-                          <DatePicker
+                          <DateTimePicker
                             label="Data de início das vendas"
                             value={startDate}
                             onChange={(newValue) => {
@@ -314,40 +298,7 @@ export const Ticket = ({
                           />
                         </Grid>
                         <Grid item lg={6} md={6} xs={12}>
-                          <TimePicker
-                            label="Hora de início das vendas"
-                            value={startTime}
-                            onChange={(newValue) => {
-                              setStartTime(newValue);
-                            }}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                variant="outlined"
-                                size="small"
-                                fullWidth
-                                required
-                                onBlur={() => setStartTimeError(" ")}
-                                error={startTimeError !== " "}
-                                helperText={startTimeError}
-                              />
-                            )}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                    <Grid
-                      item
-                      lg={12}
-                      md={12}
-                      sm={12}
-                      xs={12}
-                      justifyContent="center"
-                      display="flex"
-                    >
-                      <Grid container spacing={2}>
-                        <Grid item lg={6} md={6} xs={12}>
-                          <DatePicker
+                          <DateTimePicker
                             label="Data de término das vendas"
                             value={dueDate}
                             onChange={(newValue) => {
@@ -367,27 +318,18 @@ export const Ticket = ({
                             )}
                           />
                         </Grid>
-                        <Grid item lg={6} md={6} xs={12}>
-                          <TimePicker
-                            label="Hora de término das vendas"
-                            value={dueTime}
-                            onChange={(newValue) => {
-                              setDueTime(newValue);
-                            }}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                variant="outlined"
-                                size="small"
-                                fullWidth
-                                required
-                                onBlur={() => setDueTimeError(" ")}
-                                error={dueTimeError !== " "}
-                                helperText={dueTimeError}
-                              />
-                            )}
-                          />
-                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      item
+                      lg={12}
+                      md={12}
+                      sm={12}
+                      xs={12}
+                      justifyContent="center"
+                      display="flex"
+                    >
+                      <Grid container spacing={2}>
                         <Grid item lg={12} md={12} xs={12}>
                           <TextField
                             id="outlined-multiline-static"
