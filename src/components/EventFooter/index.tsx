@@ -1,10 +1,11 @@
-import { Box, Button, Container, Grid, Stack } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Grid, Stack } from "@mui/material";
 
 interface IEventFooter {
   onBack: () => void;
   onComplete: () => void;
   activeStep: number;
   acceptedTerms: boolean;
+  isLoading: boolean;
   steps: string[];
 }
 
@@ -14,6 +15,7 @@ export const EventFooter = ({
   activeStep,
   acceptedTerms,
   steps,
+  isLoading,
 }: IEventFooter) => {
   return (
     <Box
@@ -48,21 +50,27 @@ export const EventFooter = ({
             display="flex"
           >
             <Stack spacing={3} direction="row">
-              <Button
-                variant="outlined"
-                onClick={onBack}
-                disabled={activeStep === 0}
-              >
-                Voltar
-              </Button>
+              {activeStep > 0 && (
+                <Button
+                  variant="outlined"
+                  onClick={onBack}
+                  disabled={isLoading}
+                >
+                  Voltar
+                </Button>
+              )}
               <Button
                 variant="contained"
                 onClick={onComplete}
                 disabled={activeStep === steps.length - 1 && !acceptedTerms}
               >
-                {activeStep === steps.length - 1
-                  ? "Criar evento"
-                  : "Próximo passo"}
+                {isLoading ? (
+                  <CircularProgress color="inherit" size={24} />
+                ) : activeStep === steps.length - 1 ? (
+                  "Criar evento"
+                ) : (
+                  "Próximo passo"
+                )}
               </Button>
             </Stack>
           </Grid>

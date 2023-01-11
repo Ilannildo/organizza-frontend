@@ -1,105 +1,219 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { CreateCard } from "../../../components/CreateCard";
-import { EventCard } from "../../../components/EventCard";
-import { Navbar } from "../../../components/Navbar";
-import { useEventByUserId } from "../../../stores/event";
-import { useAuthenticatedUser } from "../../../stores/user";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Grid,
+  Skeleton,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { CalendarCheck, CalendarPlus, CalendarX, Plus } from "phosphor-react";
+import { useState } from "react";
+import { SelectEventTypeModal } from "./components/SelectEventTypeModal";
+import { EventTable } from "./components/Table";
 
 const OrganizerDashboard = () => {
-  const { data: user } = useAuthenticatedUser();
+  const theme = useTheme();
+  const [isOpenSelectEvenTypeModal, setIsOpenSelectEventTypeModal] =
+    useState(false);
 
-  const { data: eventByUser } = useEventByUserId(user?.uid);
+  const handleCloseIsOpenSelectEvenTypeModal = () =>
+    setIsOpenSelectEventTypeModal(false);
 
-  const navigate = useNavigate();
+  const handleOpenIsOpenSelectEvenTypeModal = () =>
+    setIsOpenSelectEventTypeModal(true);
 
   return (
     <>
-      <Navbar />
-      <Box
-        sx={{
-          backgroundColor: (theme) => theme.palette.background.default,
-          pt: 4,
-        }}
-      >
-        <Container
-          maxWidth="xl"
-          sx={{
-            minHeight: "100vh",
-            pb: 10,
-          }}
-        >
-          <Typography
-            sx={{
-              color: (theme) => theme.palette.text.primary,
-            }}
-          >
-            Olá, {user?.name.split(" ")[0]}
-          </Typography>
-          <Typography
-            component="h1"
-            variant="h5"
-            fontWeight={600}
-            sx={{
-              color: (theme) => theme.palette.text.primary,
-            }}
-          >
-            Crie o seu primeiro evento
-          </Typography>
-          <Grid container mt={3} spacing={2}>
-            <Grid item lg={3} md={4} sm={6} xs={12}>
-              <CreateCard
-                label="Evento online"
-                color="primary"
-                onClick={() => navigate("/organizador/evento?venue=online")}
-              />
-            </Grid>
-            <Grid item lg={3} md={4} sm={6} xs={12}>
-              <CreateCard
-                label="Evento Presencial"
-                color="secondary"
-                onClick={() => navigate("/organizador/evento?venue=presential")}
-              />
-            </Grid>
-            <Grid item lg={3} md={4} sm={6} xs={12}>
-              <CreateCard
-                label="Acadêmico ou Jornada"
-                color="tertiary"
-                onClick={() =>
-                  navigate("/organizador/evento?venue=presential&type=1")
-                }
-              />
-            </Grid>
-            <Grid item lg={3} md={4} sm={6} xs={12}>
-              <CreateCard
-                label="Personalizado"
-                color="default"
-                onClick={() => navigate("/organizador/evento")}
-              />
-            </Grid>
-          </Grid>
-          <Typography
-            component="h1"
-            variant="h6"
-            mt={5}
-            fontWeight={600}
-            sx={{
-              color: (theme) => theme.palette.primary.main,
-            }}
-          >
-            Eventos criados
-          </Typography>
-          <Grid container mt={1} spacing={2}>
-            {eventByUser &&
-              eventByUser.length > 0 &&
-              eventByUser.map((event) => (
-                <Grid key={event.id} item lg={4} md={6} sm={6} xs={12}>
-                  <EventCard event={event} />
+      <Grid container>
+        <Grid item lg={12}>
+          <Grid container spacing={2}>
+            <Grid item lg={12} md={12} sm={12} xs={12}>
+              <Grid container spacing={2}>
+                <Grid item lg={4} md={4} sm={4} xs={6}>
+                  <Card variant="elevation" elevation={0}>
+                    <CardContent>
+                      <Grid container spacing={2}>
+                        <Grid item lg={10} md={10} sm={10} xs={10}>
+                          <Typography
+                            fontSize={14}
+                            sx={{
+                              color: (theme) =>
+                                theme.palette.onSurfaceVariant.main,
+                              fontWeight: 500,
+                            }}
+                          >
+                            Eventos criados
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          lg={2}
+                          md={2}
+                          sm={2}
+                          xs={2}
+                          justifyContent="end"
+                          alignItems="center"
+                          display="flex"
+                        >
+                          <CalendarPlus
+                            size={32}
+                            color={theme.palette.success.main}
+                          />
+                        </Grid>
+                      </Grid>
+                      <Grid container mt={1}>
+                        <Grid item>
+                          <Skeleton
+                            variant="rectangular"
+                            width={75}
+                            height={21}
+                          />
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
                 </Grid>
-              ))}
+                <Grid item lg={4} md={4} sm={4} xs={6}>
+                  <Card variant="elevation" elevation={0}>
+                    <CardContent>
+                      <Grid container spacing={2}>
+                        <Grid item lg={10} md={10} sm={10} xs={10}>
+                          <Typography
+                            fontSize={14}
+                            sx={{
+                              color: (theme) =>
+                                theme.palette.onSurfaceVariant.main,
+                              fontWeight: 500,
+                            }}
+                          >
+                            Eventos encerrados
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          lg={2}
+                          md={2}
+                          sm={3}
+                          xs={4}
+                          justifyContent="end"
+                          alignItems="center"
+                          display="flex"
+                        >
+                          <CalendarX
+                            size={32}
+                            color={theme.palette.error.light}
+                          />
+                        </Grid>
+                      </Grid>
+                      <Grid container mt={1}>
+                        <Grid item>
+                          <Skeleton
+                            variant="rectangular"
+                            width={50}
+                            height={21}
+                          />
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item lg={4} md={4} sm={4} xs={6}>
+                  <Card variant="elevation" elevation={0}>
+                    <CardContent>
+                      <Grid container spacing={2}>
+                        <Grid item lg={10} md={10} sm={10} xs={10}>
+                          <Typography
+                            fontSize={14}
+                            sx={{
+                              color: (theme) =>
+                                theme.palette.onSurfaceVariant.main,
+                              fontWeight: 500,
+                            }}
+                          >
+                            Eventos disponíveis
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          lg={2}
+                          md={2}
+                          sm={2}
+                          xs={2}
+                          justifyContent="end"
+                          alignItems="center"
+                          display="flex"
+                        >
+                          <CalendarCheck
+                            size={32}
+                            color={theme.palette.primary.main}
+                          />
+                        </Grid>
+                      </Grid>
+                      <Grid container mt={1}>
+                        <Grid item>
+                          <Skeleton
+                            variant="rectangular"
+                            width={100}
+                            height={21}
+                          />
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item lg={12} md={12} sm={12} xs={12}>
+              <Card variant="elevation" elevation={0}>
+                <CardHeader
+                  sx={{
+                    backgroundColor: theme.palette.neutral.main,
+                  }}
+                  title={
+                    <Typography
+                      fontSize={14}
+                      sx={{
+                        color: (theme) => theme.palette.onSurfaceVariant.main,
+                        fontWeight: 500,
+                      }}
+                    >
+                      Todos os eventos
+                    </Typography>
+                  }
+                  action={
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      justifyContent="end"
+                      alignItems="center"
+                    >
+                      <Button
+                        variant="contained"
+                        size="medium"
+                        onClick={() => handleOpenIsOpenSelectEvenTypeModal()}
+                        startIcon={<Plus size={16} />}
+                      >
+                        Criar evento
+                      </Button>
+                    </Stack>
+                  }
+                />
+                <CardContent>
+                  <EventTable />
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
-        </Container>
-      </Box>
+        </Grid>
+      </Grid>
+      <SelectEventTypeModal
+        open={isOpenSelectEvenTypeModal}
+        onClose={() => handleCloseIsOpenSelectEvenTypeModal()}
+      />
     </>
   );
 };

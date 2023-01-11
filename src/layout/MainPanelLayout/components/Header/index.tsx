@@ -129,14 +129,11 @@ const Header = ({ handleLeftDrawerToggle, event, isLoadingEvent }: IHeader) => {
           >
             {`De: ${format(
               new Date(event.start_date),
-              "dd 'de' MMM 'de' yyyy"
-            )}, às ${format(
-              new Date(event.start_time),
-              "HH:mm"
+              "dd 'de' MMM 'de' yyyy, 'às' HH:mm"
             )} - Até: ${format(
               new Date(event.end_date),
-              "dd 'de' MMM 'de' yyyy"
-            )}, às ${format(new Date(event.end_time), "HH:mm")}`}
+              "dd 'de' MMM 'de' yyyy, 'às' HH:mm"
+            )}`}
           </Typography>
         </Box>
       )}

@@ -95,6 +95,15 @@ export const getEventStatusColor = (
   return "#00D488";
 };
 
+export const getEventStatusBackgroundColor = (
+  status: "published" | "started" | "finished"
+) => {
+  if (status === "published") return "rgba(0,212,136,0.1)";
+  if (status === "started") return "rgba(241,148,19,0.1)";
+  if (status === "finished") return "rgba(194,199,207,0.1)";
+  return "#00D488";
+};
+
 export const currencyMask = (value: number) => {
   return value.toLocaleString("pt-br", { minimumFractionDigits: 2 });
 };

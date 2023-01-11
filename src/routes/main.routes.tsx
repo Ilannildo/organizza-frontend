@@ -11,12 +11,6 @@ const ConfirmEmail = Loadable(lazy(() => import("../pages/Auth/ConfirmEmail")));
 const Event = Loadable(lazy(() => import("../pages/Event")));
 const NotFound = Loadable(lazy(() => import("../pages/Auth/NotFound")));
 const Home = Loadable(lazy(() => import("../pages/Home")));
-const OrganizerDashboard = Loadable(
-  lazy(() => import("../pages/Organizer/Dashboard"))
-);
-const CreateEvent = Loadable(
-  lazy(() => import("../pages/Organizer/Event/Create"))
-);
 
 const CreateServiceOrder = Loadable(
   lazy(() => import("../pages/Checkout/CreateServiceOrder"))
@@ -51,22 +45,6 @@ export const MainRoutes = {
     {
       path: "evento/:slug",
       element: <Event />,
-    },
-    {
-      path: "organizador",
-      element: (
-        <ProtectedRoute allowedRoles={[AllowedRolesNames["ORGANIZER"]]}>
-          <OrganizerDashboard />
-        </ProtectedRoute>
-      ),
-    },
-    {
-      path: "organizador/evento",
-      element: (
-        <ProtectedRoute allowedRoles={[AllowedRolesNames["ORGANIZER"]]}>
-          <CreateEvent />
-        </ProtectedRoute>
-      ),
     },
     {
       path: "evento/:slug/checkout/:ticketId", //:serviceOrderId/payment

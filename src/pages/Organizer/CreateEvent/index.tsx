@@ -11,15 +11,16 @@ import {
 } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { addDays } from "date-fns";
-import { Navbar } from "../../../../components/Navbar";
 import { StepOne } from "./StepOne";
-import { EventFooter } from "../../../../components/EventFooter";
 import { StepTwo } from "./StepTwo";
-import { ICity } from "../../../../models/city";
 import { StepThree } from "./StepThree";
-import Loader from "../../../../layout/Loader";
-import { api } from "../../../../services/api";
 import { toast } from "react-toastify";
+import { ICity } from "../../../models/city";
+import { api } from "../../../services/api";
+import { EventFooter } from "../../../components/EventFooter";
+import { useCustomization } from "../../../hooks/useCustomization";
+import { IEventType } from "../../../models/eventType";
+import { IMainSubject } from "../../../models/mainSubject";
 
 const steps = [
   "Informações gerais",
@@ -51,43 +52,41 @@ interface IUploadedCoverImage {
 const CreateEvent = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { setMenu } = useCustomization();
   const [activeStep, setActiveStep] = useState(0);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
   const [completed, setCompleted] = useState<{ [k: number]: boolean }>({});
   const [skipped, setSkipped] = useState(new Set<number>());
 
   const [title, setTitle] = useState<string>("");
-  const [eventTypeId, setEventTypeId] = useState<string>("");
-  const [mainSubject, setMainSubject] = useState<string>("");
+  const [eventType, setEventType] = useState<IEventType | null>(null);
+  const [mainSubject, setMainSubject] = useState<IMainSubject | null>(null);
   const [shortDescription, setShortDescription] = useState<string>("");
   const [venueType, setVenueType] = useState<"presential" | "online" | "">("");
-  const [isPrivate, setIsPrivate] = useState<boolean | null>(null);
+  const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<Date | null>(
     addDays(new Date(), 1)
   );
-  const [startTime, setStartTime] = useState<Date | null>(null);
+
   const [endDate, setEndDate] = useState<Date | null>(addDays(new Date(), 4));
-  const [endTime, setEndTime] = useState<Date | null>(null);
+
   const [uploadedCoverImage, setUploadedCoverImage] =
     useState<IUploadedCoverImage | null>(null);
 
   const [street, setStreet] = useState<string>("");
   const [city, setCity] = useState<ICity | null>(null);
+
   const [placeUndefined, setPlaceUndefined] = useState<boolean>(false);
   const [cityError, setCityError] = useState<string>(" ");
   const [streetError, setStreetError] = useState<string>(" ");
-
   const [titleError, setTitleError] = useState<string>(" ");
   const [eventTypeIdError, setEventTypeIdError] = useState<string>(" ");
   const [mainSubjectError, setMainSubjectError] = useState<string>(" ");
   const [shortDescriptionError, setShortDescriptionError] =
     useState<string>(" ");
   const [venueTypeError, setVenueTypeError] = useState<string>(" ");
-  const [isPrivateError, setIsPrivateError] = useState<string>(" ");
   const [startDateError, setStartDateError] = useState<string>(" ");
-  const [startTimeError, setStartTimeError] = useState<string>(" ");
   const [endDateError, setEndDateError] = useState<string>(" ");
-  const [endTimeError, setEndTimeError] = useState<string>(" ");
   const [uploadedCoverImageError, setUploadedCoverImageError] =
     useState<string>(" ");
   const [responsibleName, setResponsibleName] = useState<string>("");
@@ -113,15 +112,24 @@ const CreateEvent = () => {
       setVenueType("");
     }
 
-    if (searchParams.get("type") !== null) {
-      if (
-        searchParams.get("type") === "1" ||
-        searchParams.get("type") === "2"
-      ) {
-        setEventTypeId(searchParams.get("type")!);
-      }
-    }
+    // if (searchParams.get("type") !== null) {
+    //   if (
+    //     searchParams.get("type") === "1" ||
+    //     searchParams.get("type") === "2"
+    //   ) {
+    //     setEventType(null);
+    //   }
+    // }
   }, [searchParams]);
+
+  useEffect(() => {
+    setMenu(false);
+
+    return () => {
+      setMenu(true);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const validateStepOne = () => {
     if (title === "") {
@@ -156,14 +164,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if (startTime === null) {
-      setStartTimeError("Hora de início é obrigatório");
-      window.scrollTo({
-        top: 700,
-        behavior: "smooth",
-      });
-      return false;
-    }
+
     if (endDate === null) {
       setEndDateError("Data de término é obrigatório");
       window.scrollTo({
@@ -172,22 +173,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if (endTime === null) {
-      setEndTimeError("Hora de término é obrigatório");
-      window.scrollTo({
-        top: 700,
-        behavior: "smooth",
-      });
-      return false;
-    }
-    if (isPrivate === null) {
-      setIsPrivateError("Visibilidade do evento é obrigatório");
-      window.scrollTo({
-        top: 900,
-        behavior: "smooth",
-      });
-      return false;
-    }
+
     if (venueType === "") {
       setVenueTypeError("Tipo do evento é obrigatório");
       window.scrollTo({
@@ -218,7 +204,7 @@ const CreateEvent = () => {
         return false;
       }
     }
-    if (eventTypeId === "") {
+    if (eventType === null) {
       setEventTypeIdError("Categoria do evento é obrigatório");
       window.scrollTo({
         top: 1000,
@@ -226,7 +212,7 @@ const CreateEvent = () => {
       });
       return false;
     }
-    if (mainSubject === "") {
+    if (mainSubject === null) {
       setMainSubjectError("Assunto principal é obrigatório");
       window.scrollTo({
         top: 1500,
@@ -331,15 +317,13 @@ const CreateEvent = () => {
     try {
       const response = await api.post("/events", {
         title,
-        event_type_id: eventTypeId,
-        main_subject_id: mainSubject,
+        event_type_id: eventType?.id,
+        main_subject_id: mainSubject?.id,
         short_description: shortDescription,
         venue_type: venueType,
         is_private: isPrivate,
         start_date: startDate,
-        start_time: startTime,
         end_date: endDate,
-        end_time: endTime,
         address: street,
         city_id: city?.id,
         responsible_name: responsibleName,
@@ -350,34 +334,53 @@ const CreateEvent = () => {
       if (response.data) {
         // TO-DO: adicionar upload da capa do evento
         if (uploadedCoverImage) {
-          const id = toast.loading(
-            "Estamos fazendo o upload da imagem do evento..."
-          );
+          const id = toast.loading("Fazendo o upload da imagem do evento... ");
           const formData = new FormData();
           formData.append(
             "cover",
             uploadedCoverImage.file,
             uploadedCoverImage.name
           );
-          const responseUpload = await api.post("/events/cover", formData, {
-            headers: {
-              "Content-Type": `multipart/form-data`,
-            },
-          });
-          if (responseUpload.data) {
-            toast.update(id, {
-              render: "Capa do evento enviada com sucesso",
-              type: "success",
-              isLoading: false,
+          api
+            .post(`/events/${response.data.data.id}/cover`, formData, {
+              headers: {
+                "Content-Type": `multipart/form-data`,
+              },
+            })
+            .then(() => {
+              toast.update(id, {
+                render: "A capa do evento foi enviada com sucesso",
+                type: "success",
+                isLoading: false,
+                autoClose: 5000,
+              });
+            })
+            .catch((error: any) => {
+              console.log("Error upload", error);
+              toast.update(id, {
+                render: `${
+                  error.response
+                    ? error.response.data.error.message
+                    : "Upload cancelado"
+                }. Você pode alterar a capa do evento acessando o painel do evento`,
+                type: "error",
+                isLoading: false,
+                autoClose: 5000,
+              });
+            })
+            .finally(() => {
+              toast.success("Evento criado com sucesso!");
+              setIsCreatingEvent(false);
+              navigate("/organizador");
             });
-          }
+        } else {
+          setIsCreatingEvent(false);
+          toast.success("Evento criado com sucesso!");
+          navigate("/organizador");
         }
-
-        setIsCreatingEvent(false);
-        toast.success("Evento criado com sucesso!");
-        navigate("/organizador");
       }
     } catch (error: any) {
+      setIsCreatingEvent(false);
       if (error.response) {
         toast.error(error.response.data.error.message);
       }
@@ -387,8 +390,6 @@ const CreateEvent = () => {
 
   return (
     <>
-      <Navbar />
-      <Loader isLoading={isCreatingEvent} label="Aguarde" />
       <Box
         sx={{
           backgroundColor: (theme) => theme.palette.background.default,
@@ -404,8 +405,8 @@ const CreateEvent = () => {
         >
           <Typography
             component="h1"
-            variant="h5"
-            mb={2}
+            variant="h6"
+            mb={1}
             fontWeight={600}
             sx={{
               color: (theme) => theme.palette.text.primary,
@@ -465,12 +466,8 @@ const CreateEvent = () => {
               setIsPrivate={setIsPrivate}
               startDate={startDate}
               setStartDate={setStartDate}
-              startTime={startTime}
-              setStartTime={setStartTime}
               endDate={endDate}
               setEndDate={setEndDate}
-              endTime={endTime}
-              setEndTime={setEndTime}
               uploadedCoverImage={uploadedCoverImage}
               setUploadedCoverImage={setUploadedCoverImage}
               titleError={titleError}
@@ -479,16 +476,10 @@ const CreateEvent = () => {
               setShortDescriptionError={setShortDescriptionError}
               venueTypeError={venueTypeError}
               setVenueTypeError={setVenueTypeError}
-              isPrivateError={isPrivateError}
-              setIsPrivateError={setIsPrivateError}
               startDateError={startDateError}
               setStartDateError={setStartDateError}
-              startTimeError={startTimeError}
-              setStartTimeError={setStartTimeError}
               endDateError={endDateError}
               setEndDateError={setEndDateError}
-              endTimeError={endTimeError}
-              setEndTimeError={setEndTimeError}
               uploadedCoverImageError={uploadedCoverImageError}
               setUploadedCoverImageError={setUploadedCoverImageError}
             />
@@ -501,8 +492,8 @@ const CreateEvent = () => {
               setStreet={setStreet}
               placeUndefined={placeUndefined}
               setPlaceUndefined={setPlaceUndefined}
-              eventTypeId={eventTypeId}
-              setEventTypeId={setEventTypeId}
+              eventType={eventType}
+              setEventType={setEventType}
               mainSubject={mainSubject}
               setMainSubject={setMainSubject}
               eventTypeIdError={eventTypeIdError}
@@ -541,6 +532,7 @@ const CreateEvent = () => {
         activeStep={activeStep}
         acceptedTerms={acceptedTerms}
         steps={steps}
+        isLoading={isCreatingEvent}
       />
     </>
   );
