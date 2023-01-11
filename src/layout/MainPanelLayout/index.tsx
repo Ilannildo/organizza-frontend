@@ -87,9 +87,9 @@ const MainPanelLayout = () => {
   const theme = useTheme();
   const { eventId } = useParams<IParams>();
   const { opened, setMenu } = useCustomization();
+  const matchDownMd = useMediaQuery(theme.breakpoints.down("lg"));
 
   const { data: event, isLoading: isLoadingEvent } = useEventById(eventId);
-  const matchDownMd = useMediaQuery(theme.breakpoints.down("lg"));
   const navigate = useNavigate();
 
   const { data: sessionItems, isLoading: isLoadingSessionItens } =

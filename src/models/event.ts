@@ -19,9 +19,7 @@ export interface IEvent {
   venue_type: "presential" | "online";
   is_private: boolean;
   start_date: Date;
-  start_time: Date;
   end_date: Date;
-  end_time: Date;
   logo_url?: string;
   facebook_url?: string;
   instagram_url?: string;
@@ -67,4 +65,13 @@ export interface IEventPanelResponse {
   status: "published" | "started" | "finished";
   is_private: boolean;
   views: number;
+}
+
+export interface IGetEventByUserIdResponse {
+  event_id: string;
+  title: string;
+  start_date: Date;
+  end_date: Date;
+  status: "published" | "started" | "finished";
+  tickets: number;
 }

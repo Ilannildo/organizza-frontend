@@ -1,34 +1,29 @@
-import MainPanelLayout from "../layout/MainPanelLayout";
+import { lazy } from "react";
+import { Loadable } from "../layout/Loadable";
 import { AllowedRolesNames, ProtectedRoute } from "../layout/ProtectedRoute";
 
-import EventPanel from "../pages/Organizer/Event/Panel";
-import EventSession from "../pages/Organizer/Event/Session";
-import EventSubscription from "../pages/Organizer/Event/Subscription";
-import EventTicket from "../pages/Organizer/Event/Ticket";
+import OrganizerDashboard from "../pages/Organizer/Dashboard";
+import CreateEvent from "../pages/Organizer/CreateEvent";
+
+const OrganizerPanelLayout = Loadable(
+  lazy(() => import("../layout/OrganizerPanelLayout"))
+);
 
 export const OrganizerRoutes = {
-  path: "organizador/painel-evento/:eventId",
+  path: "organizador",
   element: (
     <ProtectedRoute allowedRoles={[AllowedRolesNames["ORGANIZER"]]}>
-      <MainPanelLayout />
+      <OrganizerPanelLayout />
     </ProtectedRoute>
   ),
   children: [
     {
       path: "",
-      element: <EventPanel />,
+      element: <OrganizerDashboard />,
     },
     {
-      path: "programacao/:sessionTypeId",
-      element: <EventSession />,
-    },
-    {
-      path: "ingressos",
-      element: <EventTicket />,
-    },
-    {
-      path: "participantes",
-      element: <EventSubscription />,
+      path: "criar-evento",
+      element: <CreateEvent />,
     },
   ],
 };

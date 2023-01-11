@@ -1,7 +1,11 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { createEventByIdKey, createEventBySlugKey, createEventByUserIdKey } from "./keys";
+import {
+  createEventByIdKey,
+  createEventBySlugKey,
+  createEventByUserIdKey,
+} from "./keys";
 import { api } from "../../services/api";
-import { IEvent } from "../../models/event";
+import { IEvent, IGetEventByUserIdResponse } from "../../models/event";
 
 export const useEventById = (
   event_id?: string,
@@ -32,12 +36,20 @@ export const useEventBySlug = (
 };
 
 export const useEventByUserId = (
-  user_id?: string,
-  options?: UseQueryOptions<IEvent[]>
+  { limit, page, user_id }: { user_id?: string; limit: number; page: number },
+  options?: UseQueryOptions<{
+    limit: number;
+    page: number;
+    total: number;
+    events: IGetEventByUserIdResponse[];
+  }>
 ) => {
   return useQuery(
-    createEventByUserIdKey(user_id),
-    () => api.get(`/users/events`).then((res) => res.data.data),
+    createEventByUserIdKey(limit, page, user_id),
+    () =>
+      api
+        .get(`/users/events?page=${page + 1}&limit=${limit}`)
+        .then((res) => res.data.data),
     {
       ...options,
       retry: 1,

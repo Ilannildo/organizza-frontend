@@ -27,7 +27,6 @@ export const CreateCard = ({ label, color, onClick }: ICreateCard) => {
             `linear-gradient(249.6deg, ${theme.palette.primary.main} 65.14%, ${CARD_COLORS[color]} 99.16%)`,
         },
       }}
-      // width="100%"
       height="193px"
       borderRadius={1}
       display="flex"
@@ -47,14 +46,15 @@ export const CreateCard = ({ label, color, onClick }: ICreateCard) => {
       </Typography>
       <Typography
         sx={{
-          color: (theme) => theme.palette.background.paper,
+          color: (theme) => theme.palette.onPrimary.main,
           fontSize: 12,
           fontWeight: "500",
           overflow: "hidden",
           textOverflow: "...",
           display: "-webkit-box",
-          WebkitLineClamp: "3",
+          WebkitLineClamp: "4",
           WebkitBoxOrient: "vertical",
+          textAlign: "center"
         }}
         // noWrap
       >

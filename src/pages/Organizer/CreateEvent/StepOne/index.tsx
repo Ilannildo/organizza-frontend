@@ -2,6 +2,8 @@ import {
   Box,
   Card,
   CardContent,
+  Checkbox,
+  FormControlLabel,
   Grid,
   IconButton,
   Stack,
@@ -10,18 +12,13 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import { filesize } from "filesize";
 import { uniqueId } from "lodash";
-import {
-  Buildings,
-  GlobeHemisphereEast,
-  UsersThree,
-  Webcam,
-} from "phosphor-react";
+import { UsersThree, Webcam } from "phosphor-react";
 import { useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
-import { UploadImage } from "../../../../../components/UploadImage";
+import { UploadImage } from "../../../../components/UploadImage";
 
 interface IUploadedCoverImage {
   file: File;
@@ -47,40 +44,29 @@ interface IUploadedCoverImage {
 interface IEventGeneralInformation {
   title: string;
   setTitle: (value: string) => void;
-  
+
   shortDescription: string;
   setShortDescription: (value: string) => void;
   venueType: "presential" | "online" | "";
   setVenueType: (value: "presential" | "online" | "") => void;
-  isPrivate: boolean | null;
-  setIsPrivate: (value: boolean | null) => void;
+  isPrivate: boolean;
+  setIsPrivate: (value: boolean) => void;
   startDate: Date | null;
   setStartDate: (value: Date | null) => void;
-  startTime: Date | null;
-  setStartTime: (value: Date | null) => void;
   endDate: Date | null;
   setEndDate: (value: Date | null) => void;
-  endTime: Date | null;
-  setEndTime: (value: Date | null) => void;
   uploadedCoverImage: IUploadedCoverImage | null;
   setUploadedCoverImage: (value: IUploadedCoverImage | null) => void;
   titleError: string;
   setTitleError: (value: string) => void;
-  
   shortDescriptionError: string;
   setShortDescriptionError: (value: string) => void;
   venueTypeError: string;
   setVenueTypeError: (value: string) => void;
-  isPrivateError: string;
-  setIsPrivateError: (value: string) => void;
   startDateError: string;
   setStartDateError: (value: string) => void;
-  startTimeError: string;
-  setStartTimeError: (value: string) => void;
   endDateError: string;
   setEndDateError: (value: string) => void;
-  endTimeError: string;
-  setEndTimeError: (value: string) => void;
   uploadedCoverImageError: string;
   setUploadedCoverImageError: (value: string) => void;
 }
@@ -88,7 +74,6 @@ interface IEventGeneralInformation {
 export const StepOne = ({
   title,
   setTitle,
-  
   shortDescription,
   setShortDescription,
   venueType,
@@ -97,12 +82,8 @@ export const StepOne = ({
   setIsPrivate,
   startDate,
   setStartDate,
-  startTime,
-  setStartTime,
   endDate,
   setEndDate,
-  endTime,
-  setEndTime,
   uploadedCoverImage,
   setUploadedCoverImage,
   titleError,
@@ -111,16 +92,10 @@ export const StepOne = ({
   setShortDescriptionError,
   venueTypeError,
   setVenueTypeError,
-  isPrivateError,
-  setIsPrivateError,
   startDateError,
   setStartDateError,
-  startTimeError,
-  setStartTimeError,
   endDateError,
   setEndDateError,
-  endTimeError,
-  setEndTimeError,
   uploadedCoverImageError,
   setUploadedCoverImageError,
 }: IEventGeneralInformation) => {
@@ -187,8 +162,8 @@ export const StepOne = ({
               </Grid>
               <Grid
                 item
-                lg={10}
-                md={10}
+                lg={7}
+                md={7}
                 sm={12}
                 xs={12}
                 justifyContent="center"
@@ -203,10 +178,25 @@ export const StepOne = ({
                   }}
                   error={titleError !== " "}
                   helperText={titleError}
+                  multiline
+                  maxRows={2}
                   value={title}
                   size="small"
                   fullWidth
                   color="primary"
+                />
+              </Grid>
+              <Grid item lg={3} md={3} sm={12} xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      onChange={(e, value) => {
+                        setIsPrivate(value);
+                      }}
+                      checked={isPrivate}
+                    />
+                  }
+                  label="O evento é público?"
                 />
               </Grid>
               <Grid
@@ -220,7 +210,7 @@ export const StepOne = ({
               >
                 <TextField
                   id="outlined-multiline-static"
-                  label="Descrição curta"
+                  label="Descrição curta/Tema"
                   error={shortDescriptionError !== " "}
                   helperText={shortDescriptionError}
                   onBlur={() => {
@@ -283,9 +273,9 @@ export const StepOne = ({
               {uploadedCoverImage && (
                 <Grid
                   item
-                  lg={6}
-                  md={6}
-                  sm={6}
+                  lg={8}
+                  md={8}
+                  sm={8}
                   xs={12}
                   justifyContent="center"
                   display="flex"
@@ -402,7 +392,7 @@ export const StepOne = ({
               >
                 <Grid container spacing={2}>
                   <Grid item lg={6} md={6} xs={12}>
-                    <DatePicker
+                    <DateTimePicker
                       label="Data de início"
                       value={startDate}
                       onChange={(newValue) => {
@@ -424,41 +414,7 @@ export const StepOne = ({
                     />
                   </Grid>
                   <Grid item lg={6} md={6} xs={12}>
-                    <TimePicker
-                      label="Hora de início"
-                      value={startTime}
-                      onChange={(newValue) => {
-                        setStartTime(newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          size="small"
-                          fullWidth
-                          error={startTimeError !== " "}
-                          helperText={startTimeError}
-                          onBlur={() => {
-                            setStartTimeError(" ");
-                          }}
-                        />
-                      )}
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid
-                item
-                lg={10}
-                md={10}
-                sm={12}
-                xs={12}
-                justifyContent="center"
-                display="flex"
-              >
-                <Grid container spacing={2}>
-                  <Grid item lg={6} md={6} xs={12}>
-                    <DatePicker
+                    <DateTimePicker
                       label="Data de término"
                       value={endDate}
                       onChange={(newValue) => {
@@ -479,140 +435,7 @@ export const StepOne = ({
                       )}
                     />
                   </Grid>
-                  <Grid item lg={6} md={6} xs={12}>
-                    <TimePicker
-                      label="Hora de término"
-                      value={endTime}
-                      onChange={(newValue) => {
-                        setEndTime(newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          size="small"
-                          fullWidth
-                          error={endTimeError !== " "}
-                          helperText={endTimeError}
-                          onBlur={() => {
-                            setEndTimeError(" ");
-                          }}
-                        />
-                      )}
-                    />
-                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid
-                item
-                mt={2}
-                lg={10}
-                md={10}
-                sm={12}
-                xs={12}
-                alignItems="center"
-                display="flex"
-                flexDirection="column"
-              >
-                <Typography
-                  component="h1"
-                  variant="h6"
-                  fontWeight={500}
-                  sx={{
-                    color: (theme) => theme.palette.text.primary,
-                    fontSize: 16,
-                  }}
-                >
-                  Visibilidade do evento
-                </Typography>
-                <Stack spacing={4} direction="row" mt={2}>
-                  <Stack alignItems="center" spacing={1}>
-                    <IconButton
-                      color="primary"
-                      onClick={() => {
-                        setIsPrivate(false);
-                        setIsPrivateError(" ");
-                      }}
-                      sx={{
-                        backgroundColor: (theme) =>
-                          isPrivate === false
-                            ? theme.palette.primary.main
-                            : theme.palette.primaryContainer.main,
-                        width: 70,
-                        height: 70,
-                      }}
-                    >
-                      <GlobeHemisphereEast
-                        color={
-                          isPrivate === false
-                            ? theme.palette.primaryContainer.main
-                            : theme.palette.primary.main
-                        }
-                      />
-                    </IconButton>
-                    <Typography
-                      component="h1"
-                      variant="h6"
-                      fontWeight={500}
-                      sx={{
-                        color: (theme) => theme.palette.text.disabled,
-                        fontSize: 14,
-                      }}
-                    >
-                      Público
-                    </Typography>
-                  </Stack>
-                  <Stack alignItems="center" spacing={1}>
-                    <IconButton
-                      color="primary"
-                      onClick={() => {
-                        setIsPrivate(true);
-                        setIsPrivateError(" ");
-                      }}
-                      sx={{
-                        backgroundColor: (theme) =>
-                          isPrivate === true
-                            ? theme.palette.primary.main
-                            : theme.palette.primaryContainer.main,
-                        width: 70,
-                        height: 70,
-                      }}
-                    >
-                      <Buildings
-                        color={
-                          isPrivate === true
-                            ? theme.palette.primaryContainer.main
-                            : theme.palette.primary.main
-                        }
-                      />
-                    </IconButton>
-                    <Typography
-                      component="h1"
-                      variant="h6"
-                      fontWeight={500}
-                      sx={{
-                        color: (theme) => theme.palette.text.disabled,
-                        fontSize: 14,
-                      }}
-                    >
-                      Privado
-                    </Typography>
-                  </Stack>
-                </Stack>
-                {isPrivateError !== " " && (
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    mt={2}
-                    sx={{
-                      color: (theme) => theme.palette.error.main,
-                      fontSize: 12,
-                      fontWeight: 400,
-                    }}
-                  >
-                    {isPrivateError}
-                  </Typography>
-                )}
               </Grid>
               {searchParams.get("venue") !== "online" &&
                 searchParams.get("venue") !== "presential" && (
