@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Container,
-  Divider,
   Grid,
   Step,
   StepLabel,
@@ -20,13 +19,14 @@ import { BannerTicket } from "../../components/BannerTicket";
 import { SectionMarker } from "../../components/SectionMarker";
 import { Navbar } from "./components/Navbar";
 
-import EventCover from "../../assets/images/cover.jpg";
+import EventCover from "../../assets/images/background-login.png";
 import { format } from "date-fns";
 import LoaderProgress from "../../layout/LoaderProgress";
 import {
   useEventPageBySlug,
   useEventPageTickets,
 } from "../../stores/eventPage";
+import { CalendarBlank, CaretCircleDown, Ticket } from "phosphor-react";
 
 const steps = [
   {
@@ -104,30 +104,59 @@ const Event = () => {
               backgroundColor: (theme) => theme.palette.background.default,
             }}
           >
-            <Navbar logo_url={event.logo_url} />
+            <Navbar logo_url={event.logo_url} slug={slug} />
             {!matchesSM && (
               <Box
-                height="100vh"
-                width="45%"
+                height="90vh"
+                width="100%"
                 position="absolute"
                 right="0"
                 top="0"
                 sx={{
-                  background: `url(${event?.event_cover_url || EventCover})`,
+                  background: `linear-gradient(0deg, rgba(1, 55,80, 0.1), rgba(1, 55,80, 0.5)), url(${
+                    event?.event_cover_url || EventCover
+                  })`,
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "cover",
                   backgroundPositionX: "center",
-                  backgroundPositionY: "top",
+                  backgroundPositionY: "center",
                   display: "flex",
                   alignItems: "end",
                   justifyContent: "end",
+                  clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 85%)",
+                  overflow: "hidden",
                 }}
               >
                 <Box
                   sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    position: "absolute",
+                    paddingBottom: 10,
+                    animation: "blink-animation 2s infinite",
+                    "@keyframes blink-animation": {
+                      "0%": {
+                        transform: "translateY(-50px)",
+                      },
+                      "100%": {
+                        transform: "translateY(0)",
+                      },
+                    },
+                  }}
+                >
+                  <CaretCircleDown
+                    color={theme.palette.onPrimary.main}
+                    size={32}
+                  />
+                </Box>
+
+                <Box
+                  sx={{
                     width: 315,
                     height: 120,
-                    background: "rgba(253, 252, 255, 0.1)",
+                    background: "rgba(1, 55,80, 0.3)",
                     backdropFilter: "blur(25px)",
                     mr: 4,
                     borderTopLeftRadius: 1,
@@ -149,9 +178,7 @@ const Event = () => {
                           : "Evento online"}
                       </Typography>
                     </Grid>
-                    <Grid item textAlign="center" lg={12} xs={12}>
-                      <Divider color="white" />
-                    </Grid>
+
                     <Grid item textAlign="center" lg={12} xs={12}>
                       <Typography
                         sx={{
@@ -173,7 +200,7 @@ const Event = () => {
                 </Box>
               </Box>
             )}
-            {matchesSM && (
+            {/* {matchesSM && (
               <Box
                 height="250px"
                 width="100%"
@@ -239,11 +266,11 @@ const Event = () => {
                   </Grid>
                 </Box>
               </Box>
-            )}
+            )} */}
             <Container
               maxWidth="xl"
               sx={{
-                minHeight: "calc(100vh - 64px)",
+                minHeight: "calc(90vh - 64px)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: matchesSM ? "center" : "start",
@@ -263,30 +290,20 @@ const Event = () => {
                 }}
               >
                 <Grid item lg={6} md={6} xl={6} xs={12}>
-                  {event.is_finished ? (
+                  {event.is_finished && (
                     <SectionMarker
                       label="O evento já encerrou"
                       color="primary"
                     />
-                  ) : (
-                    <Typography
-                      sx={{
-                        color: (theme) => theme.palette.secondary.main,
-                        mb: 1,
-                      }}
-                    >
-                      {`${format(new Date(event.start_date), "dd")} - ${format(
-                        new Date(event.end_date),
-                        "dd 'de' MMM 'de' yyyy"
-                      )}`}
-                    </Typography>
                   )}
                   <Typography
                     component="h1"
                     variant="h3"
                     sx={{
-                      color: (theme) => theme.palette.text.primary,
+                      color: (theme) => theme.palette.onPrimary.main,
                       fontWeight: (theme) => theme.typography.fontWeightBold,
+                      fontFamily: "Potta One",
+                      textShadow: "0px 10px 20px rgba(0, 2, 19, 0.25)",
                       fontSize: matchesSM ? 24 : 44,
                       mb: 2,
                     }}
@@ -297,8 +314,10 @@ const Event = () => {
                     component="h1"
                     variant="h3"
                     sx={{
-                      color: (theme) => theme.palette.onSurfaceVariant.main,
+                      color: (theme) => theme.palette.onPrimary.main,
                       fontSize: matchesSM ? 12 : 14,
+                      fontWeight: "500",
+                      textShadow: "0px 5px 20px rgba(0, 2, 19, 0.25)",
                       mb: 4,
                     }}
                   >
@@ -306,10 +325,23 @@ const Event = () => {
                   </Typography>
                   {!event.is_finished && (
                     <Grid container>
-                      <Grid item lg={6}>
-                        <Button variant="contained" fullWidth>
-                          Realizar inscrição
-                        </Button>
+                      <Grid item lg={12}>
+                        <Grid
+                          container
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <Grid item lg={6}>
+                            <Button
+                              variant="contained"
+                              fullWidth
+                              startIcon={<Ticket />}
+                              color="secondary"
+                            >
+                              Inscreva-se já!
+                            </Button>
+                          </Grid>
+                        </Grid>
                       </Grid>
                     </Grid>
                   )}
@@ -317,37 +349,33 @@ const Event = () => {
               </Grid>
             </Container>
           </Box>
-          {event.summary && (
+
+          {!event.summary && (
             <Box
               id="sobre"
               component="section"
               sx={{
-                backgroundColor: "rgba(246,248,255,0.5)",
+                backgroundColor: theme.palette.background.default,
               }}
             >
               <Container
                 maxWidth="xl"
                 sx={{
-                  minHeight: "50vh",
-                  pt: 4,
+                  minHeight: "40vh",
                   pb: 4,
                 }}
               >
-                <Grid container>
-                  <Grid item lg={1} md={1} sm={1} xs={2}>
-                    <SectionMarker label="Sobre o evento" color="primary" />
-                  </Grid>
-                </Grid>
                 <Grid container mt={4} spacing={2}>
-                  <Grid item lg={6} md={6} sm={12} xs={12}>
+                  <Grid item lg={12} md={12} sm={12} xs={12}>
                     <Typography
                       component="h1"
                       variant="h3"
                       sx={{
-                        color: (theme) => theme.palette.text.primary,
+                        color: (theme) => theme.palette.onSurfaceVariant.main,
                         fontWeight: (theme) => theme.typography.fontWeightBold,
                         fontSize: matchesSM ? 18 : 28,
-                        mb: 2,
+                        mb: 4,
+                        textAlign: "center",
                       }}
                     >
                       A importância dos jogos 2D para a sociedade
@@ -387,74 +415,33 @@ const Event = () => {
                       </ul>
                     </Typography>
                   </Grid>
-                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                    <Typography
-                      component="h1"
-                      variant="h3"
-                      sx={{
-                        color: (theme) => theme.palette.text.primary,
-                        fontWeight: (theme) => theme.typography.fontWeightBold,
-                        fontSize: matchesSM ? 18 : 28,
-                        mb: 2,
-                      }}
-                    >
-                      A importância dos jogos 2D para a sociedade
-                    </Typography>
-                    <Typography
-                      component="h1"
-                      variant="h3"
-                      sx={{
-                        color: (theme) => theme.palette.onSurfaceVariant.main,
-                        fontSize: matchesSM ? 12 : 14,
-                        mb: 2,
-                      }}
-                    >
-                      <p>
-                        Aqui deve ficar a descri&ccedil;&atilde;o curta do
-                        evento, tendo como principal intuito mostrar uma breve
-                        explica&ccedil;&atilde;o para o participante do que se
-                        trata o evento Aqui deve ficar a descri&ccedil;&atilde;o
-                        curta do evento, tendo como principal intuito
-                        mostrar&nbsp;uma breve explica&ccedil;&atilde;o para o
-                        participante do que se trata o&nbsp;evento.
-                      </p>
-                    </Typography>
-                  </Grid>
                 </Grid>
               </Container>
             </Box>
           )}
 
           <Box
-            id="programação"
+            id="programacao"
             component="section"
             sx={{
-              backgroundColor: (theme) => theme.palette.background.default,
+              backgroundColor: "rgba(210, 231, 255, 0.05)",
             }}
           >
             <Container
               maxWidth="xl"
               sx={{
                 minHeight: "50vh",
-                pt: 4,
+                pt: 2,
                 pb: 4,
               }}
             >
-              <Grid container>
-                <Grid item lg={2} md={2} sm={1} xs={2}>
-                  <SectionMarker
-                    label="Programação do evento"
-                    color="secondary"
-                  />
-                </Grid>
-              </Grid>
               <Grid container mt={4} spacing={2}>
                 <Grid item lg={4} md={4} sm={12} xs={12}>
                   <Typography
                     component="h1"
                     variant="h3"
                     sx={{
-                      color: (theme) => theme.palette.text.primary,
+                      color: (theme) => theme.palette.onSurfaceVariant.main,
                       fontWeight: (theme) => theme.typography.fontWeightBold,
                       fontSize: matchesSM ? 18 : 28,
                       mb: 2,
@@ -474,7 +461,15 @@ const Event = () => {
                     Acompanhe a planejamento do evento e não perca nenhum
                     momento
                   </Typography>
-                  <Button variant="outlined">Baixar programação</Button>
+                  <Button
+                    variant="contained"
+                    startIcon={<CalendarBlank />}
+                    sx={{
+                      backgroundColor: theme.palette.tertiary.main,
+                    }}
+                  >
+                    Programação completa
+                  </Button>
                 </Grid>
                 <Grid item lg={8} md={8} sm={12} xs={12}>
                   <Tabs
@@ -565,7 +560,7 @@ const Event = () => {
                         lg={8}
                         md={8}
                         sx={{
-                          backgroundColor: "rgba(223, 227, 235, 0.2)",
+                          backgroundColor: "rgba(115, 119, 127, 0.08)",
                           width: "100%",
                           display: "flex",
                           justifyContent: "space-between",
@@ -616,6 +611,7 @@ const Event = () => {
               </Grid>
             </Container>
           </Box>
+
           {!event.is_finished && tickets && tickets.length > 0 && (
             <Box
               id="inscrição"
@@ -632,18 +628,13 @@ const Event = () => {
                   pb: 8,
                 }}
               >
-                <Grid container>
-                  <Grid item lg={2} md={2} sm={1} xs={2}>
-                    <SectionMarker label="Inscrição" color="primary" />
-                  </Grid>
-                </Grid>
                 <Grid container mt={4}>
-                  <Grid item lg={12} md={12} sm={12} xs={12}>
+                  <Grid item lg={12} md={12} sm={12} xs={12} textAlign="center">
                     <Typography
                       component="h1"
                       variant="h3"
                       sx={{
-                        color: (theme) => theme.palette.text.primary,
+                        color: (theme) => theme.palette.onSurfaceVariant.main,
                         fontWeight: (theme) => theme.typography.fontWeightBold,
                         fontSize: matchesSM ? 18 : 28,
                         mb: 2,

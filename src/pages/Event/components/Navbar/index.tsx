@@ -1,57 +1,126 @@
 import {
   AppBar,
-  Box,
-  Button,
+  Chip,
   Container,
+  Grid,
   Link,
   Toolbar,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import Logo from "../../../../assets/images/logo.svg";
+import { useLocation } from "react-router-dom";
+import Logo from "../../../../assets/images/logo-white.svg";
 
 interface INavbar {
   logo_url?: string;
+  slug?: string;
 }
 
-export const Navbar = ({logo_url}: INavbar) => {
-  const pages = ["Inscrição", "Programação", "Sobre"];
+export const Navbar = ({ logo_url, slug }: INavbar) => {
+  const pages = [
+    {
+      title: "Inscrição",
+      url: "inscricao",
+    },
+    {
+      title: "Programação",
+      url: "programacao",
+    },
+    {
+      title: "Sobre",
+      url: "sobre",
+    },
+  ];
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
+
+  const location = useLocation();
+
+  const activeRoute = location.hash;
+  console.log("ACTIVE ::", activeRoute);
+
   return (
     <>
       <AppBar
-        position="relative"
+        position="sticky"
         elevation={0}
         sx={{
           background: matchesSM
             ? "linear-gradient(152.97deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 100%)"
-            : "transparent",
-          backdropFilter: matchesSM ? "blur(10px)" : "none",
+            : "linear-gradient(152.97deg, rgba(1, 55,80, 0.1) 0%, rgba(1, 55,80, 0.5) 100%)",
+          backdropFilter: "blur(1px)",
           zIndex: 10,
+          top: 0,
         }}
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Link
-              href="/evento/meu-evento-123"
-              sx={{ display: "flex", alignItems: "center", mr: 5 }}
-            >
-              <img src={logo_url || Logo} alt="" width="32" />
-            </Link>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  size="small"
-                  href={`#${page.toLowerCase()}`}
-                  onClick={() => {}}
-                  sx={{ mx: 2, display: "block" }}
+            <Grid container>
+              <Grid
+                item
+                xl={3}
+                lg={3}
+                md={4}
+                xs={9}
+                alignItems="center"
+                display="flex"
+              >
+                <Link
+                  href={`/evento/${slug}`}
+                  sx={{ display: "flex", alignItems: "center", mr: 5 }}
                 >
-                  {page}
-                </Button>
-              ))}
-            </Box>
+                  <img src={logo_url || Logo} alt="" width="32" />
+                </Link>
+              </Grid>
+              <Grid
+                item
+                xl={6}
+                lg={6}
+                md={4}
+                xs={false}
+                justifyContent="center"
+                alignItems="center"
+                display="flex"
+              >
+                {pages.map((page) => (
+                  <Chip
+                    label={page.title}
+                    component="a"
+                    key={page.url}
+                    size="medium"
+                    variant="filled"
+                    color="default"
+                    href={`#${page.url}`}
+                    sx={{
+                      mx: 2,
+                      fontWeight:
+                        `#${page.url}` === activeRoute ? "600" : "500",
+                      color:
+                        `#${page.url}` === activeRoute
+                          ? theme.palette.primary.main
+                          : theme.palette.onPrimary.main,
+                      backgroundColor:
+                        `#${page.url}` === activeRoute
+                          ? theme.palette.primaryContainer.main
+                          : "transparent",
+                    }}
+                    clickable
+                  />
+                ))}
+              </Grid>
+              {/* <Grid
+                item
+                xl={3}
+                lg={3}
+                md={4}
+                xs={3}
+                justifyContent="flex-end"
+                alignItems="center"
+                display="flex"
+              >
+                
+              </Grid> */}
+            </Grid>
           </Toolbar>
         </Container>
       </AppBar>

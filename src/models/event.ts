@@ -75,3 +75,10 @@ export interface IGetEventByUserIdResponse {
   status: "published" | "started" | "finished";
   tickets: number;
 }
+
+export interface IGetEventInformationByUserIdResponse {
+  total: number;
+  finished: number;
+  available: number;
+}
+

@@ -1,8 +1,9 @@
-import { Box, Drawer, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Drawer, useTheme } from "@mui/material";
 import { BrowserView, MobileView } from "react-device-detect";
-import { drawerWidth } from "../../../../utils/constant";
-import LogoSection from "../../../MainPanelLayout/components/LogoSection";
 import PerfectScrollbar from "react-perfect-scrollbar";
+
+import LogoSection from "../../../MainPanelLayout/components/LogoSection";
+import { drawerWidth } from "../../../../utils/constant";
 import MenuList from "../MenuList";
 
 interface ISidebar {
@@ -19,7 +20,6 @@ export const OrganizerPanelSidebar = ({
   items,
 }: ISidebar) => {
   const theme = useTheme();
-  const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
 
   const container =
     window !== undefined ? () => window.document.body : undefined;

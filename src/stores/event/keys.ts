@@ -15,3 +15,7 @@ export const createEventByUserIdKey = (
   page: number,
   user_id?: string
 ): QueryKey => ["useEventByUserIdKey", user_id, page, limit];
+
+export const createEventInformationByUserIdKey = (
+  user_id?: string
+): QueryKey => ["useEventInformationByUserIdKey", user_id];

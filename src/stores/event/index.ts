@@ -3,9 +3,10 @@ import {
   createEventByIdKey,
   createEventBySlugKey,
   createEventByUserIdKey,
+  createEventInformationByUserIdKey,
 } from "./keys";
 import { api } from "../../services/api";
-import { IEvent, IGetEventByUserIdResponse } from "../../models/event";
+import { IEvent, IGetEventByUserIdResponse, IGetEventInformationByUserIdResponse } from "../../models/event";
 
 export const useEventById = (
   event_id?: string,
@@ -49,6 +50,23 @@ export const useEventByUserId = (
     () =>
       api
         .get(`/users/events?page=${page + 1}&limit=${limit}`)
+        .then((res) => res.data.data),
+    {
+      ...options,
+      retry: 1,
+    }
+  );
+};
+
+export const useEventInformationByUserId = (
+  { user_id }: { user_id?: string },
+  options?: UseQueryOptions<IGetEventInformationByUserIdResponse>
+) => {
+  return useQuery(
+    createEventInformationByUserIdKey(user_id),
+    () =>
+      api
+        .get(`/events/general-informations`)
         .then((res) => res.data.data),
     {
       ...options,
