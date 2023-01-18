@@ -4,6 +4,7 @@ import { AllowedRolesNames, ProtectedRoute } from "../layout/ProtectedRoute";
 
 import OrganizerDashboard from "../pages/Organizer/Dashboard";
 import CreateEvent from "../pages/Organizer/CreateEvent";
+import { UserSubscriptions } from "../pages/Organizer/UserSubscriptions";
 
 const OrganizerPanelLayout = Loadable(
   lazy(() => import("../layout/OrganizerPanelLayout"))
@@ -24,6 +25,10 @@ export const OrganizerRoutes = {
     {
       path: "criar-evento",
       element: <CreateEvent />,
+    },
+    {
+      path: "inscricoes",
+      element: <UserSubscriptions />,
     },
   ],
 };

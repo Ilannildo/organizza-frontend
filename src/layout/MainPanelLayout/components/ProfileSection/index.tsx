@@ -40,7 +40,7 @@ const ProfileSection: React.FC = () => {
   const anchorRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { signOut, isLoading } = useAuth();
-  const { data: user, isLoading: isLoadingAuthUser } = useAuthenticatedUser();
+  const { data: user } = useAuthenticatedUser();
 
   const handleLogout = async () => {
     await signOut();
@@ -117,19 +117,17 @@ const ProfileSection: React.FC = () => {
           color="primary"
         />
       ) : (
-        !isLoadingAuthUser && (
-          <Tooltip title="Entre na sua conta">
-            <Button
-              variant="contained"
-              color="secondary"
-              fullWidth
-              href="/login"
-              disableElevation
-            >
-              Login
-            </Button>
-          </Tooltip>
-        )
+        <Tooltip title="Entre na sua conta">
+          <Button
+            variant="contained"
+            color="secondary"
+            fullWidth
+            href="/login"
+            disableElevation
+          >
+            Login
+          </Button>
+        </Tooltip>
       )}
       <Popper
         placement="bottom-end"

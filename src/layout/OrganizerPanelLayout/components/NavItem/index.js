@@ -90,7 +90,7 @@ const NavItem = ({ item, level }) => {
             height: "100%",
             width: 3,
             top: 0,
-            background: theme.palette.tertiary.main,
+            background: theme.palette.secondary.main,
           }}
         />
       )}

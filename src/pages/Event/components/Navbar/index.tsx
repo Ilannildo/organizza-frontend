@@ -30,6 +30,14 @@ export const Navbar = ({ logo_url, slug }: INavbar) => {
       title: "Sobre",
       url: "sobre",
     },
+    {
+      title: "Organizador",
+      url: "organizador",
+    },
+    {
+      title: "Patrocinadores",
+      url: "patrocinador",
+    },
   ];
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));

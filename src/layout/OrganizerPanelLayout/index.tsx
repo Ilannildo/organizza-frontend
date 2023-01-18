@@ -10,7 +10,7 @@ import {
 import { OrganizerPanelSidebar } from "./components/Sidebar";
 import { drawerWidth } from "../../utils/constant";
 import { useCustomization } from "../../hooks/useCustomization";
-import { Calendar } from "phosphor-react";
+import { Calendar, Ticket } from "phosphor-react";
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open: boolean;
@@ -61,6 +61,14 @@ const OrganizerPanelLayout = () => {
         type: "item",
         url: "",
         icon: Calendar,
+        breadcrumbs: false,
+      },
+      {
+        id: "inscricoes",
+        title: "Minhas inscrições",
+        type: "item",
+        url: "inscricoes",
+        icon: Ticket,
         breadcrumbs: false,
       },
     ],

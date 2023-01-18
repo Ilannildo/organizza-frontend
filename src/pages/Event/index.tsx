@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
 import {
   Box,
   Button,
   Container,
+  Divider,
   Grid,
+  Stack,
   Step,
   StepLabel,
   Stepper,
@@ -13,20 +14,28 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Navigate, Params, useNavigate, useParams } from "react-router-dom";
 
 import { BannerTicket } from "../../components/BannerTicket";
 import { SectionMarker } from "../../components/SectionMarker";
 import { Navbar } from "./components/Navbar";
 
-import EventCover from "../../assets/images/background-login.png";
 import { format } from "date-fns";
+import {
+  CalendarBlank,
+  CaretCircleDown,
+  EnvelopeSimple,
+  Ticket,
+} from "phosphor-react";
+import EventCover from "../../assets/images/background-login.png";
+import ResponsibleLogo from "../../assets/images/logo-white.svg";
 import LoaderProgress from "../../layout/LoaderProgress";
 import {
   useEventPageBySlug,
   useEventPageTickets,
 } from "../../stores/eventPage";
-import { CalendarBlank, CaretCircleDown, Ticket } from "phosphor-react";
+import { Footer } from "./components/Footer";
 
 const steps = [
   {
@@ -200,28 +209,32 @@ const Event = () => {
                 </Box>
               </Box>
             )}
-            {/* {matchesSM && (
+            {matchesSM && (
               <Box
                 height="250px"
                 width="100%"
                 position="absolute"
                 top="0"
                 sx={{
-                  background: `url(${event?.event_cover_url || EventCover})`,
+                  background: `linear-gradient(0deg, rgba(1, 55,80, 0.1), rgba(1, 55,80, 0.5)), url(${
+                    event?.event_cover_url || EventCover
+                  })`,
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "cover",
                   backgroundPositionX: "center",
-                  backgroundPositionY: "top",
+                  backgroundPositionY: "center",
                   display: "flex",
                   alignItems: "end",
                   justifyContent: "end",
+                  clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 85%)",
+                  overflow: "hidden",
                 }}
               >
                 <Box
                   sx={{
                     width: 315,
                     height: 120,
-                    background: "rgba(253, 252, 255, 0.1)",
+                    background: "rgba(1, 55,80, 0.3)",
                     backdropFilter: "blur(25px)",
                     mr: 4,
                     borderTopLeftRadius: 1,
@@ -243,9 +256,7 @@ const Event = () => {
                           : "Evento online"}
                       </Typography>
                     </Grid>
-                    <Grid item textAlign="center" lg={12} xs={12}>
-                      <Divider color="white" />
-                    </Grid>
+
                     <Grid item textAlign="center" lg={12} xs={12}>
                       <Typography
                         sx={{
@@ -266,29 +277,19 @@ const Event = () => {
                   </Grid>
                 </Box>
               </Box>
-            )} */}
+            )}
             <Container
               maxWidth="xl"
               sx={{
-                minHeight: "calc(90vh - 64px)",
+                minHeight: matchesSM
+                  ? "calc(100vh - 200px)"
+                  : "calc(90vh - 64px)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: matchesSM ? "center" : "start",
               }}
             >
-              <Grid
-                container
-                zIndex={1}
-                mt={matchesSM ? 4 : -2}
-                sx={{
-                  background: matchesSM
-                    ? "linear-gradient(152.97deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.1) 100%)"
-                    : "transparent",
-                  backdropFilter: matchesSM ? "blur(21px)" : "none",
-                  borderRadius: matchesSM ? 2 : 0,
-                  padding: matchesSM ? 2 : 0,
-                }}
-              >
+              <Grid container zIndex={1} mt={matchesSM ? 4 : -2}>
                 <Grid item lg={6} md={6} xl={6} xs={12}>
                   {event.is_finished && (
                     <SectionMarker
@@ -300,10 +301,15 @@ const Event = () => {
                     component="h1"
                     variant="h3"
                     sx={{
-                      color: (theme) => theme.palette.onPrimary.main,
+                      color: (theme) =>
+                        matchesSM
+                          ? theme.palette.onSurfaceVariant.main
+                          : theme.palette.onPrimary.main,
                       fontWeight: (theme) => theme.typography.fontWeightBold,
                       fontFamily: "Potta One",
-                      textShadow: "0px 10px 20px rgba(0, 2, 19, 0.25)",
+                      textShadow: matchesSM
+                        ? "none"
+                        : "0px 10px 20px rgba(0, 2, 19, 0.25)",
                       fontSize: matchesSM ? 24 : 44,
                       mb: 2,
                     }}
@@ -314,7 +320,10 @@ const Event = () => {
                     component="h1"
                     variant="h3"
                     sx={{
-                      color: (theme) => theme.palette.onPrimary.main,
+                      color: (theme) =>
+                        matchesSM
+                          ? theme.palette.onSurfaceVariant.main
+                          : theme.palette.onPrimary.main,
                       fontSize: matchesSM ? 12 : 14,
                       fontWeight: "500",
                       textShadow: "0px 5px 20px rgba(0, 2, 19, 0.25)",
@@ -336,6 +345,8 @@ const Event = () => {
                               variant="contained"
                               fullWidth
                               startIcon={<Ticket />}
+                              component="a"
+                              href="#inscricao"
                               color="secondary"
                             >
                               Inscreva-se já!
@@ -614,7 +625,7 @@ const Event = () => {
 
           {!event.is_finished && tickets && tickets.length > 0 && (
             <Box
-              id="inscrição"
+              id="inscricao"
               component="section"
               sx={{
                 backgroundColor: (theme) => theme.palette.background.default,
@@ -655,7 +666,13 @@ const Event = () => {
                     </Typography>
                   </Grid>
                 </Grid>
-                <Grid container mt={4} spacing={2}>
+                <Grid
+                  container
+                  mt={4}
+                  spacing={2}
+                  justifyContent="center"
+                  alignItems="center"
+                >
                   {tickets.map((ticket, index) => (
                     <Grid
                       item
@@ -672,6 +689,262 @@ const Event = () => {
               </Container>
             </Box>
           )}
+
+          <Box
+            id="organizador"
+            component="section"
+            sx={{
+              backgroundColor: "rgba(210, 235,255,0.05)",
+            }}
+          >
+            <Container
+              maxWidth="xl"
+              sx={{
+                pt: 4,
+                pb: 4,
+              }}
+            >
+              <Grid container mt={2}>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                  <Typography
+                    component="h1"
+                    variant="h3"
+                    sx={{
+                      color: (theme) => theme.palette.onSurfaceVariant.main,
+                      fontWeight: (theme) => theme.typography.fontWeightBold,
+                      fontSize: matchesSM ? 18 : 24,
+                      mb: 2,
+                    }}
+                  >
+                    # Sobre o organizador
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                spacing={2}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                  <Stack direction="row" spacing={2} alignItems="start">
+                    <img
+                      src={event.logo_url || ResponsibleLogo}
+                      alt="Logo do responsável do evento"
+                    />
+                    <Grid container>
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Typography
+                          component="h1"
+                          variant="h3"
+                          sx={{
+                            color: (theme) =>
+                              theme.palette.onSurfaceVariant.main,
+                            fontSize: matchesSM ? 12 : 14,
+                            fontWeight: (theme) =>
+                              theme.typography.fontWeightBold,
+                          }}
+                        >
+                          {event.event_responsible_name}
+                        </Typography>
+                        <Typography
+                          component="h1"
+                          variant="h3"
+                          sx={{
+                            color: (theme) => theme.palette.text.disabled,
+                            fontSize: matchesSM ? 12 : 14,
+                            mt: 1,
+                          }}
+                        >
+                          A Backstage Dance Center é referência no melhor da
+                          Dança em Brasília! Vem com a gente!
+                        </Typography>
+                        <Button
+                          variant="contained"
+                          startIcon={<EnvelopeSimple />}
+                          sx={{
+                            backgroundColor: theme.palette.tertiary.main,
+                            mt: 2,
+                          }}
+                        >
+                          Entrar em contato
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Stack>
+                </Grid>
+              </Grid>
+            </Container>
+          </Box>
+
+          <Box
+            id="patrocinador"
+            component="section"
+            sx={{
+              backgroundColor: "rgba(210, 235,255,0.05)",
+            }}
+          >
+            <Container
+              maxWidth="xl"
+              sx={{
+                pt: 4,
+                pb: 6,
+              }}
+            >
+              <Grid container mt={2}>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                  <Typography
+                    component="h1"
+                    variant="h3"
+                    sx={{
+                      color: (theme) => theme.palette.onSurfaceVariant.main,
+                      fontWeight: (theme) => theme.typography.fontWeightBold,
+                      fontSize: matchesSM ? 18 : 24,
+                      mb: 2,
+                    }}
+                  >
+                    # Patrocinadores
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                spacing={2}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Grid item lg={4} md={4} sm={6} xs={12}>
+                  <Stack direction="row" spacing={2} alignItems="start">
+                    <img
+                      src={event.logo_url || ResponsibleLogo}
+                      alt="Logo do patrocinador do evento"
+                    />
+                    <Grid container>
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Typography
+                          component="h1"
+                          variant="h3"
+                          sx={{
+                            color: (theme) =>
+                              theme.palette.onSurfaceVariant.main,
+                            fontSize: matchesSM ? 12 : 14,
+                            fontWeight: (theme) =>
+                              theme.typography.fontWeightBold,
+                          }}
+                        >
+                          {event.event_responsible_name}
+                        </Typography>
+                        <Typography
+                          component="h1"
+                          variant="h3"
+                          sx={{
+                            color: (theme) => theme.palette.text.disabled,
+                            fontSize: matchesSM ? 12 : 14,
+                            mt: 1,
+                          }}
+                        >
+                          A Backstage Dance Center é referência no melhor da
+                          Dança em Brasília! Vem com a gente!
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Divider
+                      orientation="vertical"
+                      variant="middle"
+                      flexItem
+                      sx={{
+                        ml: 2,
+                      }}
+                    />
+                  </Stack>
+                </Grid>
+                <Grid item lg={4} md={4} sm={6} xs={12}>
+                  <Stack direction="row" spacing={2} alignItems="start">
+                    <img
+                      src={event.logo_url || ResponsibleLogo}
+                      alt="Logo do responsável do evento"
+                    />
+                    <Grid container>
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Typography
+                          component="h1"
+                          variant="h3"
+                          sx={{
+                            color: (theme) =>
+                              theme.palette.onSurfaceVariant.main,
+                            fontSize: matchesSM ? 12 : 14,
+                            fontWeight: (theme) =>
+                              theme.typography.fontWeightBold,
+                          }}
+                        >
+                          {event.event_responsible_name}
+                        </Typography>
+                        <Typography
+                          component="h1"
+                          variant="h3"
+                          sx={{
+                            color: (theme) => theme.palette.text.disabled,
+                            fontSize: matchesSM ? 12 : 14,
+                            mt: 1,
+                          }}
+                        >
+                          A Backstage Dance Center é referência no melhor da
+                          Dança em Brasília! Vem com a gente!
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Divider
+                      orientation="vertical"
+                      variant="middle"
+                      flexItem
+                      sx={{
+                        ml: 2,
+                      }}
+                    />
+                  </Stack>
+                </Grid>
+                <Grid item lg={4} md={4} sm={6} xs={12}>
+                  <Stack direction="row" spacing={2} alignItems="start">
+                    <img
+                      src={event.logo_url || ResponsibleLogo}
+                      alt="Logo do responsável do evento"
+                    />
+                    <Grid container>
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Typography
+                          component="h1"
+                          variant="h3"
+                          sx={{
+                            color: (theme) =>
+                              theme.palette.onSurfaceVariant.main,
+                            fontSize: matchesSM ? 12 : 14,
+                            fontWeight: (theme) =>
+                              theme.typography.fontWeightBold,
+                          }}
+                        >
+                          {event.event_responsible_name}
+                        </Typography>
+                        <Typography
+                          component="h1"
+                          variant="h3"
+                          sx={{
+                            color: (theme) => theme.palette.text.disabled,
+                            fontSize: matchesSM ? 12 : 14,
+                            mt: 1,
+                          }}
+                        >
+                          A Backstage Dance Center é referência no melhor da
+                          Dança em Brasília! Vem com a gente!
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Stack>
+                </Grid>
+              </Grid>
+            </Container>
+          </Box>
+
+          <Footer />
         </>
       )}
     </>

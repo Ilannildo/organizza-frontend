@@ -1,131 +1,144 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Grid,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { IEventPageTickets } from "../../models/ticket";
-import CardBorder from "../../assets/ticket-card-border.svg";
+import { Box, Grid, Typography } from "@mui/material";
 import { formatCurrency } from "../../utils/masks";
-import { BannerTicketButton } from "../BannerTicketButton";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { useAuthenticatedUser } from "../../stores/user";
+
+import { IEventPageTickets } from "../../models/ticket";
+import TicketBackground from "../../assets/images/ticket.svg";
+
+import "./styles.css";
 interface IBannerTicket {
   ticket: IEventPageTickets;
 }
 
 export const BannerTicket = ({ ticket }: IBannerTicket) => {
   const navigate = useNavigate();
-  const { data: user } = useAuthenticatedUser();
 
   const handleCheckoutTicket = ({ ticketId }: { ticketId: string }) => {
     navigate(`checkout/${ticketId}`);
   };
   return (
-    <Card
-      elevation={0}
+    <Box
+      className={ticket.available ? "ticket-container" : ""}
+      onClick={() => {
+        if (ticket.available) {
+          handleCheckoutTicket({
+            ticketId: ticket.ticket_id,
+          });
+        }
+      }}
       sx={{
         height: 300,
-        overflow: "none",
-        background: `url(${CardBorder})`,
+        backgroundImage: `url(${TicketBackground})`,
         backgroundRepeat: "no-repeat",
+        backgroundColor: "transparent",
         backgroundSize: "cover",
+        px: 2,
+        py: 4,
+        backgroundPosition: "center",
+        width: 165,
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "column",
       }}
     >
-      <Box
-        sx={{ backgroundColor: "rgba(115, 119, 127, 0.05)", height: "100%" }}
+      <Grid
+        container
+        className="ticket-front"
+        sx={{
+          display: "block",
+        }}
       >
-        <CardContent
+        <Grid item lg={12} md={12} sm={12} xs={12}>
+          <Typography
+            sx={{
+              fontSize: 14,
+              color: (theme) => theme.palette.onSurfaceVariant.main,
+              textAlign: "center",
+              fontWeight: "600",
+              mb: 2,
+              mt: 2,
+            }}
+          >
+            {ticket.category_title}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: 12,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: "5",
+              WebkitBoxOrient: "vertical",
+              textAlign: "center",
+              color: (theme) => theme.palette.text.disabled,
+            }}
+          >
+            {ticket.description}
+          </Typography>
+        </Grid>
+      </Grid>
+      {
+        <Grid
+          container
+          className="ticket-back"
           sx={{
-            height: "90%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
+            display: "none",
           }}
         >
-          <Grid container>
-            <Grid item>
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  color: (theme) => theme.palette.onPrimaryContainer.main,
-                }}
-              >
-                {ticket.category_title}
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 24,
-                  fontWeight: "bold",
-                  color: (theme) => theme.palette.onPrimaryContainer.main,
-                }}
-              >
-                {ticket.is_free ? "Grátis" : formatCurrency(ticket.value)}
-              </Typography>
-
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: "5",
-                  WebkitBoxOrient: "vertical",
-                  color: (theme) => theme.palette.onPrimaryContainer.main,
-                }}
-              >
-                {ticket.description}
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Stack>
-            {ticket.available && (
-              <Typography
-                sx={{
-                  fontSize: 10,
-                  mt: 2,
-                  mb: 1,
-                  color: (theme) => theme.palette.onPrimaryContainer.main,
-                }}
-              >
-                Inscrições até{" "}
-                {format(new Date(ticket.due_date), "dd/MM/yyyy 'às' HH:mm")}
-              </Typography>
-            )}
-            <Tooltip
-              title={
-                !ticket.available
-                  ? ticket.status
-                  : !user
-                  ? "Faça login para comprar um ingresso"
-                  : "Comprar um ingresso de inscrição do evento"
-              }
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Typography
+              sx={{
+                fontSize: 24,
+                color: (theme) => theme.palette.onSurfaceVariant.main,
+                textAlign: "center",
+                fontWeight: "600",
+                mb: 2,
+                mt: 4,
+              }}
             >
-              <Box
-                sx={{
-                  width: "100%",
-                }}
-              >
-                <BannerTicketButton
-                  label={ticket.status}
-                  disabled={!ticket.available}
-                  color={ticket.is_free ? "tertiary" : "secondary"}
-                  onClick={() =>
-                    handleCheckoutTicket({
-                      ticketId: ticket.ticket_id,
-                    })
-                  }
-                />
-              </Box>
-            </Tooltip>
-          </Stack>
-        </CardContent>
-      </Box>
-    </Card>
+              {ticket.is_free
+                ? "Clique para se inscrever"
+                : "Clique para comprar"}
+            </Typography>
+          </Grid>
+        </Grid>
+      }
+      <Grid container>
+        <Grid item lg={12} md={12} sm={12} xs={12}>
+          <Typography
+            sx={{
+              fontSize: 24,
+              fontWeight: "bold",
+              color: (theme) =>
+                !ticket.available
+                  ? theme.palette.text.disabled
+                  : theme.palette.onSurfaceVariant.main,
+              mt: 3,
+              textAlign: "center",
+            }}
+          >
+            {!ticket.available
+              ? ticket.status
+              : ticket.is_free
+              ? "Grátis"
+              : formatCurrency(ticket.value)}
+          </Typography>
+          {ticket.available && (
+            <Typography
+              sx={{
+                fontSize: 10,
+                textAlign: "center",
+                mb: 2,
+                color: (theme) => theme.palette.onSurfaceVariant.main,
+              }}
+            >
+              Inscrições até{" "}
+              {format(new Date(ticket.due_date), "dd/MM/yyyy 'às' HH:mm")}
+            </Typography>
+          )}
+        </Grid>
+      </Grid>
+    </Box>
   );
 };

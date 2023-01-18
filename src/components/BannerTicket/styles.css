@@ -1,0 +1,16 @@
+.ticket-container {
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.ticket-container:hover {
+    transform: scale(1.05);
+}
+
+.ticket-container:hover .ticket-front {
+    display: none !important;
+}
+
+.ticket-container:hover .ticket-back {
+    display: flex !important;
+}
