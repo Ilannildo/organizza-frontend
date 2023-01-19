@@ -13,8 +13,7 @@ const CreateServiceOrder = () => {
   const navigate = useNavigate();
   const { ticketId, slug } = useParams<IParams>();
 
-  const { handleCreateServiceOrder, isCreatingServiceOrder } =
-    useEventCheckout();
+  const { handleCreateServiceOrder } = useEventCheckout();
 
   useEffect(() => {
     if (ticketId) {
@@ -23,12 +22,14 @@ const CreateServiceOrder = () => {
       })
         .then((res) => {
           if (res) {
-            navigate(`/evento/${slug}/checkout/${res.service_order_id}/address`);
+            navigate(
+              `/evento/${slug}/checkout/${res.service_order_id}/address`
+            );
           }
         })
         .catch((err: any) => {
           if (err.response) {
-            toast.error(err.response.data.error.message);
+            toast.warning(err.response.data.error.message);
           } else {
             toast.error("Ocorreu um problema ao realizar o pagamento");
           }
@@ -38,11 +39,7 @@ const CreateServiceOrder = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ticketId, slug, navigate]);
 
-  if (isCreatingServiceOrder) {
-    return <Loader isLoading />;
-  }
-
-  return <div>Hello</div>;
+  return <Loader isLoading />;
 };
 
 export default CreateServiceOrder;

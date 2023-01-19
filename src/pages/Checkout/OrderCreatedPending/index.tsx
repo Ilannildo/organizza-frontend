@@ -9,6 +9,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { format } from "date-fns";
 import {
   CheckCircle,
   CheckSquare,
@@ -17,20 +18,19 @@ import {
   DeviceMobileCamera,
   EnvelopeSimple,
 } from "phosphor-react";
+import { useEffect, useState } from "react";
 import { Params, useLocation, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import QrCodeIcon from "../../../assets/icons/QrCode.svg";
 import { Main } from "../../../layout/CheckoutLayout";
 import LogoSection from "../../../layout/MainPanelLayout/components/LogoSection";
-import QrCodeIcon from "../../../assets/icons/QrCode.svg";
-import { format } from "date-fns";
-import { useEffect, useState } from "react";
 import { IPayServiceOrderResponse } from "../../../models/serviceOrder";
+import { api } from "../../../services/api";
 import {
   formatCurrency,
   getReturnValuesCounter,
   padTo2Digits,
 } from "../../../utils/masks";
-import { api } from "../../../services/api";
-import { toast } from "react-toastify";
 
 interface IParams extends Params {
   slug: string;
@@ -88,7 +88,7 @@ const CheckoutOrderCreatedPending = () => {
     console.log("enviar email");
   };
 
-  const closeServiceOrder = async (order_id: string) => {
+  const closeServiceOrder = async (order_id?: string) => {
     try {
       await api.put(`/service-orders/${order_id}/close`);
     } catch (error: any) {

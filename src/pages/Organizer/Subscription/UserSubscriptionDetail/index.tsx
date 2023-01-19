@@ -641,7 +641,9 @@ export const UserSubscriptionDetail = () => {
                               fontWeight: 500,
                             }}
                           >
-                            {formatCurrency(subscription.summary.value || 0)}
+                            {subscription.ticket.is_free
+                              ? `Grátis`
+                              : formatCurrency(subscription.summary.value || 0)}
                           </Typography>
                         </Grid>
                         <Grid item lg={12} md={12} xs={12}>

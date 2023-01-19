@@ -57,7 +57,7 @@ const CheckoutOrderCreatedApproved = () => {
           sx={{
             display: "flex",
             flexDirection: "row",
-            height: "100%"
+            height: "100%",
           }}
         >
           <Grid
@@ -98,7 +98,7 @@ const CheckoutOrderCreatedApproved = () => {
                           fontWeight: 600,
                         }}
                       >
-                        Pagamento aprovado
+                        Inscrição aprovada
                       </Typography>
                     </Grid>
                     <Grid item lg={8} md={8} xs={12} textAlign="center">

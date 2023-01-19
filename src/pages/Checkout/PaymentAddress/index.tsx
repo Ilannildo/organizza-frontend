@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -8,8 +7,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Params, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { Params, useNavigate, useParams } from "react-router-dom";
 
 import { useEventCheckout } from "../../../hooks/useEventCheckout";
 import { useAuthenticatedUser } from "../../../stores/user";
@@ -124,9 +124,15 @@ const CheckoutPaymentAddress = () => {
         street: address,
         zipcode: zipCode,
       });
-      navigate(
-        `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment`
-      );
+      if (serviceOrder.ticket.is_free) {
+        navigate(
+          `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment/pay`
+        );
+      } else {
+        navigate(
+          `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment`
+        );
+      }
     }
   };
 
