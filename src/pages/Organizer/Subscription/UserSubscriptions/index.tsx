@@ -9,10 +9,16 @@ import {
   useTheme,
 } from "@mui/material";
 import { MagnifyingGlass } from "phosphor-react";
+import { useState } from "react";
+import { useDebounce } from "../../../../hooks/useDebounce";
 import { UserSubscriptionTable } from "./Table";
 
 export const UserSubscriptions = () => {
   const theme = useTheme();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
   return (
     <Grid container>
       <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -36,6 +42,7 @@ export const UserSubscriptions = () => {
               <TextField
                 placeholder="Buscar por evento ou código"
                 variant="standard"
+                onChange={(e) => setSearchTerm(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -47,7 +54,7 @@ export const UserSubscriptions = () => {
             }
           />
           <CardContent>
-            <UserSubscriptionTable />
+            <UserSubscriptionTable searchTerm={debouncedSearchTerm} />
           </CardContent>
         </Card>
       </Grid>

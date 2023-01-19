@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Chip,
   CircularProgress,
@@ -15,17 +14,22 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { AlignBottom, ArrowRight } from "phosphor-react";
-import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-import { useAuthenticatedUser } from "../../../../stores/user";
-import { useEventByUserId } from "../../../../stores/event";
-import LoaderProgress from "../../../../layout/LoaderProgress";
-import { getEventStatus, getEventStatusBackgroundColor, getEventStatusColor } from "../../../../utils/masks";
-import config from "../../../../config";
+import { ArrowRight } from "phosphor-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import config from "../../../../../config";
+import LoaderProgress from "../../../../../layout/LoaderProgress";
+import { useUserSubscriptions } from "../../../../../stores/subscription";
+import { useAuthenticatedUser } from "../../../../../stores/user";
+import {
+  getSubscriptionStatus,
+  getSubscriptionStatusBackgroundColor,
+  getSubscriptionStatusColor,
+} from "../../../../../utils/masks";
 
 interface IColumn {
-  id: "title" | "start_date" | "end_date" | "status";
+  id: "code" | "event_title" | "start_date" | "subscription_date" | "status";
   label: string;
   minWidth?: number;
   align?: "right" | "center" | "left";
@@ -33,15 +37,16 @@ interface IColumn {
 }
 
 const columns: readonly IColumn[] = [
-  { id: "title", label: "Evento", minWidth: 200 },
+  { id: "code", label: "Código", minWidth: 75 },
+  { id: "event_title", label: "Evento", minWidth: 200 },
   {
     id: "start_date",
     label: "Data de início",
     minWidth: 150,
   },
   {
-    id: "end_date",
-    label: "Data de término",
+    id: "subscription_date",
+    label: "Data da inscrição",
     minWidth: 150,
   },
   {
@@ -51,26 +56,39 @@ const columns: readonly IColumn[] = [
   },
 ];
 
-export const UserSubscriptionTable = () => {
+interface IUserSubscriptionTable {
+  searchTerm: string;
+}
+
+export const UserSubscriptionTable = ({
+  searchTerm,
+}: IUserSubscriptionTable) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const navigate = useNavigate();
 
   const { data: user } = useAuthenticatedUser();
-  const { data: eventsByUser, isLoading: isLoadingEventsByUserId } =
-    useEventByUserId(
-      { user_id: user?.uid, page, limit: rowsPerPage },
-      {
-        enabled: !!user,
-      }
-    );
+  const {
+    data: userSubscriptionsResponse,
+    isLoading: isLoadingUserSubscriptions,
+  } = useUserSubscriptions(
+    {
+      user_id: user?.uid,
+      page,
+      limit: rowsPerPage,
+      search: searchTerm,
+    },
+    {
+      enabled: !!user,
+    }
+  );
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
-  const goToEventPanel = (eventId: string) => {
-    navigate(`/organizador/painel-evento/${eventId}`);
+  const goToSubscriptionDetail = (subscriptionId: string) => {
+    navigate(`/organizador/inscricoes/${subscriptionId}`);
   };
 
   const handleChangeRowsPerPage = (
@@ -87,18 +105,18 @@ export const UserSubscriptionTable = () => {
           minHeight: 280,
         }}
       >
-        {isLoadingEventsByUserId ? (
+        {isLoadingUserSubscriptions ? (
           <>
             <Grid container>
               <Grid item lg={12} xs={12} textAlign="center">
                 <CircularProgress size={32} color="primary" />
-                <Typography>Buscando eventos criados por você :)</Typography>
+                <Typography>Buscando suas inscrições :)</Typography>
               </Grid>
             </Grid>
             <LoaderProgress />
           </>
         ) : (
-          eventsByUser && (
+          userSubscriptionsResponse && (
             <>
               <Table
                 sx={{ minWidth: 400 }}
@@ -117,24 +135,22 @@ export const UserSubscriptionTable = () => {
                       </TableCell>
                     ))}
                     <TableCell style={{ minWidth: 50, fontWeight: 500 }}>
-                      Ingressos
-                    </TableCell>
-                    <TableCell style={{ minWidth: 50, fontWeight: 500 }}>
                       Ações
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {eventsByUser.events.map((row) => (
+                  {userSubscriptionsResponse.subscriptions.map((row) => (
                     <TableRow
                       hover
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
                       }}
                       tabIndex={-1}
-                      key={row.event_id}
+                      key={row.id}
                     >
-                      <TableCell>{row.title}</TableCell>
+                      <TableCell>{row.code}</TableCell>
+                      <TableCell>{row.event_title}</TableCell>
                       <TableCell>
                         {format(
                           new Date(row.start_date),
@@ -143,23 +159,21 @@ export const UserSubscriptionTable = () => {
                       </TableCell>
                       <TableCell>
                         {format(
-                          new Date(row.end_date),
+                          new Date(row.subscription_date),
                           "dd/MM/yyyy 'às' HH:mm"
                         )}
                       </TableCell>
                       <TableCell>
                         <Chip
-                          label={getEventStatus(row.status)}
+                          label={getSubscriptionStatus(row.status)}
                           sx={{
-                            backgroundColor: getEventStatusBackgroundColor(
-                              row.status
-                            ),
-                            color: getEventStatusColor(row.status),
+                            backgroundColor:
+                              getSubscriptionStatusBackgroundColor(row.status),
+                            color: getSubscriptionStatusColor(row.status),
                             fontWeight: 500,
                           }}
                         />
                       </TableCell>
-                      <TableCell>{row.tickets}</TableCell>
                       <TableCell>
                         <Stack direction="row" spacing={1}>
                           <Tooltip title="Ver detalhes">
@@ -168,7 +182,7 @@ export const UserSubscriptionTable = () => {
                               size="medium"
                               color="primary"
                               onClick={() => {
-                                goToEventPanel(row.event_id);
+                                goToSubscriptionDetail(row.id);
                               }}
                             >
                               <ArrowRight size={24} />
@@ -187,9 +201,13 @@ export const UserSubscriptionTable = () => {
       <TablePagination
         rowsPerPageOptions={config.rowsPerPage}
         component="div"
-        count={eventsByUser !== undefined ? eventsByUser.total : 0}
+        count={
+          userSubscriptionsResponse !== undefined
+            ? userSubscriptionsResponse.total
+            : 0
+        }
         rowsPerPage={rowsPerPage}
-        page={eventsByUser !== undefined ? page : 0}
+        page={userSubscriptionsResponse !== undefined ? page : 0}
         labelRowsPerPage="Registros por página"
         labelDisplayedRows={({ from, to, count }) => {
           return `Exibindo de ${from} até ${to} de ${

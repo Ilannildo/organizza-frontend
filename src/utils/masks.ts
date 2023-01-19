@@ -104,6 +104,68 @@ export const getEventStatusBackgroundColor = (
   return "#00D488";
 };
 
+export const getSubscriptionStatusBackgroundColor = (
+  status: "pending" | "processing" | "completed" | "refused"
+) => {
+  if (status === "completed") return "rgba(0,212,136,0.1)";
+  if (status === "pending") return "rgba(241,148,19,0.1)";
+  if (status === "processing") return "rgba(241,148,19,0.1)";
+  if (status === "refused") return "rgba(194,199,207,0.1)";
+  return "#00D488";
+};
+
+export const getSubscriptionStatus = (
+  status: "pending" | "processing" | "completed" | "refused"
+) => {
+  if (status === "completed") return "Confirmado";
+  if (status === "pending") return "Pendente";
+  if (status === "processing") return "Processando";
+  if (status === "refused") return "Recusado";
+};
+
+export const getSubscriptionStatusColor = (
+  status: "pending" | "processing" | "completed" | "refused"
+) => {
+  if (status === "completed") return "#55DAD2";
+  if (status === "pending") return "#F19413";
+  if (status === "processing") return "#F19413";
+  if (status === "refused") return "#C2C7CF";
+  return "#00D488";
+};
+
+export const getServiceOrderStatusBackgroundColor = (
+  status: "open" | "processing" | "settled" | "closed" | "canceled"
+) => {
+  if (status === "settled") return "rgba(0,212,136,0.1)";
+  if (status === "open") return "rgba(241,148,19,0.1)";
+  if (status === "processing") return "rgba(241,148,19,0.1)";
+  if (status === "closed") return "rgba(194,199,207,0.1)";
+  if (status === "canceled") return "rgba(255,218,214,0.5)";
+  return "rgba(194,199,207,0.1)";
+};
+
+export const getServiceOrderStatus = (
+  status: "open" | "processing" | "settled" | "closed" | "canceled"
+) => {
+  if (status === "settled") return "Aprovado";
+  if (status === "open") return "Aberto";
+  if (status === "processing") return "Processando";
+  if (status === "closed") return "Fechado";
+  if (status === "canceled") return "Cancelado";
+  return "Fechado";
+};
+
+export const getServiceOrderStatusColor = (
+  status: "open" | "processing" | "settled" | "closed" | "canceled"
+) => {
+  if (status === "settled") return "#55DAD2";
+  if (status === "open") return "#F19413";
+  if (status === "processing") return "#F19413";
+  if (status === "closed") return "#C2C7CF";
+  if (status === "canceled") return "#BA1A1A";
+  return "#C2C7CF";
+};
+
 export const currencyMask = (value: number) => {
   return value.toLocaleString("pt-br", { minimumFractionDigits: 2 });
 };

@@ -2,9 +2,10 @@ import { lazy } from "react";
 import { Loadable } from "../layout/Loadable";
 import { AllowedRolesNames, ProtectedRoute } from "../layout/ProtectedRoute";
 
-import OrganizerDashboard from "../pages/Organizer/Dashboard";
 import CreateEvent from "../pages/Organizer/CreateEvent";
-import { UserSubscriptions } from "../pages/Organizer/UserSubscriptions";
+import OrganizerDashboard from "../pages/Organizer/Dashboard";
+import { UserSubscriptionDetail } from "../pages/Organizer/Subscription/UserSubscriptionDetail";
+import { UserSubscriptions } from "../pages/Organizer/Subscription/UserSubscriptions";
 
 const OrganizerPanelLayout = Loadable(
   lazy(() => import("../layout/OrganizerPanelLayout"))
@@ -29,6 +30,10 @@ export const OrganizerRoutes = {
     {
       path: "inscricoes",
       element: <UserSubscriptions />,
+    },
+    {
+      path: "inscricoes/:subscriptionId",
+      element: <UserSubscriptionDetail />,
     },
   ],
 };
