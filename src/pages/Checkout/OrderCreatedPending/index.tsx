@@ -9,21 +9,28 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { format } from "date-fns";
 import {
   CheckCircle,
+  CheckSquare,
   Clock,
   Copy,
   DeviceMobileCamera,
   EnvelopeSimple,
 } from "phosphor-react";
+import { useEffect, useState } from "react";
 import { Params, useLocation, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import QrCodeIcon from "../../../assets/icons/QrCode.svg";
 import { Main } from "../../../layout/CheckoutLayout";
 import LogoSection from "../../../layout/MainPanelLayout/components/LogoSection";
-import QrCodeIcon from "../../../assets/icons/QrCode.svg";
-import { format } from "date-fns";
-import { useEffect, useState } from "react";
 import { IPayServiceOrderResponse } from "../../../models/serviceOrder";
-import { formatCurrency, getReturnValuesCounter, padTo2Digits } from "../../../utils/masks";
+import { api } from "../../../services/api";
+import {
+  formatCurrency,
+  getReturnValuesCounter,
+  padTo2Digits,
+} from "../../../utils/masks";
 
 interface IParams extends Params {
   slug: string;
@@ -65,8 +72,10 @@ const CheckoutOrderCreatedPending = () => {
       started
     ) {
       setStarted(false);
-      navigate(`/evento/${slug}`, {
-        replace: true,
+      closeServiceOrder(orderCreated.order.order_id).then(() => {
+        navigate(`/evento/${slug}`, {
+          replace: true,
+        });
       });
     }
   }, [days, hours, minutes, seconds, orderCreated, started, navigate, slug]);
@@ -77,6 +86,18 @@ const CheckoutOrderCreatedPending = () => {
 
   const onSendEmailNotification = () => {
     console.log("enviar email");
+  };
+
+  const closeServiceOrder = async (order_id?: string) => {
+    try {
+      await api.put(`/service-orders/${order_id}/close`);
+    } catch (error: any) {
+      if (error.response) {
+        toast.error(error.response.data.error.message);
+      } else {
+        toast.error("Não foi possível fechar a ordem de serviço");
+      }
+    }
   };
 
   useEffect(() => {
@@ -92,8 +113,10 @@ const CheckoutOrderCreatedPending = () => {
   useEffect(() => {
     if (orderCreated && orderCreated.order.expires_at) {
       if (new Date(orderCreated.order.expires_at) < new Date()) {
-        navigate(`/evento/${slug}`, {
-          replace: true,
+        closeServiceOrder(orderCreated.order.order_id).then(() => {
+          navigate(`/evento/${slug}`, {
+            replace: true,
+          });
         });
       } else {
         setStarted(true);
@@ -144,7 +167,7 @@ const CheckoutOrderCreatedPending = () => {
             display="flex"
           >
             {orderCreated && (
-              <Grid item lg={7} md={8} sm={12} xs={12}>
+              <Grid item lg={10} md={10} sm={12} xs={12}>
                 <Grid container spacing={2}>
                   <Grid item lg={12} md={12} sm={12} xs={12}>
                     <Grid
@@ -165,9 +188,10 @@ const CheckoutOrderCreatedPending = () => {
                         display="flex"
                         flexDirection="column"
                         mb={2}
+                        mt={2}
                       >
                         <CheckCircle
-                          size={48}
+                          size={44}
                           color={theme.palette.success.main}
                         />
 
@@ -181,7 +205,7 @@ const CheckoutOrderCreatedPending = () => {
                         >
                           {orderCreated.order.status === "pending"
                             ? `Inscrição aguardando pagamento`
-                            : "Teste"}
+                            : "Inscrição pendente"}
                         </Typography>
                       </Grid>
                       {orderCreated.order.expires_at && (
@@ -203,12 +227,7 @@ const CheckoutOrderCreatedPending = () => {
                         </Grid>
                       )}
                       {started && (
-                        <Grid
-                          item
-                          lg={8}
-                          xs={8}
-                          mt={1}
-                        >
+                        <Grid item lg={8} xs={8} mt={1}>
                           <Stack
                             direction="row"
                             alignItems="center"
@@ -226,7 +245,9 @@ const CheckoutOrderCreatedPending = () => {
                                 width: 44,
                               }}
                             >
-                              {`${padTo2Digits(minutes)}:${padTo2Digits(seconds)}`}
+                              {`${padTo2Digits(minutes)}:${padTo2Digits(
+                                seconds
+                              )}`}
                             </Typography>
                           </Stack>
                         </Grid>
@@ -335,6 +356,25 @@ const CheckoutOrderCreatedPending = () => {
                                 Selecione a opção pagar com QR Code e escaneie o
                                 código acima ou copie o código e selecione a
                                 opção Pix Copia e Cola
+                              </Typography>
+                            </Stack>
+                            <Stack
+                              spacing={2}
+                              direction="row"
+                              alignItems="center"
+                              width="100%"
+                              mt={2}
+                            >
+                              <CheckSquare size={18} color="#73777F" />
+                              <Typography
+                                fontSize={14}
+                                sx={{
+                                  color: (theme) =>
+                                    theme.palette.onPrimaryContainer.main,
+                                }}
+                              >
+                                Enviaremos uma confirmação de pagamento para o
+                                seu email
                               </Typography>
                             </Stack>
                           </Grid>

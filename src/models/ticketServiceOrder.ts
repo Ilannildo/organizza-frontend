@@ -22,5 +22,6 @@ export interface ITicketServiceOrderResponse {
     event_title: string;
     title: string;
     icon_url?: string;
+    is_free: boolean;
   };
 }

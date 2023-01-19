@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Alert,
   AlertTitle,
@@ -14,7 +13,9 @@ import {
   useTheme,
 } from "@mui/material";
 import { Clock } from "phosphor-react";
+import { useEffect, useState } from "react";
 
+import { Params, useNavigate, useParams } from "react-router-dom";
 import Logo from "../../../../assets/images/logo.svg";
 import { useEventCheckout } from "../../../../hooks/useEventCheckout";
 import {
@@ -22,8 +23,6 @@ import {
   getReturnValuesCounter,
   padTo2Digits,
 } from "../../../../utils/masks";
-import { Params, useNavigate, useParams } from "react-router-dom";
-
 
 interface IParams extends Params {
   slug: string;
@@ -42,6 +41,7 @@ export const CheckoutSidebar = () => {
     handleFinalizeServiceOrder,
     isFinishingServiceOrder,
     finalize,
+    handleChangeExpired,
   } = useEventCheckout();
 
   const [counter, setCounter] = useState(0);
@@ -74,6 +74,7 @@ export const CheckoutSidebar = () => {
   useEffect(() => {
     if (serviceOrder && days + hours + minutes + seconds <= 0 && stated) {
       handleResetServiceOrder();
+      handleChangeExpired(true);
       setStarted(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,36 +85,40 @@ export const CheckoutSidebar = () => {
       setErrorMessage("");
       const response = await handleFinalizeServiceOrder();
       if (response.status === "pending") {
-        handleResetServiceOrder()
+        handleResetServiceOrder();
+        handleChangeExpired(false);
         navigate(`/evento/${slug}/checkout/buy/order-pending`, {
           state: {
             order: response,
-            ammout: serviceOrder?.total
+            ammout: serviceOrder?.total,
           },
-          replace: true
+          replace: true,
         });
       }
       if (response.status === "approved") {
-        handleResetServiceOrder()
+        handleResetServiceOrder();
+        handleChangeExpired(false);
         navigate(`/evento/${slug}/checkout/buy/order-approved`, {
           state: {
             order: response,
           },
-          replace: true
+          replace: true,
         });
       }
       if (response.status === "processing") {
-        handleResetServiceOrder()
+        handleResetServiceOrder();
+        handleChangeExpired(false);
         navigate(`/evento/${slug}/checkout/buy/order-processing`, {
           state: {
             order: response,
           },
-          replace: true
+          replace: true,
         });
       }
       if (response.status === "error") {
+        handleResetServiceOrder();
         setErrorMessage(
-          "Não foi possível finalizar a sua inscrição. Verifique os dados e tente novamente!"
+          "Não foi possível finalizar o seu pagamento. Tente novamente mais tarde!"
         );
       }
     } catch (error: any) {
@@ -132,7 +137,7 @@ export const CheckoutSidebar = () => {
       sx={{
         flexShrink: { md: 0 },
         width: matchUpMd ? 320 : "auto",
-        backgroundColor: "rgba(0,98,161, 0.05)",
+        backgroundColor: "rgba(221,227,234, 0.4)",
         ml: 2,
         py: 3,
         px: 5,
@@ -169,7 +174,9 @@ export const CheckoutSidebar = () => {
                       width: 16,
                     }}
                   >
-                    {isExpired ? "00:00" : `${padTo2Digits(minutes)}:${padTo2Digits(seconds)}`}
+                    {isExpired
+                      ? "00:00"
+                      : `${padTo2Digits(minutes)}:${padTo2Digits(seconds)}`}
                   </Typography>
                 </Stack>
               </Grid>
@@ -190,10 +197,11 @@ export const CheckoutSidebar = () => {
                   <img
                     src={serviceOrder.ticket.icon_url || Logo}
                     alt=""
-                    width="68"
+                    width="56"
                   />
                   <Typography
                     fontSize={18}
+                    mt={1}
                     sx={{
                       color: (theme) => theme.palette.onPrimaryContainer.main,
                       fontWeight: 500,
@@ -205,7 +213,6 @@ export const CheckoutSidebar = () => {
                     fontSize={14}
                     sx={{
                       color: (theme) => theme.palette.onPrimaryContainer.main,
-
                       mt: 1,
                     }}
                   >
@@ -275,10 +282,11 @@ export const CheckoutSidebar = () => {
                       fontSize={16}
                       sx={{
                         color: (theme) => theme.palette.onPrimaryContainer.main,
-                        fontWeight: "bold",
                       }}
                     >
-                      {formatCurrency(serviceOrder.total)}
+                      {serviceOrder.ticket.is_free
+                        ? `GRÁTIS`
+                        : formatCurrency(serviceOrder.total)}
                     </Typography>
                   </Stack>
                 </Grid>

@@ -30,12 +30,12 @@ import { useAllSessionTypesMenu } from "../../stores/sessionTypes";
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open: boolean;
 }>(({ theme, open }) => ({
-  backgroundColor: "rgba(0,98,161, 0.05)",
+  backgroundColor: "rgba(221,227,234, 0.5)",
   // backgroundColor: "#EBF0FF",
   width: "100%",
   minHeight: "calc(100vh - 70px)",
   flexGrow: 1,
-  padding: "20px",
+  padding: "16px",
   marginTop: "70px",
   // marginRight: "20px",
   ...(!open && {
@@ -87,9 +87,9 @@ const MainPanelLayout = () => {
   const theme = useTheme();
   const { eventId } = useParams<IParams>();
   const { opened, setMenu } = useCustomization();
+  const matchDownMd = useMediaQuery(theme.breakpoints.down("lg"));
 
   const { data: event, isLoading: isLoadingEvent } = useEventById(eventId);
-  const matchDownMd = useMediaQuery(theme.breakpoints.down("lg"));
   const navigate = useNavigate();
 
   const { data: sessionItems, isLoading: isLoadingSessionItens } =

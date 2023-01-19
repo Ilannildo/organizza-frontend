@@ -68,10 +68,9 @@ const NavItem = ({ item, level, event }) => {
         alignItems: "flex-start",
         backgroundColor:
           isOpen.findIndex((id) => id === item.id) > -1
-            ? `rgba(233,240,247,0.1) !important`
+            ? `rgba(233,240,247,0.05) !important`
             : "transparent",
         pl: `${level * 24}px`,
-        opacity: isOpen.findIndex((id) => id === item.id) > -1 ? 1 : 0.8,
       }}
       selected={isOpen.findIndex((id) => id === item.id) > -1}
       onClick={() => itemHandler(item.id)}
@@ -84,7 +83,7 @@ const NavItem = ({ item, level, event }) => {
             height: "100%",
             width: 3,
             top: 0,
-            background: theme.palette.secondary.main,
+            background: theme.palette.tertiary.main,
           }}
         />
       )}

@@ -19,8 +19,8 @@ import { useEventCheckout } from "../../../hooks/useEventCheckout";
 import { useAllPaymentMethods } from "../../../stores/paymentMethods";
 import { useAuthenticatedUser } from "../../../stores/user";
 
-import PixIcon from "../../../assets/pix.png";
 import CreditIcon from "../../../assets/card.png";
+import PixIcon from "../../../assets/pix.png";
 
 interface IParams extends Params {
   slug: string;
@@ -61,7 +61,7 @@ const CheckoutPaymentMethod = () => {
       }
 
       return navigate(
-        `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment/${paymentMethod.payment_id}/pay`
+        `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment/pay`
       );
     }
   };

@@ -17,7 +17,8 @@ import { toast } from "react-toastify";
 
 import { api } from "../../../services/api";
 import { validateEmail } from "../../../utils/roles";
-import Logo from "../../../assets/images/logo-color.svg";
+import Logo from "../../../assets/images/logo-text.svg";
+import BackgroundLoginImage from "../../../assets/images/background-login.png";
 
 const Register = () => {
   const theme = useTheme();
@@ -93,48 +94,29 @@ const Register = () => {
     <Grid container component="main" minHeight="100vh">
       <Grid
         item
-        xs={false}
-        md={5}
-        lg={4}
-        xl={4}
-        sx={{
-          backgroundColor: (theme) => theme.palette.primary.main,
-          alignItems: "center",
-          justifyContent: "center",
-          display: "flex",
-        }}
-      >
-        <Box mt={4} p={3} display={matchesSM ? "none" : "block"}>
-          <Typography fontSize={42} variant="h3" color="Background">
-            Vamos construir relacionamentos, não apenas eventos.
-          </Typography>
-          <Typography fontSize={16} variant="h4" mt={2} color="Background">
-            — I. Viana, CEO & Co-Founder Organizza
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid
-        item
         xs={12}
-        sm={12}
-        md={7}
-        lg={8}
-        xl={7}
-        p={2}
+        md={5}
+        lg={5}
+        xl={4}
         sx={{
           backgroundColor: (theme) => theme.palette.background.default,
           position: "relative",
+          alignItems: "center",
+          justifyContent: "center",
+          display: "flex",
+          p: 2,
+          maxWidth: 640,
         }}
       >
         <Box
           sx={{
-            // backgroundColor: (theme) => theme.palette.primary.main,
             alignItems: "center",
             height: "100%",
             width: "100%",
             justifyContent: "center",
             display: "flex",
             flexDirection: "column",
+            maxWidth: 375,
           }}
           onSubmit={handleSubmit}
           component="form"
@@ -143,17 +125,22 @@ const Register = () => {
             <Grid
               item
               sx={{ userSelect: "none" }}
-              lg={6}
-              xl={4}
+              lg={12}
+              xl={12}
               xs={12}
               display="flex"
               justifyContent="center"
               alignItems="center"
               flexDirection="column"
             >
-              <img src={Logo} alt="Logo Monitora Tocantins" draggable="false" />
-              <Typography fontSize={16} variant="h1" fontWeight="500">
-                Deixando o seu evento melhor!
+              <img
+                src={Logo}
+                alt="Logo Organizza"
+                draggable="false"
+                width="256"
+              />
+              <Typography fontSize={18} variant="h1" fontWeight="500" mt={2}>
+                Crie sua conta!
               </Typography>
               {location.state && location.state.checkout && (
                 <Typography
@@ -163,7 +150,7 @@ const Register = () => {
                   fontWeight="500"
                   color="secondary"
                 >
-                  Realize seu cadastro para continuar a inscrição
+                  Realize seu login para continuar a inscrição
                 </Typography>
               )}
             </Grid>
@@ -171,8 +158,8 @@ const Register = () => {
           <Grid container justifyContent="center" mt={2}>
             <Grid
               item
-              lg={6}
-              xl={4}
+              lg={12}
+              xl={12}
               xs={12}
               display="flex"
               justifyContent="center"
@@ -191,12 +178,10 @@ const Register = () => {
                 onChange={(e) => setName(e.target.value)}
               />
             </Grid>
-          </Grid>
-          <Grid container justifyContent="center">
             <Grid
               item
-              lg={6}
-              xl={4}
+              lg={12}
+              xl={12}
               xs={12}
               display="flex"
               justifyContent="center"
@@ -216,12 +201,10 @@ const Register = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
-          </Grid>
-          <Grid container justifyContent="center">
             <Grid
               item
-              lg={6}
-              xl={4}
+              lg={12}
+              xl={12}
               xs={12}
               display="flex"
               justifyContent="center"
@@ -242,12 +225,10 @@ const Register = () => {
                 helperText={passwordError}
               />
             </Grid>
-          </Grid>
-          <Grid container justifyContent="center">
             <Grid
               item
-              lg={6}
-              xl={4}
+              lg={12}
+              xl={12}
               xs={12}
               display="flex"
               justifyContent="center"
@@ -268,12 +249,10 @@ const Register = () => {
                 helperText={passwordError}
               />
             </Grid>
-          </Grid>
-          <Grid container justifyContent="center">
             <Grid
               item
-              lg={6}
-              xl={4}
+              lg={12}
+              xl={12}
               xs={12}
               display="flex"
               justifyContent="center"
@@ -309,12 +288,10 @@ const Register = () => {
                 }
               />
             </Grid>
-          </Grid>
-          <Grid container justifyContent="center">
             <Grid
               item
-              lg={6}
-              xl={4}
+              lg={12}
+              xl={12}
               xs={12}
               display="flex"
               justifyContent="center"
@@ -355,6 +332,28 @@ const Register = () => {
             </Grid>
           </Grid>
         </Box>
+      </Grid>
+      <Grid
+        item
+        xs={false}
+        sm={12}
+        md={7}
+        lg={7}
+        xl={8}
+        p={2}
+        sx={{
+          backgroundColor: (theme) => theme.palette.primary.main,
+          background: `url(${BackgroundLoginImage})`,
+          backgroundRepeat: "no-repeat",
+          backgroundBlendMode: "multiply",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          position: "relative",
+          alignItems: "center",
+          justifyContent: "center",
+          display: "flex",
+        }}
+      >
         <Box
           position="absolute"
           left={0}
@@ -363,32 +362,19 @@ const Register = () => {
           display={matchesSM ? "none" : "block"}
         >
           <Grid container px={2} py={1}>
-            <Grid item lg={6}>
-              <Typography fontSize={16} variant="h4" color="#C2C7CF">
+            <Grid item lg={6} xs={false}>
+              <Typography fontSize={14} variant="h4" color="#C2C7CF">
                 © Organizza Eventos 2022
               </Typography>
             </Grid>
             <Grid item lg={6} xs={false} display="flex" justifyContent="end">
-              <Typography fontSize={16} variant="h4" color="#C2C7CF">
+              <Typography fontSize={14} variant="h4" color="#C2C7CF">
                 help@organizza.online
               </Typography>
             </Grid>
           </Grid>
         </Box>
       </Grid>
-      <Grid
-        item
-        xs={false}
-        md={false}
-        lg={false}
-        xl={1}
-        sx={{
-          backgroundColor: (theme) => theme.palette.secondary.main,
-          alignItems: "center",
-          justifyContent: "center",
-          display: "flex",
-        }}
-      ></Grid>
     </Grid>
   );
 };

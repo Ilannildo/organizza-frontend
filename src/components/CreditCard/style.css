@@ -147,18 +147,6 @@
   left: 15px;
 }
 
-/* .card:hover .card__front {
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-}
-
-.card:hover .card__back {
-  transform: rotateY(0deg);
-  -webkit-transform: rotateY(0deg);
-  -moz-transform: rotateY(0deg);
-} */
-
 .card-rotate .card__front {
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);

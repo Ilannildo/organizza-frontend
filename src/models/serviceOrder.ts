@@ -21,7 +21,7 @@ export interface IServiceOrder {
 }
 
 export interface IPayServiceOrderResponse {
-  payment_method:
+  payment_method?:
     | "credit"
     | "debit"
     | "check"
@@ -42,5 +42,12 @@ export interface IPayServiceOrderResponse {
     | "error";
   qr_code_url?: string;
   qr_code?: string;
+  is_free?: boolean;
+  order_id?: string;
   expires_at?: Date;
+}
+
+export interface IEventPanelSalesResponse {
+  total: number;
+  processing: number;
 }

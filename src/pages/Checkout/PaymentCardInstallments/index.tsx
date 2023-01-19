@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   Avatar,
   Button,
@@ -13,8 +12,9 @@ import {
   Radio,
   Typography,
 } from "@mui/material";
-import { Params, useNavigate, useParams } from "react-router-dom";
 import creditCardType from "credit-card-type";
+import { useEffect } from "react";
+import { Params, useNavigate, useParams } from "react-router-dom";
 
 import { useEventCheckout } from "../../../hooks/useEventCheckout";
 import { useAllPaymentInstallments } from "../../../stores/paymentMethods";
@@ -54,7 +54,7 @@ const CheckoutPaymentCardInstallments = () => {
       paymentCardInstallment
     ) {
       navigate(
-        `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment/${paymentMethod.payment_id}/pay`
+        `/evento/${slug}/checkout/${serviceOrder.service_order_id}/payment/pay`
       );
     }
   };

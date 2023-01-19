@@ -14,9 +14,7 @@ export interface ITicket {
   value: number;
   sold?: number;
   start_date: Date | null;
-  start_time: Date | null;
   due_date: Date | null;
-  due_time: Date | null;
 
   event?: IEvent;
   ticket_price_type?: ITicketPriceType;
@@ -32,9 +30,7 @@ export interface ITicketForm {
   description: string;
   value: number;
   start_date: Date | null;
-  start_time: Date | null;
   due_date: Date | null;
-  due_time: Date | null;
 }
 
 export interface ITicketPriceType {
@@ -58,5 +54,10 @@ export interface IEventPageTickets {
   is_free: boolean;
   status: string;
   due_date: Date;
-  due_time: Date;
+}
+
+export interface IEventPanelTicketInformationResponse {
+  sold: number;
+  canceled: number;
+  remaining: number;
 }

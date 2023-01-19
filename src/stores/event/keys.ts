@@ -10,7 +10,12 @@ export const createEventBySlugKey = (slug?: string): QueryKey => [
   slug,
 ];
 
-export const createEventByUserIdKey = (user_id?: string): QueryKey => [
-  "useEventByUserIdKey",
-  user_id,
-];
+export const createEventByUserIdKey = (
+  limit: number,
+  page: number,
+  user_id?: string
+): QueryKey => ["useEventByUserIdKey", user_id, page, limit];
+
+export const createEventInformationByUserIdKey = (
+  user_id?: string
+): QueryKey => ["useEventInformationByUserIdKey", user_id];

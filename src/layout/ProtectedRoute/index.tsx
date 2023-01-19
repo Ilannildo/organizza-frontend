@@ -1,4 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 import { useAuthenticatedUser } from "../../stores/user";
 import Loader from "../Loader";
 
@@ -19,7 +20,13 @@ export const ProtectedRoute = ({
   checkout,
   allowedRoles,
 }: IProtectedRoutes) => {
-  const { isLoading, data } = useAuthenticatedUser();
+  const { isAuthenticated } = useAuth();
+
+  const isToken = isAuthenticated();
+
+  const { isLoading, data } = useAuthenticatedUser({
+    enabled: isToken,
+  });
   const location = useLocation();
 
   if (!isLoading) {

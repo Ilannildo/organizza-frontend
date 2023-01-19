@@ -30,6 +30,7 @@ const CheckoutLayout = () => {
     serviceOrder,
     handleGetServiceOrder,
     isExpired,
+    isFetchingServiceOrder,
     handleChangeExpired,
   } = useEventCheckout();
 
@@ -38,10 +39,12 @@ const CheckoutLayout = () => {
       handleGetServiceOrder({ serviceOrderId }).catch((err) => {
         if (err.response) {
           if (err.response.data.error.code === Codes.EXPIRED_TIME) {
+            handleChangeExpired(false);
             navigate(`/evento/${slug}/checkout/buy/expired`, {
               replace: true,
             });
           } else {
+            handleChangeExpired(false);
             toast.info(err.response.data.error.message);
             navigate(`/evento/${slug}`, {
               replace: true,
@@ -50,7 +53,6 @@ const CheckoutLayout = () => {
         } else {
           toast.error("Ocorreu um problema ao realizar o pagamento");
         }
-        console.log("error");
       });
     } else {
       navigate("/", { replace: true });
@@ -58,8 +60,8 @@ const CheckoutLayout = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serviceOrderId, navigate, slug]);
 
-  useEffect(() => {
-    if (!serviceOrder && isExpired) {
+  useEffect(() => {    
+    if (!serviceOrder && !isFetchingServiceOrder && isExpired) {
       setTimeout(() => {
         handleChangeExpired(false);
         navigate(`/evento/${slug}/checkout/buy/expired`, {
@@ -68,7 +70,13 @@ const CheckoutLayout = () => {
       }, 300);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isExpired, serviceOrder, navigate, slug, serviceOrderId]);
+  }, [
+    isExpired,
+    serviceOrder,
+    navigate,
+    slug,
+    isFetchingServiceOrder,
+  ]);
 
   return (
     <>
@@ -95,11 +103,11 @@ const CheckoutLayout = () => {
       </AppBar>
       <Main theme={theme}>
         <Container
-          maxWidth="lg"
+          maxWidth="xl"
           sx={{
             display: "flex",
             flexDirection: "row",
-            height: "100%"
+            height: "100%",
           }}
         >
           <Outlet />

@@ -32,18 +32,14 @@ export const CreateTicketModal = ({
   const [description, setDescription] = useState<string>("");
   const [value, setValue] = useState<number>(0);
   const [startDate, setStartDate] = useState<Date | null>(null);
-  const [startTime, setStartTime] = useState<Date | null>(null);
   const [dueDate, setDueDate] = useState<Date | null>(null);
-  const [dueTime, setDueTime] = useState<Date | null>(null);
 
   const [categoryTitleError, setCategoryTitleError] = useState<string>(" ");
   const [participantLimitError, setParticipantLimitError] =
     useState<string>(" ");
   const [valueError, setValueError] = useState<string>(" ");
   const [startDateError, setStartDateError] = useState<string>(" ");
-  const [startTimeError, setStartTimeError] = useState<string>(" ");
   const [dueDateError, setDueDateError] = useState<string>(" ");
-  const [dueTimeError, setDueTimeError] = useState<string>(" ");
 
   const createEventTicketMutation = useCreateEventTicket();
 
@@ -72,10 +68,6 @@ export const CreateTicketModal = ({
       setStartDateError("Data inválida. Escolha uma data futura");
       return false;
     }
-    if (!startTime) {
-      setStartTimeError("A hora de início das vendas é obrigatório");
-      return false;
-    }
     if (!dueDate) {
       setDueDateError("A data de término das vendas é obrigatório");
       return false;
@@ -84,10 +76,6 @@ export const CreateTicketModal = ({
       setDueDateError(
         "Data inválida. Escolha uma data maior que a data de início"
       );
-      return false;
-    }
-    if (!dueTime) {
-      setDueTimeError("A hora de término das vendas é obrigatório");
       return false;
     }
     return true;
@@ -102,10 +90,8 @@ export const CreateTicketModal = ({
         ticket: {
           category_title: categoryTitle,
           start_date: startDate,
-          start_time: startTime,
           description,
           due_date: dueDate,
-          due_time: dueTime,
           event_id: eventId,
           include_fee: includeFee,
           participant_limit: participantLimit,
@@ -118,10 +104,10 @@ export const CreateTicketModal = ({
   };
 
   useEffect(() => {
-    if(createEventTicketMutation.isSuccess) {
+    if (createEventTicketMutation.isSuccess) {
       onClose();
     }
-  }, [createEventTicketMutation, onClose])
+  }, [createEventTicketMutation, onClose]);
 
   useEffect(() => {
     handleGenerateTicketCodeRef();
@@ -146,27 +132,19 @@ export const CreateTicketModal = ({
             setValue={setValue}
             startDate={startDate}
             setStartDate={setStartDate}
-            startTime={startTime}
-            setStartTime={setStartTime}
             dueDate={dueDate}
             setDueDate={setDueDate}
-            dueTime={dueTime}
-            setDueTime={setDueTime}
             ticket_price_type={type}
             categoryTitleError={categoryTitleError}
             participantLimitError={participantLimitError}
             valueError={valueError}
             startDateError={startDateError}
-            startTimeError={startTimeError}
             dueDateError={dueDateError}
-            dueTimeError={dueTimeError}
             setCategoryTitleError={setCategoryTitleError}
             setParticipantLimitError={setParticipantLimitError}
             setValueError={setValueError}
             setStartDateError={setStartDateError}
-            setStartTimeError={setStartTimeError}
             setDueDateError={setDueDateError}
-            setDueTimeError={setDueTimeError}
           />
         ) : (
           <Typography
@@ -203,8 +181,6 @@ export const CreateTicketModal = ({
             (!type.is_free && value <= 0) ||
             !startDate ||
             !dueDate ||
-            !startTime ||
-            !dueTime ||
             createEventTicketMutation.isLoading
           }
           size="small"

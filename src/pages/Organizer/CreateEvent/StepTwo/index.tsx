@@ -3,22 +3,20 @@ import {
   Card,
   CardContent,
   Checkbox,
-  Chip,
   FormControlLabel,
   Grid,
-  IconButton,
   Stack,
   StepIcon,
   TextField,
   Typography,
-  useTheme,
 } from "@mui/material";
-import { Plus } from "phosphor-react";
-import { ICity } from "../../../../../models/city";
-import { useAllCities } from "../../../../../stores/city";
-import { useAllEventTypes } from "../../../../../stores/eventType";
-import { useAllMainSubjects } from "../../../../../stores/mainSubject";
-import { useAllStates } from "../../../../../stores/state";
+import { ICity } from "../../../../models/city";
+import { IEventType } from "../../../../models/eventType";
+import { IMainSubject } from "../../../../models/mainSubject";
+import { useAllCities } from "../../../../stores/city";
+import { useAllEventTypes } from "../../../../stores/eventType";
+import { useAllMainSubjects } from "../../../../stores/mainSubject";
+import { useAllStates } from "../../../../stores/state";
 
 interface IStepTwo {
   city: ICity | null;
@@ -27,10 +25,10 @@ interface IStepTwo {
   setStreet: (value: string) => void;
   placeUndefined: boolean;
   setPlaceUndefined: (value: boolean) => void;
-  eventTypeId: string;
-  setEventTypeId: (value: string) => void;
-  mainSubject: string;
-  setMainSubject: (value: string) => void;
+  eventType: IEventType | null;
+  setEventType: (value: IEventType | null) => void;
+  mainSubject: IMainSubject | null;
+  setMainSubject: (value: IMainSubject | null) => void;
   eventTypeIdError: string;
   setEventTypeIdError: (value: string) => void;
   mainSubjectError: string;
@@ -48,8 +46,8 @@ export const StepTwo = ({
   street,
   placeUndefined,
   setPlaceUndefined,
-  eventTypeId,
-  setEventTypeId,
+  eventType,
+  setEventType,
   mainSubject,
   setMainSubject,
   eventTypeIdError,
@@ -63,9 +61,9 @@ export const StepTwo = ({
 }: IStepTwo) => {
   const { data: cities, isLoading: isLoadingCities } = useAllCities();
   const { data: states, isLoading: isLoadingStates } = useAllStates();
-  const { data: eventTypes } = useAllEventTypes();
+  const { data: eventTypes, isLoading: isLoadingEventTypes } =
+    useAllEventTypes();
   const { data: mainSubjects } = useAllMainSubjects();
-  const theme = useTheme();
 
   return (
     <Grid container mt={2} spacing={2} justifyContent="center" display="flex">
@@ -255,146 +253,71 @@ export const StepTwo = ({
               </Grid>
               <Grid
                 item
-                mt={2}
                 lg={10}
                 md={10}
                 sm={12}
                 xs={12}
-                alignItems="center"
+                justifyContent="center"
                 display="flex"
-                flexDirection="column"
-              >
-                <Stack spacing={4} direction="row" mt={2}>
-                  {eventTypes?.map((type) => (
-                    <Stack key={type.id} alignItems="center" spacing={1}>
-                      <IconButton
-                        color="primary"
-                        onClick={() => {
-                          setEventTypeId(type.id);
-                          setEventTypeIdError(" ");
-                        }}
-                        sx={{
-                          backgroundColor: (theme) =>
-                            eventTypeId === type.id
-                              ? theme.palette.primary.main
-                              : theme.palette.primaryContainer.main,
-                          width: 70,
-                          height: 70,
-                        }}
-                      >
-                        <i
-                          className={`ph-${type.icon_name}`}
-                          style={{
-                            color:
-                              eventTypeId === type.id
-                                ? theme.palette.primaryContainer.main
-                                : theme.palette.primary.main,
-                          }}
-                        />
-                      </IconButton>
-                      <Typography
-                        component="h1"
-                        variant="h6"
-                        fontWeight={500}
-                        sx={{
-                          color: (theme) => theme.palette.text.disabled,
-                          fontSize: 14,
-                        }}
-                      >
-                        {type.title}
-                      </Typography>
-                    </Stack>
-                  ))}
-                </Stack>
-                {eventTypeIdError !== " " && (
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    mt={2}
-                    sx={{
-                      color: (theme) => theme.palette.error.main,
-                      fontSize: 12,
-                      fontWeight: 400,
-                    }}
-                  >
-                    {eventTypeIdError}
-                  </Typography>
-                )}
-              </Grid>
-              <Grid
-                item
-                mt={3}
-                lg={10}
-                md={10}
-                sm={12}
-                xs={12}
-                alignItems="center"
-                display="flex"
-                flexDirection="column"
-              >
-                <Typography
-                  component="h1"
-                  variant="h6"
-                  fontWeight={500}
-                  sx={{
-                    color: (theme) => theme.palette.text.primary,
-                    fontSize: 16,
-                  }}
-                >
-                  Selecione o assunto principal
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                mt={1}
-                lg={10}
-                md={10}
-                sm={12}
-                xs={12}
-                alignItems="center"
-                display="flex"
-                flexDirection="column"
               >
                 <Grid container spacing={2}>
-                  {mainSubjects?.map((subject) => (
-                    <Grid item key={subject.id}>
-                      <Chip
-                        label={subject.title}
-                        onClick={() => {
-                          setMainSubject(subject.id);
-                          setMainSubjectError(" ");
-                        }}
-                        color="primary"
-                        variant={
-                          mainSubject === subject.id ? "filled" : "outlined"
-                        }
-                      />
-                    </Grid>
-                  ))}
-                  <Grid item>
-                    <Chip
-                      label="Adicionar assunto"
-                      onClick={() => {}}
-                      color="error"
-                      variant="outlined"
-                      icon={<Plus style={{ marginLeft: 8 }} />}
+                  <Grid item lg={6} md={6} xs={12}>
+                    <Autocomplete
+                      id="category"
+                      options={eventTypes !== undefined ? eventTypes : []}
+                      getOptionLabel={(value) => value.title}
+                      loading={isLoadingEventTypes}
+                      disabled={isLoadingEventTypes}
+                      onChange={(event, newValue) => {
+                        setEventType(newValue);
+                        setEventTypeIdError(" ");
+                      }}
+                      value={eventType}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Selecione a categoria do evento"
+                          variant="outlined"
+                          size="small"
+                          fullWidth
+                          onBlur={() => {
+                            setEventTypeIdError(" ");
+                          }}
+                          error={eventTypeIdError !== " "}
+                          helperText={eventTypeIdError}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item lg={6} md={6} xs={12}>
+                    <Autocomplete
+                      id="main-subject"
+                      options={mainSubjects !== undefined ? mainSubjects : []}
+                      getOptionLabel={(value) => value.title}
+                      loading={isLoadingEventTypes}
+                      disabled={isLoadingEventTypes}
+                      onChange={(event, newValue) => {
+                        setMainSubject(newValue);
+                        setMainSubjectError(" ");
+                      }}
+                      value={mainSubject}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Selecione o assunto principal"
+                          variant="outlined"
+                          size="small"
+                          fullWidth
+                          onBlur={() => {
+                            setMainSubjectError(" ");
+                          }}
+                          error={mainSubjectError !== " "}
+                          helperText={mainSubjectError}
+                        />
+                      )}
                     />
                   </Grid>
                 </Grid>
-                {mainSubjectError !== " " && (
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    mt={2}
-                    sx={{
-                      color: (theme) => theme.palette.error.main,
-                      fontSize: 12,
-                      fontWeight: 400,
-                    }}
-                  >
-                    {mainSubjectError}
-                  </Typography>
-                )}
               </Grid>
             </Grid>
           </CardContent>

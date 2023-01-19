@@ -102,7 +102,7 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
   };
 
   const handleResetServiceOrder = () => {
-    setIsExpired(true);
+    // setIsExpired(true);
     setServiceOrder(null);
     setPaymentMethod(null);
     setPaymentAddress(null);
@@ -173,10 +173,12 @@ export const EventCheckoutProvider: React.FC<IEventCheckoutProvider> = ({
         }>(`/service-orders/${serviceOrder?.service_order_id}/pay`, {
           payment_method_id: paymentMethod?.payment_id,
           payment_type: paymentMethod?.payment_type,
-          installments:
-            paymentMethod?.payment_type === "pix"
+          installments: paymentMethod
+            ? paymentMethod?.payment_type === "pix"
               ? 1
-              : paymentCardInstallment?.number,
+              : paymentCardInstallment?.number
+            : 1,
+          is_free: serviceOrder?.ticket.is_free,
           customer_document: paymentCardForm?.userDocument,
           customer_phone_number: paymentCardForm?.phoneNumber,
           billing_city: paymentAddress?.city,

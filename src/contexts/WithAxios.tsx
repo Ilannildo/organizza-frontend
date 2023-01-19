@@ -17,11 +17,6 @@ export const WithAxios = ({ children }: any) => {
             if (config.headers) {
               config.headers = { Authorization: `Bearer ${_token}` };
             }
-            // config.headers
-            //   ? (config.headers. = `Bearer ${_token}`)
-            //   : (config.headers = { Authorization: `Bearer ${_token}` });
-            // if (config.headers)
-            //   config.headers.Authorization = `Bearer ${_token}`;
           }
         }
         return config;

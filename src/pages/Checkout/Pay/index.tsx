@@ -107,7 +107,7 @@ const CheckoutPay = () => {
   };
 
   const handleSubmitPaymentUser = () => {
-    if (serviceOrder && paymentMethod) {
+    if (serviceOrder) {
       handleChangePaymentCardForm({
         cardNumber: "",
         cardOwnerName: "",
@@ -121,8 +121,12 @@ const CheckoutPay = () => {
   };
 
   useEffect(() => {
-    if (serviceOrder && paymentMethod && !isFetchingServiceOrder) {
-      if (paymentMethod.payment_type === "credit" && !paymentCardInstallment) {
+    if (serviceOrder && !isFetchingServiceOrder) {
+      if (
+        paymentMethod &&
+        paymentMethod.payment_type === "credit" &&
+        !paymentCardInstallment
+      ) {
         return navigate(
           `/evento/${slug}/checkout/${serviceOrder.service_order_id}/address`
         );
@@ -144,7 +148,7 @@ const CheckoutPay = () => {
     slug,
     navigate,
     paymentCardInstallment,
-    isFetchingServiceOrder
+    isFetchingServiceOrder,
   ]);
 
   return (
@@ -225,17 +229,20 @@ const CheckoutPay = () => {
             <>
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Grid container spacing={2}>
-                  <Grid item lg={12} md={12} sm={12} xs={12}>
-                    <Typography
-                      fontSize={14}
-                      sx={{
-                        color: (theme) => theme.palette.onPrimaryContainer.main,
-                        fontWeight: 500,
-                      }}
-                    >
-                      Forma de pagamento
-                    </Typography>
-                  </Grid>
+                  {!serviceOrder?.ticket.is_free && (
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                      <Typography
+                        fontSize={14}
+                        sx={{
+                          color: (theme) =>
+                            theme.palette.onPrimaryContainer.main,
+                          fontWeight: 500,
+                        }}
+                      >
+                        Forma de pagamento
+                      </Typography>
+                    </Grid>
+                  )}
                   {paymentCardForm &&
                     paymentMethod &&
                     (paymentMethod.payment_type === "credit" ? (
