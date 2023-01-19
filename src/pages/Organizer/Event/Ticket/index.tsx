@@ -199,12 +199,12 @@ const EventTicket = () => {
                     disabled={!!selectedCreateTicketType}
                     onClick={() =>
                       setSelectedCreateTicketType({
-                        id: "5a14ab5a-94b5-4f15-96fa-9e2b18ab5dba",
+                        id: "ab516208-e061-42d6-a819-e7c0bcf79f27",
                         title: "Gratuito",
                         is_free: true,
-                        quote_id: "809d1936-bab6-46b6-8b5a-3a957d959a59",
+                        quote_id: "400391e4-54b9-44a4-b5ae-8571e55911a0",
                         quote: {
-                          id: "809d1936-bab6-46b6-8b5a-3a957d959a59",
+                          id: "400391e4-54b9-44a4-b5ae-8571e55911a0",
                           min_base_value: 0,
                           min_value: 0,
                           name: "Taxa grátis",
@@ -222,13 +222,13 @@ const EventTicket = () => {
                     disabled={!!selectedCreateTicketType}
                     onClick={() =>
                       setSelectedCreateTicketType({
-                        id: "ae9ecea2-8024-4d48-9595-612a552cb5ee",
+                        id: "92cfa890-a730-4ea2-8be0-761790e4848d",
                         is_free: false,
-                        quote_id: "15f57147-50f9-4712-a5b2-65d623ec1cb6",
+                        quote_id: "02433e7b-ae22-44ef-a521-33a5db22d544",
                         title: "Pago",
                         quote: {
-                          id: "15f57147-50f9-4712-a5b2-65d623ec1cb6",
-                          min_base_value: 2.5,
+                          id: "02433e7b-ae22-44ef-a521-33a5db22d544",
+                          min_base_value: 3,
                           min_value: 30,
                           name: "Taxa pago",
                           percentage: 0.1,
