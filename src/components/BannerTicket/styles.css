@@ -1,16 +1,17 @@
 .ticket-container {
-    transition: all 0.5s ease;
-    cursor: pointer;
+  transition: all 0.5s ease;
+  cursor: pointer;
 }
 
 .ticket-container:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
+  background-image: url("../../assets/images/ticket-hover.svg");
 }
 
 .ticket-container:hover .ticket-front {
-    display: none !important;
+  display: none !important;
 }
 
 .ticket-container:hover .ticket-back {
-    display: flex !important;
+  display: flex !important;
 }

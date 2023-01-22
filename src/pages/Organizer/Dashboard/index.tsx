@@ -16,7 +16,7 @@ import { useAuthenticatedUser } from "../../../stores/user";
 import { SelectEventTypeModal } from "./components/SelectEventTypeModal";
 import { EventTable } from "./components/Table";
 
-const OrganizerDashboard = () => {
+export const OrganizerDashboard = () => {
   const theme = useTheme();
   const [isOpenSelectEvenTypeModal, setIsOpenSelectEventTypeModal] =
     useState(false);
@@ -268,7 +268,7 @@ const OrganizerDashboard = () => {
                         </Grid>
                         <Grid container mt={1}>
                           <Grid item>
-                          <Typography
+                            <Typography
                               fontSize={18}
                               sx={{
                                 color: (theme) =>
@@ -317,7 +317,7 @@ const OrganizerDashboard = () => {
                         </Grid>
                         <Grid container mt={1}>
                           <Grid item>
-                          <Typography
+                            <Typography
                               fontSize={18}
                               sx={{
                                 color: (theme) =>
@@ -386,5 +386,3 @@ const OrganizerDashboard = () => {
     </>
   );
 };
-
-export default OrganizerDashboard;

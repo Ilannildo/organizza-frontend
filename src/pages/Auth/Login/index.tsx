@@ -13,8 +13,8 @@ import { FormEvent, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import Logo from "../../../assets/images/logo-text.svg";
 import BackgroundLoginImage from "../../../assets/images/background-login.png";
+import Logo from "../../../assets/images/logo-text.svg";
 import { useAuth } from "../../../hooks/useAuth";
 import { validateEmail } from "../../../utils/roles";
 
@@ -155,7 +155,6 @@ const Login = () => {
                 id="email"
                 label="E-mail"
                 size="medium"
-                required
                 name="email"
                 autoComplete="email"
                 value={email}
@@ -181,7 +180,6 @@ const Login = () => {
                 label="Senha"
                 type="password"
                 size="medium"
-                required
                 id="password"
                 autoComplete="current-password"
                 value={password}

@@ -1,4 +1,3 @@
-import { Outlet } from "react-router-dom";
 import {
   AppBar,
   Box,
@@ -7,10 +6,11 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { OrganizerPanelSidebar } from "./components/Sidebar";
-import { drawerWidth } from "../../utils/constant";
+import { Calendar, Ticket, UserCircle } from "phosphor-react";
+import { Outlet } from "react-router-dom";
 import { useCustomization } from "../../hooks/useCustomization";
-import { Calendar, Ticket } from "phosphor-react";
+import { drawerWidth } from "../../utils/constant";
+import { OrganizerPanelSidebar } from "./components/Sidebar";
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open: boolean;
@@ -69,6 +69,14 @@ const OrganizerPanelLayout = () => {
         type: "item",
         url: "inscricoes",
         icon: Ticket,
+        breadcrumbs: false,
+      },
+      {
+        id: "minha-conta",
+        title: "Minha conta",
+        type: "item",
+        url: "minha-conta",
+        icon: UserCircle,
         breadcrumbs: false,
       },
     ],

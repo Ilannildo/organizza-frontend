@@ -279,7 +279,7 @@ export const UserSubscriptionDetail = () => {
                         <Box
                           sx={{
                             backgroundColor: (theme) =>
-                              theme.palette.success.main,
+                              getSubscriptionStatusColor(subscription.status),
                             height: 4,
                           }}
                         />

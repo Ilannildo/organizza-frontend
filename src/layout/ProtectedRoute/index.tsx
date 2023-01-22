@@ -29,6 +29,16 @@ export const ProtectedRoute = ({
   });
   const location = useLocation();
 
+  if (!isToken) {
+    return (
+      <Navigate
+        to={`/login?callback-url=${location.pathname}`}
+        replace
+        state={{ from: location, checkout }}
+      />
+    );
+  }
+
   if (!isLoading) {
     if (!data) {
       return (

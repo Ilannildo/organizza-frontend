@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Box,
   Container,
@@ -9,18 +8,19 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import { addDays } from "date-fns";
-import { StepOne } from "./StepOne";
-import { StepTwo } from "./StepTwo";
-import { StepThree } from "./StepThree";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { ICity } from "../../../models/city";
-import { api } from "../../../services/api";
 import { EventFooter } from "../../../components/EventFooter";
 import { useCustomization } from "../../../hooks/useCustomization";
+import { ICity } from "../../../models/city";
 import { IEventType } from "../../../models/eventType";
 import { IMainSubject } from "../../../models/mainSubject";
+import { api } from "../../../services/api";
+import { StepOne } from "./StepOne";
+import { StepThree } from "./StepThree";
+import { StepTwo } from "./StepTwo";
 
 const steps = [
   "Informações gerais",
@@ -49,7 +49,7 @@ interface IUploadedCoverImage {
   url: string | null;
 }
 
-const CreateEvent = () => {
+export const CreateEvent = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { setMenu } = useCustomization();
@@ -537,5 +537,3 @@ const CreateEvent = () => {
     </>
   );
 };
-
-export default CreateEvent;
