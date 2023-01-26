@@ -45,9 +45,10 @@ export const HomeEventCard = () => {
             <Typography
               fontWeight={600}
               textAlign="center"
+              fontFamily="Poppins"
               sx={{
                 color: (theme) => theme.palette.background.default,
-                fontSize: 24,
+                fontSize: 16,
                 mx: 5,
                 my: 2,
                 overflow: "hidden",
@@ -82,8 +83,10 @@ export const HomeEventCard = () => {
               <Grid item>
                 <Typography
                   fontWeight="bold"
+                  fontFamily="Poppins"
+                  textAlign="left"
                   sx={{
-                    color: (theme) => theme.palette.text.primary,
+                    color: (theme) => theme.palette.onSurfaceVariant.main,
                     fontSize: 24,
                   }}
                 >
@@ -139,7 +142,7 @@ export const HomeEventCard = () => {
                   <Grid item lg={6} md={6} sm={6} xs={12}>
                     <Button
                       variant="contained"
-                      color="secondary"
+                      sx={{ backgroundColor: (theme) => theme.palette.tertiary.main }}
                       disableElevation
                       fullWidth
                     >

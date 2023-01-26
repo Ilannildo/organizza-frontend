@@ -1,8 +1,10 @@
 import { Box, Button, Card, CardContent, Grid, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { UsersFour } from "phosphor-react";
+import { Carousel } from "react-responsive-carousel";
+import { start } from "repl";
 export const HomeInformatiosEventCard = () => {
   const theme = useTheme();
-  const matchUpMD = useMediaQuery(theme.breakpoints.up('sm'));
+  const matchUpMD = useMediaQuery(theme.breakpoints.up('lg'));
   return (
     <Card
       elevation={0}
@@ -17,14 +19,14 @@ export const HomeInformatiosEventCard = () => {
       <Grid container>
         <Grid
           lg={6}
-          md={6}
-          sm={6}
+          md={12}
+          sm={12}
           xs={12}
           item
           sx={{
-            display: 'flex', alignItems: 'center',
+            display: 'flex', justifyContent: 'center',
             position: 'relative',
-            backgroundColor: !matchUpMD ? theme.palette.primaryContainer.dark : 'transparent',
+            backgroundColor: !matchUpMD ? theme.palette.secondaryContainer.main : 'transparent',
           }}
         >
           <CardContent
@@ -32,16 +34,18 @@ export const HomeInformatiosEventCard = () => {
           >
             <Grid container>
               <Grid
-                lg={12}
+                lg={10}
                 md={12}
                 sm={12}
                 xs={12}
+
                 item
               >
                 <Typography
                   fontWeight='bold'
                   sx={{
-                    color: (theme) => theme.palette.text.primary,
+                    color: (theme) => theme.palette.onSurfaceVariant.main,
+                    textAlign: matchUpMD ? 'start' : 'center',
                     fontSize: matchUpMD ? 32 : 24,
                   }}
                 >
@@ -50,33 +54,77 @@ export const HomeInformatiosEventCard = () => {
               </Grid>
             </Grid>
             <Grid
-              spacing={2}
               mt={2}
               container>
               <Grid
-                lg={12}
+                lg={10}
                 md={12}
                 sm={12}
                 xs={12}
                 item>
-                <Stack
-                  alignItems='center'
-                  direction='row'
-                  spacing={2}
+                <Carousel
+                  autoPlay={true}
+                  interval={5000}
+                  showArrows={false}
+                  showStatus={false}
+                  swipeable={true}
+                  showThumbs={false}
+                  infiniteLoop={true}
+                  emulateTouch={true}
+                  showIndicators={false}
                 >
-                  <Typography
-                    fontWeight='bold'
-                    sx={{
-                      color: (theme) => theme.palette.text.primary,
-                      fontSize: matchUpMD ? 18 : 16,
-                    }}
+                  <Box
+
                   >
-                    Simples e acessível
-                  </Typography>
-                </Stack>
+                    <Typography
+                      fontWeight='bold'
+                      sx={{
+                        pl: 4,
+                        color: (theme) => theme.palette.onSurfaceVariant.main,
+                        fontSize: matchUpMD ? 22 : 16,
+                      }}
+                    >
+                      Simples e acessível
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "Poppins",
+                        fontSize: matchUpMD ? 16 : 16,
+                        color: (theme) => theme.palette.onSurfaceVariant.main,
+                      }}
+                    >
+                      No organizza o criador do evento tem uma gama ferremantas para auxiliá-lo
+                      durante a criação do seu evento, além disso, a plataforma
+                    </Typography>
+                  </Box>
+
+
+                  <Box
+
+                  >
+                    <Typography
+                      fontWeight='bold'
+                      sx={{
+                        pl: 4,
+                        color: (theme) => theme.palette.onSurfaceVariant.main,
+                        fontSize: matchUpMD ? 22 : 16,
+                      }}
+                    >
+                      Simples e acessível
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "Poppins",
+                        fontSize: matchUpMD ? 16 : 16,
+                        color: (theme) => theme.palette.text.disabled,
+                      }}
+                    >
+                      No organizza o criador do evento tem uma gama ferremantas para auxiliá-lo
+                      durante a criação do seu evento, além disso, a plataforma
+                    </Typography>
+                  </Box>
+                </Carousel>
               </Grid>
-
-
             </Grid>
           </CardContent>
 
@@ -84,7 +132,7 @@ export const HomeInformatiosEventCard = () => {
             sx={{
               width: '100%',
               height: '100%',
-              backgroundColor: (theme) => theme.palette.primaryContainer.dark,
+              backgroundColor: (theme) => theme.palette.secondaryContainer.main,
               position: 'absolute',
               clipPath: 'polygon(0 0, 100% 0, 86% 100%, 0% 100%)',
               zIndex: 1
@@ -93,8 +141,8 @@ export const HomeInformatiosEventCard = () => {
         </Grid>
         <Grid
           lg={6}
-          md={6}
-          sm={6}
+          md={12}
+          sm={12}
           xs={12}
           item
           sx={{
@@ -113,7 +161,7 @@ export const HomeInformatiosEventCard = () => {
                   fontWeight='bold'
                   sx={{
                     textAlign: 'center',
-                    color: (theme) => theme.palette.text.primary,
+                    color: (theme) => theme.palette.onSurfaceVariant.main,
                     fontSize: 24,
                   }}
                 >
@@ -181,7 +229,7 @@ export const HomeInformatiosEventCard = () => {
                 item>
                 <Button
                   variant='contained'
-                  color='secondary'
+                  sx={{ backgroundColor: (theme) => theme.palette.tertiary.main }}
                   disableElevation
                   fullWidth
                 >

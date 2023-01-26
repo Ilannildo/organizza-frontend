@@ -56,7 +56,7 @@ export const HomeNavbar = () => {
       position="sticky"
       elevation={0}
       sx={{
-        backgroundColor: (theme) => theme.palette.primary.main,
+        backgroundColor: 'transparent',
       }}
     >
       <Container maxWidth="xl">
@@ -92,7 +92,7 @@ export const HomeNavbar = () => {
                 {pages.map((page) => (
                   <Button
                     key={page.id}
-                    onClick={() => {}}
+                    onClick={() => { }}
                     sx={{ color: "white", display: "block" }}
                   >
                     {page.title}

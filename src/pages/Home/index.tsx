@@ -15,7 +15,8 @@ import { HomeEventCard } from "../../components/HomeEventCard";
 import { HomeNavbar } from "./components/HomeNavbar";
 import { HomeCategoryEventCard } from "../../components/HomeCategoryEventCard";
 import { HomeInformatiosEventCard } from "../../components/HomeInformatiosEventCard";
-
+import ImgHome from "../../assets/images/img-homeome.png";
+import { Footer } from "../Event/components/Footer";
 
 const Home = () => {
   const theme = useTheme();
@@ -24,9 +25,24 @@ const Home = () => {
   return (
     <>
       <Box
+        // sx={{
+        //   // backgroundColor: (theme) => theme.palette.primary.main,
+        // }}  
+        // height="90vh"
+        width="100%"
+        // position="absolute"
+        // right="0"
+        // top="0"
         sx={{
-          backgroundColor: (theme) => theme.palette.primary.main,
+          background: `url(${ImgHome})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPositionX: "center",
+          backgroundPositionY: "center",
+          clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+          overflow: "hidden",
         }}
+
       >
         <HomeNavbar />
         <Container>
@@ -47,6 +63,7 @@ const Home = () => {
               {matchUpMd ? (
                 <Typography
                   fontSize={40}
+                  fontFamily="Potta One"
                   fontWeight="bold"
                   sx={{ color: theme.palette.onPrimary.main }}
                 >
@@ -57,6 +74,7 @@ const Home = () => {
               ) : (
                 <Typography
                   fontSize={24}
+                  fontFamily="Potta One"
                   fontWeight="bold"
                   sx={{ color: theme.palette.onPrimary.main }}
                 >
@@ -66,6 +84,7 @@ const Home = () => {
               <Typography
                 sx={{ color: theme.palette.onPrimary.main }}
                 fontSize={matchUpMd ? 16 : 14}
+                fontFamily="Poppins"
                 mt={2}
                 mb={2}
               >
@@ -98,9 +117,31 @@ const Home = () => {
         }}
       >
         <Container maxWidth="xl">
-          <Grid container>
-            <Grid item>
-              <SectionMarker color="primary" label="Eventos em Destaque" />
+          <Grid container mt={4}>
+            <Grid item lg={12} md={12} sm={12} xs={12} textAlign="center">
+              <Typography
+                component="h1"
+                variant="h3"
+                sx={{
+                  color: (theme) => theme.palette.onSurfaceVariant.main,
+                  fontWeight: (theme) => theme.typography.fontWeightBold,
+                  fontSize: 28,
+                  mb: 2,
+                }}
+              >
+                Eventos em destaque
+              </Typography>
+              <Typography
+                component="h1"
+                variant="h3"
+                sx={{
+                  color: (theme) => theme.palette.onSurfaceVariant.main,
+                  fontSize: 14,
+                  mb: 4,
+                }}
+              >
+                Veja quais eventos estão com destaque nesse momento
+              </Typography>
             </Grid>
           </Grid>
 
@@ -113,6 +154,7 @@ const Home = () => {
                 showStatus={false}
                 swipeable={true}
                 showThumbs={false}
+                emulateTouch={true}
               >
                 <HomeEventCard />
                 <HomeEventCard />
@@ -147,11 +189,11 @@ const Home = () => {
       <Box>
         <Container maxWidth='xl'>
           <Grid container>
-            <Grid
+            {/* <Grid
               mt={2}
               item>
               <SectionMarker color="primary" label="Educação" />
-            </Grid>
+            </Grid> */}
             <Grid
               container
               mt={2}
@@ -169,6 +211,7 @@ const Home = () => {
           </Grid>
         </Container>
       </Box>
+      <Footer />
     </>
   );
 };

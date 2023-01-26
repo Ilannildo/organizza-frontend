@@ -13,7 +13,7 @@ export const HomeCategoryEventCard = () => {
             }}
         >
             <Grid
-                
+
                 container>
                 <Grid
                     position='relative'
@@ -22,7 +22,7 @@ export const HomeCategoryEventCard = () => {
                     sm={12}
                     xs={12}
                     item
-                   
+
                 >
                     <Box
                         height="100%"
@@ -83,8 +83,9 @@ export const HomeCategoryEventCard = () => {
                                 <Typography
                                     fontWeight='bold'
                                     sx={{
-                                        color: (theme) => theme.palette.text.primary,
+                                        color: (theme) => theme.palette.onSurfaceVariant.main,
                                         fontSize: 18,
+                                        fontFamily: 'Poppins',
                                     }}
                                 >
                                     III Congresso da computação no Baixo tocantins
@@ -111,6 +112,7 @@ export const HomeCategoryEventCard = () => {
                                         sx={{
                                             color: (theme) => theme.palette.onSurfaceVariant.main,
                                             fontSize: 16,
+                                            fontFamily: 'Poppins',
                                         }}
                                     >
                                         Evento presencial
@@ -134,6 +136,7 @@ export const HomeCategoryEventCard = () => {
                                         sx={{
                                             color: (theme) => theme.palette.onSurfaceVariant.main,
                                             fontSize: 16,
+                                            fontFamily: 'Poppins',
                                         }}
                                     >
                                         Cametá/PA - Rua Dos Parijos
@@ -155,6 +158,7 @@ export const HomeCategoryEventCard = () => {
                                     <Calendar size={32} />
                                     <Typography
                                         sx={{
+                                            fontFamily: 'Poppins',
                                             color: (theme) => theme.palette.onSurfaceVariant.main,
                                             fontSize: 16,
                                         }}
@@ -173,7 +177,7 @@ export const HomeCategoryEventCard = () => {
                                 item>
                                 <Button
                                     variant='contained'
-                                    color='secondary'
+                                    sx={{ backgroundColor: (theme) => theme.palette.tertiary.main }}
                                     disableElevation
                                     fullWidth
                                 >
