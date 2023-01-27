@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Button,
   Grid,
@@ -13,13 +12,14 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { PencilSimple, TrashSimple } from "phosphor-react";
 import { format } from "date-fns";
+import { PencilSimple, Plus, TrashSimple } from "phosphor-react";
+import { useState } from "react";
 
-import { useSessionBySessionTypeId } from "../../../../../../stores/sessionTypes";
-import { ISessionType } from "../../../../../../models/sessionType";
-import config from "../../../../../../config";
 import { Params, useParams } from "react-router-dom";
+import config from "../../../../../../config";
+import { ISessionType } from "../../../../../../models/sessionType";
+import { useSessionBySessionTypeId } from "../../../../../../stores/sessionTypes";
 
 interface IColumn {
   id: "id" | "title";
@@ -94,12 +94,11 @@ export const SessionTable = ({ sessionType }: ISessionTable) => {
           <Stack direction="row" spacing={2} justifyContent="end">
             <Button
               variant="contained"
-              disableElevation
-              color="info"
               size="small"
               onClick={() => {}}
+              startIcon={<Plus />}
             >
-              Adicionar {sessionType.title}
+              Adicionar
             </Button>
           </Stack>
         </Grid>
@@ -157,10 +156,8 @@ export const SessionTable = ({ sessionType }: ISessionTable) => {
                       <TableCell>
                         {`${format(
                           new Date(row.start_date),
-                          "dd 'de' MMM 'de' yyyy"
-                        )}, 
-                        ${format(new Date(row.start_time), "HH:mm")} - 
-                        ${format(new Date(row.end_time), "HH:mm")}`}
+                          "dd 'de' MMM 'de' yyyy 'às' HH:mm"
+                        )}`}
                       </TableCell>
                       <TableCell>Grátis</TableCell>
                       <TableCell>
