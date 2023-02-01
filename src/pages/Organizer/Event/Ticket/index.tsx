@@ -11,11 +11,13 @@ import {
 import { Ticket } from "phosphor-react";
 import { Params, useParams } from "react-router-dom";
 
-import { TicketTable } from "./component/Table";
-import { CreateTicketModal } from "./component/CreateTicketModal";
 import { useState } from "react";
 import { ITicketPriceType } from "../../../../models/ticket";
+import { useEventById } from "../../../../stores/event";
 import { useEventPanelTicketInformation } from "../../../../stores/eventPanel";
+import { useTicketPriceType } from "../../../../stores/ticket";
+import { CreateTicketModal } from "./component/CreateTicketModal";
+import { TicketTable } from "./component/Table";
 
 interface IEventTicketParams extends Params {
   eventId: string;
@@ -26,6 +28,8 @@ const EventTicket = () => {
   const { eventId } = useParams<IEventTicketParams>();
   const [selectedCreateTicketType, setSelectedCreateTicketType] =
     useState<ITicketPriceType | null>(null);
+
+  const { data: event } = useEventById(eventId);
 
   const {
     data: eventTicketInformation,
@@ -38,6 +42,7 @@ const EventTicket = () => {
       enabled: !!eventId,
     }
   );
+  const { data: ticketPriceTypes } = useTicketPriceType();
 
   const onChangeModalCreateTicket = () => {
     setSelectedCreateTicketType(null);
@@ -322,64 +327,32 @@ const EventTicket = () => {
                   Tipos de ingressos
                 </Typography>
               </Grid>
-              <Grid
-                item
-                xl={6}
-                lg={6}
-                xs={6}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Stack direction="row" spacing={2} justifyContent="end">
-                  <Button
-                    variant="contained"
-                    disableElevation
-                    color="info"
-                    size="small"
-                    disabled={!!selectedCreateTicketType}
-                    onClick={() =>
-                      setSelectedCreateTicketType({
-                        id: "5a14ab5a-94b5-4f15-96fa-9e2b18ab5dba",
-                        title: "Gratuito",
-                        is_free: true,
-                        quote_id: "809d1936-bab6-46b6-8b5a-3a957d959a59",
-                        quote: {
-                          id: "809d1936-bab6-46b6-8b5a-3a957d959a59",
-                          min_base_value: 0,
-                          min_value: 0,
-                          name: "Taxa grátis",
-                          percentage: 0,
-                        },
-                      })
-                    }
-                  >
-                    Adicionar ingresso grátis
-                  </Button>
-                  <Button
-                    variant="contained"
-                    disableElevation
-                    size="small"
-                    disabled={!!selectedCreateTicketType}
-                    onClick={() =>
-                      setSelectedCreateTicketType({
-                        id: "ae9ecea2-8024-4d48-9595-612a552cb5ee",
-                        is_free: false,
-                        quote_id: "15f57147-50f9-4712-a5b2-65d623ec1cb6",
-                        title: "Pago",
-                        quote: {
-                          id: "15f57147-50f9-4712-a5b2-65d623ec1cb6",
-                          min_base_value: 2.5,
-                          min_value: 30,
-                          name: "Taxa pago",
-                          percentage: 0.1,
-                        },
-                      })
-                    }
-                  >
-                    Adicionar ingresso pago
-                  </Button>
-                </Stack>
-              </Grid>
+              {event && event.status !== "finished" && ticketPriceTypes && (
+                <Grid
+                  item
+                  xl={6}
+                  lg={6}
+                  xs={6}
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Stack direction="row" spacing={2} justifyContent="end">
+                    {ticketPriceTypes.map((type) => (
+                      <Button
+                        variant="contained"
+                        key={type.id}
+                        disableElevation
+                        color={type.is_free ? "info" : "primary"}
+                        size="small"
+                        disabled={!!selectedCreateTicketType}
+                        onClick={() => setSelectedCreateTicketType(type)}
+                      >
+                        Adicionar ingresso {type.title.toLowerCase()}
+                      </Button>
+                    ))}
+                  </Stack>
+                </Grid>
+              )}
             </Grid>
             <TicketTable />
           </CardContent>

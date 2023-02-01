@@ -63,7 +63,7 @@ export const CreateEvent = () => {
   const [mainSubject, setMainSubject] = useState<IMainSubject | null>(null);
   const [shortDescription, setShortDescription] = useState<string>("");
   const [venueType, setVenueType] = useState<"presential" | "online" | "">("");
-  const [isPrivate, setIsPrivate] = useState<boolean>(false);
+  const [isPrivate, setIsPrivate] = useState<boolean>(true);
   const [startDate, setStartDate] = useState<Date | null>(
     addDays(new Date(), 1)
   );

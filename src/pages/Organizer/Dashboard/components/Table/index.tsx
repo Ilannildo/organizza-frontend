@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Chip,
   CircularProgress,
@@ -15,18 +14,19 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { AlignBottom } from "phosphor-react";
 import { format } from "date-fns";
+import { AlignBottom } from "phosphor-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import config from "../../../../../config";
+import LoaderProgress from "../../../../../layout/LoaderProgress";
+import { useEventByUserId } from "../../../../../stores/event";
+import { useAuthenticatedUser } from "../../../../../stores/user";
 import {
   getEventStatus,
   getEventStatusBackgroundColor,
   getEventStatusColor,
 } from "../../../../../utils/masks";
-import { useEventByUserId } from "../../../../../stores/event";
-import { useAuthenticatedUser } from "../../../../../stores/user";
-import config from "../../../../../config";
-import LoaderProgress from "../../../../../layout/LoaderProgress";
-import { useNavigate } from "react-router-dom";
 
 interface IColumn {
   id: "title" | "start_date" | "end_date" | "status";
@@ -37,7 +37,7 @@ interface IColumn {
 }
 
 const columns: readonly IColumn[] = [
-  { id: "title", label: "Evento", minWidth: 200 },
+  { id: "title", label: "Evento", minWidth: 150 },
   {
     id: "start_date",
     label: "Data de início",
@@ -120,10 +120,10 @@ export const EventTable = () => {
                         {column.label}
                       </TableCell>
                     ))}
-                    <TableCell style={{ minWidth: 50, fontWeight: 500 }}>
-                      Ingressos
+                    <TableCell style={{ minWidth: 150, fontWeight: 500 }}>
+                      Ingressos disponíveis
                     </TableCell>
-                    <TableCell style={{ minWidth: 50, fontWeight: 500 }}>
+                    <TableCell style={{ minWidth: 30, fontWeight: 500 }}>
                       Ações
                     </TableCell>
                   </TableRow>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -16,10 +15,11 @@ import {
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { CaretDown, Info } from "phosphor-react";
+import { useState } from "react";
 import Barcode from "react-barcode";
 
-import { currencyMask, removeCurrencyMask } from "../../utils/masks";
 import { ITicketPriceType } from "../../models/ticket";
+import { currencyMask, removeCurrencyMask } from "../../utils/masks";
 
 interface ITicket {
   categoryTitle: string;
@@ -93,7 +93,8 @@ export const Ticket = ({
     if (value >= ticket_price_type.quote.min_value) {
       fee = value * ticket_price_type.quote.percentage;
     } else {
-      console.log("Valor mínimo é R$ 2,50");
+      // console.log("Valor mínimo é R$ 2,50");
+      ticketValue = ticket_price_type.quote.min_base_value;
     }
 
     // calcular o valor do ingresso
@@ -176,7 +177,11 @@ export const Ticket = ({
                     placeholder="0,00"
                     disabled={ticket_price_type.is_free}
                     onChange={(e) => {
-                      setValue(parseFloat(removeCurrencyMask(e.target.value)));
+                      setValue(
+                        e.target.value
+                          ? parseFloat(removeCurrencyMask(e.target.value))
+                          : 0
+                      );
                       setAmount(
                         e.target.value
                           .replace(/\D/g, "")

@@ -191,9 +191,9 @@ export const StepOne = ({
                   control={
                     <Checkbox
                       onChange={(e, value) => {
-                        setIsPrivate(value);
+                        setIsPrivate(!value);
                       }}
-                      checked={isPrivate}
+                      checked={!isPrivate}
                     />
                   }
                   label="O evento é público?"

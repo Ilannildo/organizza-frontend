@@ -5,9 +5,9 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { ITicket, ITicketForm } from "../../models/ticket";
+import { ITicket, ITicketForm, ITicketPriceType } from "../../models/ticket";
 import { api } from "../../services/api";
-import { createTicketByEventIdKey } from "./keys";
+import { createTicketByEventIdKey, createTicketPriceTypeKey } from "./keys";
 
 export const useCreateEventTicket = () => {
   const queryClient = useQueryClient();
@@ -53,6 +53,19 @@ export const useTicketsByEventId = (
       api
         .get(`/events/${eventId}/tickets?page=${page + 1}&limit=${limit}`)
         .then((res) => res.data.data),
+    {
+      ...options,
+      retry: 1,
+    }
+  );
+};
+
+export const useTicketPriceType = (
+  options?: UseQueryOptions<ITicketPriceType[]>
+) => {
+  return useQuery(
+    createTicketPriceTypeKey(),
+    () => api.get(`/ticket-price-types`).then((res) => res.data.data),
     {
       ...options,
       retry: 1,

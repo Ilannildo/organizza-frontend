@@ -1,6 +1,5 @@
 import {
-  Button,
-  Grid,
+  Chip,
   IconButton,
   Stack,
   Table,
@@ -10,19 +9,24 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { format } from "date-fns";
-import { PencilSimple, Plus, TrashSimple } from "phosphor-react";
+import { PencilSimple, TrashSimple } from "phosphor-react";
 import { useState } from "react";
 
 import { Params, useParams } from "react-router-dom";
 import config from "../../../../../../config";
 import { ISessionType } from "../../../../../../models/sessionType";
 import { useSessionBySessionTypeId } from "../../../../../../stores/sessionTypes";
+import {
+  formatCurrency,
+  getEventStatus,
+  getEventStatusBackgroundColor,
+  getEventStatusColor,
+} from "../../../../../../utils/masks";
 
 interface IColumn {
-  id: "id" | "title";
+  id: "code_ref" | "title";
   label: string;
   minWidth?: number;
   align?: "right" | "center" | "left";
@@ -30,7 +34,7 @@ interface IColumn {
 }
 
 const columns: readonly IColumn[] = [
-  { id: "id", label: "Código", minWidth: 80 },
+  { id: "code_ref", label: "Código", minWidth: 100 },
   { id: "title", label: "Título", minWidth: 250 },
 ];
 
@@ -70,39 +74,6 @@ export const SessionTable = ({ sessionType }: ISessionTable) => {
 
   return (
     <>
-      <Grid container alignItems="center" rowSpacing={2} mb={2}>
-        <Grid item xl={6} lg={6} xs={6}>
-          <Typography
-            component="h1"
-            variant="h3"
-            sx={{
-              fontWeight: 600,
-              fontSize: 16,
-            }}
-          >
-            {sessionType.title}
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          xl={6}
-          lg={6}
-          xs={6}
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Stack direction="row" spacing={2} justifyContent="end">
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() => {}}
-              startIcon={<Plus />}
-            >
-              Adicionar
-            </Button>
-          </Stack>
-        </Grid>
-      </Grid>
       <TableContainer
         sx={{
           minHeight: 280,
@@ -122,10 +93,16 @@ export const SessionTable = ({ sessionType }: ISessionTable) => {
                   </TableCell>
                 ))}
                 <TableCell style={{ minWidth: 100, fontWeight: 500 }}>
-                  Data e hora
+                  Data de início
+                </TableCell>
+                <TableCell style={{ minWidth: 100, fontWeight: 500 }}>
+                  Data de término
                 </TableCell>
                 <TableCell style={{ minWidth: 100, fontWeight: 500 }}>
                   Valor
+                </TableCell>
+                <TableCell style={{ minWidth: 100, fontWeight: 500 }}>
+                  Status
                 </TableCell>
                 <TableCell style={{ minWidth: 100, fontWeight: 500 }}>
                   Ações
@@ -159,7 +136,27 @@ export const SessionTable = ({ sessionType }: ISessionTable) => {
                           "dd 'de' MMM 'de' yyyy 'às' HH:mm"
                         )}`}
                       </TableCell>
-                      <TableCell>Grátis</TableCell>
+                      <TableCell>
+                        {`${format(
+                          new Date(row.end_date),
+                          "dd 'de' MMM 'de' yyyy 'às' HH:mm"
+                        )}`}
+                      </TableCell>
+                      <TableCell>
+                        {!row.is_free ? formatCurrency(row.value) : "Grátis"}
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          label={getEventStatus(row.status)}
+                          sx={{
+                            backgroundColor: getEventStatusBackgroundColor(
+                              row.status
+                            ),
+                            color: getEventStatusColor(row.status),
+                            fontWeight: 500,
+                          }}
+                        />
+                      </TableCell>
                       <TableCell>
                         <Stack direction="row" spacing={1}>
                           <IconButton

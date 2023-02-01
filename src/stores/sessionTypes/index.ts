@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { ISession } from "../../models/session";
+import { IGetAllSessionBySessionTypeResponse } from "../../models/session";
 import { ISessionType, ISessionTypeMenu } from "../../models/sessionType";
 import { api } from "../../services/api";
 import {
@@ -38,7 +38,7 @@ export const useSessionBySessionTypeId = (
     page = 1,
   }: { sessionTypeId: string; eventId: string; limit: number; page: number },
   options?: UseQueryOptions<{
-    sessions: ISession[];
+    sessions: IGetAllSessionBySessionTypeResponse[];
     limit: number;
     page: number;
     total: number;

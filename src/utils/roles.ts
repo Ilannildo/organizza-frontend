@@ -1,10 +1,10 @@
-import { ITicketPriceType } from "../models/ticket";
-import Visa from "../assets/cards/visa-light.svg";
-import MasterCard from "../assets/cards/mastercard-light.svg";
 import AmEx from "../assets/cards/amex.svg";
+import DinersClub from "../assets/cards/diners.svg";
 import Elo from "../assets/cards/elo.svg";
 import Hipercard from "../assets/cards/hipercard.svg";
-import DinersClub from "../assets/cards/diners.svg";
+import MasterCard from "../assets/cards/mastercard-light.svg";
+import Visa from "../assets/cards/visa-light.svg";
+import { ITicketPriceType } from "../models/ticket";
 
 export function validateCpf(cpf: string) {
   let Soma;
@@ -215,3 +215,105 @@ export const creditCards = [
     logo: Visa,
   },
 ];
+
+export function getNumberInWords(number: number): string {
+  const unidades = [
+    "",
+    "Um",
+    "Dois",
+    "Três",
+    "Quatro",
+    "Cinco",
+    "Seis",
+    "Sete",
+    "Oito",
+    "Nove",
+  ];
+  const dezenas = [
+    "Dez",
+    "Vinte",
+    "Trinta",
+    "Quarenta",
+    "Cinquenta",
+    "Sessenta",
+    "Setenta",
+    "Oitenta",
+    "Noventa",
+  ];
+  const dezenasComUnidade = [
+    "Onze",
+    "Doze",
+    "Treze",
+    "Quatorze",
+    "Quinze",
+    "Dezesseis",
+    "Dezessete",
+    "Dezoito",
+    "Dezenove",
+  ];
+
+  if (number < 10) {
+    return unidades[number];
+  }
+  if (number >= 10 && number < 20) {
+    return dezenasComUnidade[number - 11];
+  }
+  if (number >= 20 && number < 100) {
+    return (
+      dezenas[Math.floor(number / 10) - 1] +
+      (number % 10 !== 0 ? " e " + unidades[number % 10] : "")
+    );
+  }
+  return "Valor fora do intervalo";
+}
+
+export function getOrdinalNumberInWords(number: number): string {
+  const unidades = [
+    "",
+    "Primeiro",
+    "Segundo",
+    "Terceiro",
+    "Quarto",
+    "Quinto",
+    "Sexto",
+    "Sétimo",
+    "Oitavo",
+    "Nono",
+  ];
+  const dezenas = [
+    "Décimo",
+    "Vigésimo",
+    "Trigésimo",
+    "Quadragésimo",
+    "Quinquagésimo",
+    "Sexagésimo",
+    "Septuagésimo",
+    "Octogésimo",
+    "Nonagésimo",
+  ];
+  const dezenasComUnidade = [
+    "Décimo primeiro",
+    "Décimo segundo",
+    "Décimo terceiro",
+    "Décimo quarto",
+    "Décimo quinto",
+    "Décimo sexto",
+    "Décimo sétimo",
+    "Décimo oitavo",
+    "Décimo nono",
+  ];
+
+  if (number < 10) {
+    return unidades[number];
+  }
+  if (number >= 10 && number < 20) {
+    return dezenasComUnidade[number - 11];
+  }
+  if (number >= 20 && number < 100) {
+    return (
+      dezenas[Math.floor(number / 10) - 1] +
+      (number % 10 !== 0 ? " e " + unidades[number % 10] : "")
+    );
+  }
+  return "Valor fora do intervalo";
+}
