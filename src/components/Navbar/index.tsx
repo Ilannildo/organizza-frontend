@@ -151,7 +151,7 @@ export const Navbar = () => {
               >
                 {user !== undefined ? (
                   <Tooltip title="Meu perfil">
-                    <IconButton onClick={() => {}} sx={{ p: 0 }}>
+                    <IconButton onClick={() => { }} sx={{ p: 0 }}>
                       <StyledBadge
                         overlap="circular"
                         anchorOrigin={{

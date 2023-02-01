@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   AppBar,
   Box,
@@ -17,6 +16,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { SquaresFour, X } from "phosphor-react";
+import { useState } from "react";
 import LogoSection from "../../../../layout/MainPanelLayout/components/LogoSection";
 import ProfileSection from "../../../../layout/MainPanelLayout/components/ProfileSection";
 
@@ -27,24 +27,24 @@ export const HomeNavbar = () => {
   const pages = [
     {
       id: "1",
-      title: "Recursos",
-      url: "/recursos",
+      title: "Criar evento",
+      url: "/organizador/criar-evento",
     },
     {
       id: "2",
-      title: "Preços",
-      url: "/precos-taxas",
+      title: "Meus Eventos",
+      url: "/organizador",
     },
-    {
-      id: "3",
-      title: "Encontre eventos",
-      url: "/eventos",
-    },
-    {
-      id: "4",
-      title: "Tire suas dúvidas",
-      url: "/suporte",
-    },
+    // {
+    //   id: "3",
+    //   title: "Encontre eventos",
+    //   url: "/eventos",
+    // },
+    // {
+    //   id: "4",
+    //   title: "Tire suas dúvidas",
+    //   url: "/suporte",
+    // },
   ];
 
   const handleOpen = () => {
@@ -56,7 +56,7 @@ export const HomeNavbar = () => {
       position="sticky"
       elevation={0}
       sx={{
-        backgroundColor: (theme) => theme.palette.primary.main,
+        backgroundColor: "transparent",
       }}
     >
       <Container maxWidth="xl">
@@ -92,7 +92,7 @@ export const HomeNavbar = () => {
                 {pages.map((page) => (
                   <Button
                     key={page.id}
-                    onClick={() => {}}
+                    href={page.url}
                     sx={{ color: "white", display: "block" }}
                   >
                     {page.title}
