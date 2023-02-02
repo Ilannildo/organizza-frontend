@@ -15,7 +15,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { SquaresFour, X } from "phosphor-react";
+import { List as ListIcon, X } from "phosphor-react";
 import { useState } from "react";
 import LogoSection from "../../../../layout/MainPanelLayout/components/LogoSection";
 import ProfileSection from "../../../../layout/MainPanelLayout/components/ProfileSection";
@@ -66,6 +66,7 @@ export const HomeNavbar = () => {
             display="flex"
             flexDirection="row"
             justifyContent="space-between"
+            alignItems="center"
           >
             <Grid
               item
@@ -111,7 +112,7 @@ export const HomeNavbar = () => {
                 onClick={() => handleOpen()}
                 color="inherit"
               >
-                <SquaresFour size={32} />
+                <ListIcon size={32} />
               </IconButton>
             )}
           </Grid>
@@ -131,6 +132,7 @@ export const HomeNavbar = () => {
             <Box
               display="flex"
               flexDirection="row"
+              alignItems="center"
               justifyContent="space-between"
               sx={{
                 p: 2,

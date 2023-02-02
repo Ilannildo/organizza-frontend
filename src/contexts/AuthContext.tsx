@@ -1,5 +1,6 @@
-import React, { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import React, { createContext, useEffect, useState } from "react";
+import config from "../config";
 import { api } from "../services/api";
 
 type AuthContextProps = {
@@ -28,7 +29,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const isAuthenticated = () => {
     try {
-      const token = Cookies.get("__token");
+      const token = Cookies.get(config.token_key);
       return !!token;
     } catch (error) {
       return false;
@@ -43,17 +44,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           email,
           password,
         });
-        Cookies.set("__token", res.data.data.access_token, {
+        Cookies.set(config.token_key, res.data.data.access_token, {
           expires: 1,
           secure: true,
-          sameSite: 'lax',
+          sameSite: "lax",
         });
         setIsLoading(false);
         resolve(true);
       } catch (error: any) {
         setIsLoading(false);
         reject(error);
-        
       }
     });
   };
@@ -61,8 +61,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return new Promise<void>((resolve, reject) => {
       setIsLoading(true);
       setInitialized(false);
-      
-      Cookies.remove("__token");
+
+      Cookies.remove(config.token_key);
       setIsLoading(false);
       window.location.reload();
       resolve();

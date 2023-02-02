@@ -20,14 +20,7 @@ const Home = () => {
   return (
     <>
       <Box
-        // sx={{
-        //   // backgroundColor: (theme) => theme.palette.primary.main,
-        // }}
-        // height="90vh"
         width="100%"
-        // position="absolute"
-        // right="0"
-        // top="0"
         sx={{
           background: `url(${ImgHome})`,
           backgroundRepeat: "no-repeat",
@@ -101,40 +94,122 @@ const Home = () => {
           </Box>
         </Container>
       </Box>
-      <Box width="100%">
-        <Container>
-          <Box>
-            <Grid
-              item
-              xl={6}
-              lg={6}
-              md={4}
-              xs={false}
-              p={5}
-              textAlign="center"
-              justifyContent="center"
-              alignItems="center"
-              display="flex"
-              flexDirection="column"
-            >
+      <Box
+        id="sobre"
+        component="section"
+        sx={{
+          backgroundColor: "rgba(210, 231, 255, 0.05)",
+        }}
+      >
+        <Container
+          maxWidth="lg"
+          sx={{
+            minHeight: "40vh",
+            pb: 4,
+          }}
+        >
+          <Grid container mt={4} spacing={2}>
+            <Grid item lg={12} md={12} sm={12} xs={12}>
               <Typography
+                component="h1"
                 sx={{
                   color: (theme) => theme.palette.onSurfaceVariant.main,
+                  fontWeight: (theme) => theme.typography.fontWeightBold,
+                  fontSize: 28,
+                  mb: 1,
+                  textAlign: "center",
                 }}
-                fontSize={matchUpMd ? 16 : 14}
-                mt={2}
-                mb={2}
               >
-                A nossa plataforma é a solução ideal para organizar seus eventos
-                com eficiência e facilidade. Oferecemos tudo o que você precisa
-                para planejar e executar um evento bem-sucedido, desde a
-                divulgação até o gerenciamento do dia do evento. Nossa
-                plataforma é projetada para tornar o processo de organização de
-                eventos mais simples, permitindo que você se concentre em criar
-                uma experiência incrível para seus convidados.
+                Eficiente e Fácil
+              </Typography>
+              <Typography
+                component="p"
+                sx={{
+                  color: (theme) => theme.palette.onSurfaceVariant.main,
+                  fontSize: 14,
+                  mb: 6,
+                  textAlign: "center",
+                }}
+              >
+                Organizar eventos pode ser uma tarefa desafiadora, mas não
+                precisa ser assim. Com a nossa plataforma de organização de
+                eventos, você terá tudo o que precisa em um só lugar. Não
+                importa se você está planejando um pequeno evento ou um grande
+                evento corporativo, nossa plataforma é projetada para tornar o
+                processo mais simples e eficiente.
+              </Typography>
+              <Typography
+                component="h2"
+                sx={{
+                  color: (theme) => theme.palette.onSurfaceVariant.main,
+                  fontWeight: (theme) => theme.typography.fontWeightBold,
+                  fontSize: 24,
+                  mb: 1,
+                  textAlign: "center",
+                }}
+              >
+                Recursos da Nossa Plataforma
               </Typography>
             </Grid>
-          </Box>
+            <Grid item lg={6} md={6} xs={12}>
+              <Typography
+                component="p"
+                sx={{
+                  color: (theme) => theme.palette.onSurfaceVariant.main,
+                  fontSize: 14,
+                  mb: 4,
+                }}
+              >
+                Divulgar o seu evento para um público amplo
+              </Typography>
+              <Typography
+                component="p"
+                sx={{
+                  color: (theme) => theme.palette.onSurfaceVariant.main,
+                  fontSize: 14,
+                  mb: 4,
+                }}
+              >
+                Gerenciar facilmente a lista de convidados
+              </Typography>
+            </Grid>
+            <Grid item lg={6} md={6} xs={12}>
+              <Typography
+                component="p"
+                sx={{
+                  color: (theme) => theme.palette.onSurfaceVariant.main,
+                  fontSize: 14,
+                  mb: 4,
+                }}
+              >
+                Controlar o fluxo de pagamentos
+              </Typography>
+              <Typography
+                component="p"
+                sx={{
+                  color: (theme) => theme.palette.onSurfaceVariant.main,
+                  fontSize: 14,
+                  mb: 4,
+                }}
+              >
+                Acompanhar o progresso do seu evento em tempo real
+              </Typography>
+            </Grid>
+            <Box
+              sx={{
+                color: (theme) => theme.palette.onSurfaceVariant.main,
+                fontSize: 14,
+                mb: 2,
+              }}
+            >
+              <p>
+                Não perca mais tempo e energia na organização de eventos.
+                Escolha a nossa plataforma e tenha tudo o que precisa em um só
+                lugar. Se concentre em criar uma experiência incrível para seus
+                convidados e deixe a organização com a gente.
+              </p>
+            </Box>
+          </Grid>
         </Container>
       </Box>
 
