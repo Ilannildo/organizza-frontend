@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Box,
   Button,
-  Chip,
   ClickAwayListener,
   Divider,
+  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
@@ -17,7 +16,9 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
 // third-party
+import { Calendar, CalendarCheck, SignOut, User } from "phosphor-react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../../hooks/useAuth";
@@ -25,19 +26,13 @@ import { useAuthenticatedUser } from "../../../../stores/user";
 import { stringAvatar } from "../../../../utils/masks";
 import Transitions from "../../../Extends/Transitions";
 import MainCard from "../MainCard";
-import {
-  Calendar,
-  CalendarCheck,
-  CaretDown,
-  SignOut,
-  User,
-} from "phosphor-react";
 
 const ProfileSection: React.FC = () => {
   const theme = useTheme();
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
-  const anchorRef = useRef<HTMLDivElement>(null);
+  // const anchorRef = useRef<HTMLDivElement>(null);
+  const anchorRef = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
   const { signOut, isLoading } = useAuth();
   const { data: user } = useAuthenticatedUser();
@@ -87,40 +82,64 @@ const ProfileSection: React.FC = () => {
       }}
     >
       {user !== undefined ? (
-        <Chip
-          sx={{
-            height: "44px",
-            alignItems: "center",
-            borderRadius: "24px",
-            transition: "all .2s ease-in-out",
-            border: "none",
-          }}
-          icon={
-            <Avatar
-              {...stringAvatar(user.name, 34, 34)}
-              sx={{
-                fontSize: "1.2rem",
-                cursor: "pointer",
-              }}
-              ref={anchorRef}
-              aria-controls={open ? "menu-list-grow" : undefined}
-              aria-haspopup="true"
-              color="inherit"
-            />
-          }
-          label={<CaretDown />}
-          variant="outlined"
+        // <Chip
+        //   sx={{
+        //     height: "32px",
+        //     alignItems: "center",
+        //     borderRadius: "24px",
+        //     transition: "all .2s ease-in-out",
+        //     border: "none",
+        //   }}
+        //   size="small"
+        //   icon={
+        //     <Avatar
+        //       {...stringAvatar(user.name, 32, 32)}
+        //       sx={{
+        //         cursor: "pointer",
+        //       }}
+        //       ref={anchorRef}
+        //       aria-controls={open ? "menu-list-grow" : undefined}
+        //       aria-haspopup="true"
+        //       color="inherit"
+        //     >
+        //       <User weight="bold" />
+        //     </Avatar>
+        //   }
+        //   variant="outlined"
+        //   ref={anchorRef}
+        //   aria-controls={open ? "menu-list-grow" : undefined}
+        //   aria-haspopup="true"
+        //   onClick={handleToggle}
+        //   color="primary"
+        // />
+        <IconButton
+          size="medium"
           ref={anchorRef}
-          aria-controls={open ? "menu-list-grow" : undefined}
-          aria-haspopup="true"
           onClick={handleToggle}
           color="primary"
-        />
+        >
+          <Avatar
+            {...stringAvatar(user.name, 32, 32)}
+            sx={{
+              cursor: "pointer",
+            }}
+            // ref={anchorRef}
+            aria-controls={open ? "menu-list-grow" : undefined}
+            aria-haspopup="true"
+            color="inherit"
+            variant="circular"
+            // ref={anchorRef}
+            // onClick={handleToggle}
+          >
+            <User weight="bold" />
+          </Avatar>
+        </IconButton>
       ) : (
         <Tooltip title="Entre na sua conta">
           <Button
             variant="contained"
             color="secondary"
+            size="small"
             fullWidth
             href="/login"
             disableElevation

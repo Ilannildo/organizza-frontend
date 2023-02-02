@@ -1,19 +1,11 @@
-import React, { useEffect } from "react";
 import {
   AppBar,
   Box,
-  CssBaseline,
   styled,
   Toolbar,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { Outlet, Params, useNavigate, useParams } from "react-router-dom";
-import { drawerWidth } from "../../utils/constant";
-import { useCustomization } from "../../hooks/useCustomization";
-import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
-import { useEventById } from "../../stores/event";
 import {
   Article,
   CalendarCheck,
@@ -25,7 +17,14 @@ import {
   UserCirclePlus,
   UsersThree,
 } from "phosphor-react";
+import { useEffect } from "react";
+import { Outlet, Params, useNavigate, useParams } from "react-router-dom";
+import { useCustomization } from "../../hooks/useCustomization";
+import { useEventById } from "../../stores/event";
 import { useAllSessionTypesMenu } from "../../stores/sessionTypes";
+import { drawerWidth } from "../../utils/constant";
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open: boolean;
@@ -241,7 +240,6 @@ const MainPanelLayout = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <CssBaseline />
       <AppBar
         enableColorOnDark
         position="fixed"
@@ -249,10 +247,29 @@ const MainPanelLayout = () => {
         elevation={0}
         sx={{
           bgcolor: theme.palette.background.default,
-          transition: opened ? theme.transitions.create("width") : "none",
+          transition: theme.transitions.create(["width", "margin"], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
+          ...(!matchDownMd && {
+            marginLeft: drawerWidth,
+            width: `calc(100% - ${drawerWidth}px)`,
+            transition: theme.transitions.create(["width", "margin"], {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.enteringScreen,
+            }),
+          }),
+          // ...(!opened && {
+          //   marginLeft: `calc(${theme.spacing(7)} + 1px)`,
+          //   width: "100%",
+          //   transition: theme.transitions.create(["width", "margin"], {
+          //     easing: theme.transitions.easing.sharp,
+          //     duration: theme.transitions.duration.leavingScreen,
+          //   }),
+          // }),
         }}
       >
-        <Toolbar>
+        <Toolbar disableGutters>
           <Header
             handleLeftDrawerToggle={handleLeftDrawerToggle}
             event={event}

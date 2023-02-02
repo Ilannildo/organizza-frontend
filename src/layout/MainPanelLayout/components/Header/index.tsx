@@ -1,12 +1,6 @@
-import PropTypes from "prop-types";
-
 // material-ui
-import { useTheme } from "@mui/material/styles";
 import {
-  Avatar,
   Box,
-  ButtonBase,
-  Divider,
   IconButton,
   Skeleton,
   Stack,
@@ -14,12 +8,13 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { ArrowSquareOut, List } from "phosphor-react";
+import { useTheme } from "@mui/material/styles";
 import { format } from "date-fns";
-import NotificationSection from "../NotificationSection";
-import ProfileSection from "../ProfileSection";
+import { ArrowSquareOut, List, X } from "phosphor-react";
+import LogoWhite from "../../../../assets/images/logo-white.svg";
+import { useCustomization } from "../../../../hooks/useCustomization";
 import { IEvent } from "../../../../models/event";
-
+import ProfileSection from "../ProfileSection";
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 interface IHeader {
@@ -30,42 +25,50 @@ interface IHeader {
 
 const Header = ({ handleLeftDrawerToggle, event, isLoadingEvent }: IHeader) => {
   const theme = useTheme();
-  const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
+  const matchDownMd = useMediaQuery(theme.breakpoints.down("lg"));
+  const matchUpMd = useMediaQuery(theme.breakpoints.up("sm"));
+  const { opened } = useCustomization();
 
   return (
     <>
       <Box
         sx={{
-          marginLeft: matchUpMd ? 32 : 0,
           display: "flex",
-          [theme.breakpoints.down("md")]: {
-            width: "auto",
-          },
         }}
       >
-        {!matchUpMd && (
-          <ButtonBase sx={{ borderRadius: "12px", overflow: "hidden" }}>
-            <Avatar
-              variant="rounded"
-              sx={{
-                transition: "all .2s ease-in-out",
-                background: theme.palette.primaryContainer.main,
-                color: theme.palette.primary.main,
-                "&:hover": {
-                  background: theme.palette.secondary.dark,
-                  color: theme.palette.secondary.light,
-                },
-              }}
-              onClick={handleLeftDrawerToggle}
-              color="primary"
-            >
-              <List size="1.3rem" />
-            </Avatar>
-          </ButtonBase>
+        {matchDownMd && (
+          // <ButtonBase sx={{ borderRadius: "12px", overflow: "hidden" }}>
+          //   <Avatar
+          //     variant="rounded"
+          //     sx={{
+          //       transition: "all .2s ease-in-out",
+          //       background: theme.palette.primaryContainer.main,
+          //       color: theme.palette.primary.main,
+          //       "&:hover": {
+          //         background: theme.palette.secondary.dark,
+          //         color: theme.palette.secondary.light,
+          //       },
+          //     }}
+          //     onClick={handleLeftDrawerToggle}
+          //     color="primary"
+          //   >
+          //     <List size="1.3rem" />
+          //   </Avatar>
+          // </ButtonBase>
+          <IconButton
+            size="medium"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleLeftDrawerToggle}
+            color="primary"
+          >
+            {!opened ? <List /> : <X />}
+          </IconButton>
         )}
       </Box>
 
-      {isLoadingEvent && (
+      {matchUpMd && isLoadingEvent && (
         <Box
           sx={{
             marginLeft: 2,
@@ -87,15 +90,13 @@ const Header = ({ handleLeftDrawerToggle, event, isLoadingEvent }: IHeader) => {
           <Skeleton variant="rectangular" width={250} height={16} />
         </Box>
       )}
-      {!isLoadingEvent && event && (
+      {matchUpMd && !isLoadingEvent && event && (
         <Box
           sx={{
             marginLeft: 2,
             display: "flex",
+            width: "100%",
             flexDirection: "column",
-            [theme.breakpoints.down("md")]: {
-              width: "auto",
-            },
           }}
         >
           <Stack direction="row" alignItems="center" spacing={1}>
@@ -138,26 +139,28 @@ const Header = ({ handleLeftDrawerToggle, event, isLoadingEvent }: IHeader) => {
         </Box>
       )}
 
-      <Box sx={{ flexGrow: 1 }} />
-      <Box sx={{ flexGrow: 1 }} />
+      {!matchUpMd && (
+        <Box
+          sx={{
+            marginLeft: 2,
+            width: "100%",
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <img
+            src={LogoWhite}
+            width="40"
+            alt="Logo Organizza"
+            draggable="false"
+          />
+        </Box>
+      )}
 
-      {/* notification & profile */}
-      <NotificationSection />
-      <Divider
-        orientation="vertical"
-        flexItem
-        variant="middle"
-        sx={{
-          color: theme.palette.surfaceVariant.main,
-        }}
-      />
       <ProfileSection />
     </>
   );
-};
-
-Header.propTypes = {
-  handleLeftDrawerToggle: PropTypes.func,
 };
 
 export default Header;

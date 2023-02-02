@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import { useMemo } from "react";
 import { toast } from "react-toastify";
+import config from "../config";
 import { useAuth } from "../hooks/useAuth";
 import { api } from "../services/api";
 import { Codes } from "../utils/codes";
@@ -10,16 +11,16 @@ export const WithAxios = ({ children }: any) => {
 
   useMemo(() => {
     api.interceptors.request.use(
-      (config) => {
-        const _token = Cookies.get("__token");
+      (request) => {
+        const _token = Cookies.get(config.token_key);
         if (typeof _token === "string") {
           if (_token) {
-            if (config.headers) {
-              config.headers = { Authorization: `Bearer ${_token}` };
+            if (request.headers) {
+              request.headers = { Authorization: `Bearer ${_token}` };
             }
           }
         }
-        return config;
+        return request;
       },
       (error) => {
         return Promise.reject(error);

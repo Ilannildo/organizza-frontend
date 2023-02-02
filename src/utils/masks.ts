@@ -5,7 +5,7 @@ export function stringAvatar(name: string, width: number, height: number) {
       width,
       height,
     },
-    children: `${name.replace(/\s(de|da|dos|das)\s/g, " ").split(" ")[0][0]}`,
+    // children: `${name.replace(/\s(de|da|dos|das)\s/g, " ").split(" ")[0][0]}`,
   };
 }
 
