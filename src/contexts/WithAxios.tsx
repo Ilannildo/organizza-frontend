@@ -1,3 +1,4 @@
+import { AxiosHeaders } from "axios";
 import Cookies from "js-cookie";
 import { useMemo } from "react";
 import { toast } from "react-toastify";
@@ -15,8 +16,12 @@ export const WithAxios = ({ children }: any) => {
         const _token = Cookies.get(config.token_key);
         if (typeof _token === "string") {
           if (_token) {
-            if (request.headers) {
-              request.headers = { Authorization: `Bearer ${_token}` };
+            if (request && request.headers) {
+              // request.headers = { Authorization: `Bearer ${_token}` };
+              (request.headers as AxiosHeaders).set(
+                "Authorization",
+                `Bearer ${_token}`
+              );
             }
           }
         }
