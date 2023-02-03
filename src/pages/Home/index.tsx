@@ -155,6 +155,7 @@ const Home = () => {
                 swipeable={true}
                 showThumbs={false}
                 emulateTouch={true}
+                centerMode={true}
               >
                 <HomeEventCard />
                 <HomeEventCard />
