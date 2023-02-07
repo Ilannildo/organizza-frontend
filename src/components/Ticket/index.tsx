@@ -111,17 +111,16 @@ export const Ticket = ({
   return (
     <Box
       sx={{
-        width: "100%",
         background: (theme) => theme.palette.background.default,
         borderColor: (theme) => theme.palette.surfaceVariant.main,
         borderWidth: 1,
         borderRadius: 1,
-        px: 2,
+        px: 1,
         py: 1,
       }}
     >
-      <Grid container spacing={2}>
-        <Grid item lg={9}>
+      <Grid container spacing={1}>
+        <Grid item lg={9} sm={9} md={9}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
               <TextField
@@ -360,6 +359,8 @@ export const Ticket = ({
         <Grid
           item
           lg={3}
+          sm={3}
+          md={3}
           display="flex"
           justifyContent="flex-end"
           alignItems="center"
@@ -368,7 +369,7 @@ export const Ticket = ({
           <Box
             sx={{
               position: "absolute",
-              left: "30%",
+              left: "20%",
               backgroundImage: `url(
                   "data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='4' stroke-dasharray='6%2c 50' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"
                 )`,

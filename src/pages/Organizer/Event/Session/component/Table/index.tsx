@@ -98,10 +98,10 @@ export const SessionTable = ({ sessionType }: ISessionTable) => {
                 <TableCell style={{ minWidth: 100, fontWeight: 500 }}>
                   Data de término
                 </TableCell>
-                <TableCell style={{ minWidth: 100, fontWeight: 500 }}>
+                <TableCell style={{ minWidth: 50, fontWeight: 500 }}>
                   Valor
                 </TableCell>
-                <TableCell style={{ minWidth: 100, fontWeight: 500 }}>
+                <TableCell style={{ minWidth: 50, fontWeight: 500 }}>
                   Status
                 </TableCell>
                 <TableCell style={{ minWidth: 100, fontWeight: 500 }}>

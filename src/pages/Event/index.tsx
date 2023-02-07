@@ -33,24 +33,11 @@ import ResponsibleLogo from "../../assets/images/logo-white.svg";
 import LoaderProgress from "../../layout/LoaderProgress";
 import {
   useEventPageBySlug,
+  useEventPageSessions,
   useEventPageTickets,
 } from "../../stores/eventPage";
+import { getOrdinalNumberInWords } from "../../utils/roles";
 import { Footer } from "./components/Footer";
-
-const steps = [
-  {
-    label: "Credenciamento",
-    hour: "08:00 - 09:00",
-  },
-  {
-    label: "Palestra 1",
-    hour: "08:00 - 09:00",
-  },
-  {
-    label: "Palestra 2",
-    hour: "08:00 - 09:00",
-  },
-];
 
 interface IParams extends Params {
   slug: string;
@@ -74,11 +61,22 @@ const Event = () => {
       enabled: !!event?.event_id && !event.is_finished,
     }
   );
+
+  const { data: sessions } = useEventPageSessions(
+    {
+      eventId: event?.event_id,
+    },
+    {
+      enabled: !!event?.event_id && !event.is_finished,
+    }
+  );
+
   const handleChangeActiveSession = (
     event: React.SyntheticEvent,
     newValue: number
   ) => {
     setActiveSessionDay(newValue);
+    setActiveSessionHour(0);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -435,7 +433,7 @@ const Event = () => {
             id="programacao"
             component="section"
             sx={{
-              backgroundColor: "rgba(210, 231, 255, 0.05)",
+              backgroundColor: "rgba(210, 231, 255, 0.2)",
             }}
           >
             <Container
@@ -447,7 +445,17 @@ const Event = () => {
               }}
             >
               <Grid container mt={4} spacing={2}>
-                <Grid item lg={4} md={4} sm={12} xs={12}>
+                <Grid
+                  item
+                  lg={12}
+                  md={12}
+                  sm={12}
+                  xs={12}
+                  justifyContent="center"
+                  alignItems="center"
+                  display="flex"
+                  flexDirection="column"
+                >
                   <Typography
                     component="h1"
                     variant="h3"
@@ -482,143 +490,172 @@ const Event = () => {
                     Programação completa
                   </Button>
                 </Grid>
-                <Grid item lg={8} md={8} sm={12} xs={12}>
-                  <Tabs
-                    value={activeSessionDay}
-                    onChange={handleChangeActiveSession}
-                    aria-label="session tabs"
-                    variant="scrollable"
-                  >
-                    <Tab
-                      sx={{
-                        textAlign: "left",
-                        width: 160,
-                      }}
-                      label={
-                        <>
-                          <Box
+                {sessions && (
+                  <Grid item lg={12} md={12} sm={12} xs={12} mt={3}>
+                    <Tabs
+                      value={activeSessionDay}
+                      onChange={handleChangeActiveSession}
+                      aria-label="session tabs"
+                      variant="scrollable"
+                    >
+                      {sessions.days.map((day, index) => (
+                        <Tab
+                          key={day}
+                          sx={{
+                            textAlign: "left",
+                            width: 160,
+                          }}
+                          label={
+                            <>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                }}
+                              >
+                                <Typography
+                                  component="h1"
+                                  variant="h6"
+                                  sx={{
+                                    fontSize: 14,
+                                    textTransform: "none",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {getOrdinalNumberInWords(index + 1)} dia
+                                </Typography>
+                                <Box
+                                  display="flex"
+                                  flexDirection="row"
+                                  alignItems="center"
+                                >
+                                  <Typography
+                                    component="h1"
+                                    variant="h6"
+                                    sx={{
+                                      fontSize: 18,
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    {format(new Date(day), "dd")}
+                                  </Typography>
+                                  <Typography
+                                    component="h1"
+                                    variant="h6"
+                                    sx={{
+                                      fontSize: 10,
+                                      textTransform: "none",
+                                      fontWeight: "bold",
+                                      ml: 1,
+                                    }}
+                                  >
+                                    {format(new Date(day), "MMM ',' EEEE")}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            </>
+                          }
+                          id={`${index}`}
+                        />
+                      ))}
+                    </Tabs>
+                    {sessions.sessions[activeSessionDay] && (
+                      <Grid container mt={2}>
+                        <Grid item lg={4} sm={4} md={4} xs={12}>
+                          <Stepper
+                            activeStep={activeSessionHour}
+                            onChange={() => handleNextHour()}
+                            orientation="vertical"
+                          >
+                            {sessions.sessions[activeSessionDay].map(
+                              (session) => (
+                                <Step key={session.session_id}>
+                                  <StepLabel
+                                    optional={`${format(
+                                      new Date(session.start_date),
+                                      "HH:mm"
+                                    )} - ${format(
+                                      new Date(session.end_date),
+                                      "HH:mm"
+                                    )}`}
+                                  >
+                                    {session.title}
+                                  </StepLabel>
+                                </Step>
+                              )
+                            )}
+                          </Stepper>
+                        </Grid>
+                        {sessions.sessions[activeSessionDay][
+                          activeSessionHour
+                        ] && (
+                          <Grid
+                            item
+                            lg={8}
+                            md={8}
                             sx={{
+                              backgroundColor: "rgba(115, 119, 127, 0.08)",
                               width: "100%",
+                              display: "flex",
+                              justifyContent: "space-between",
+                              flexDirection: "column",
+                              borderRadius: 1,
+                              p: 2,
                             }}
                           >
+                            <Box>
+                              <Typography
+                                component="h1"
+                                variant="h6"
+                                sx={{
+                                  fontSize: 16,
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {
+                                  sessions.sessions[activeSessionDay][
+                                    activeSessionHour
+                                  ].title
+                                }
+                              </Typography>
+                              <Typography
+                                component="h1"
+                                variant="h6"
+                                sx={{
+                                  fontSize: 14,
+                                  mt: 1,
+                                  color: (theme) =>
+                                    theme.palette.onSurfaceVariant.main,
+                                }}
+                              >
+                                {
+                                  sessions.sessions[activeSessionDay][
+                                    activeSessionHour
+                                  ].summary
+                                }
+                              </Typography>
+                            </Box>
                             <Typography
                               component="h1"
                               variant="h6"
                               sx={{
                                 fontSize: 14,
-                                textTransform: "none",
-                                fontWeight: "bold",
+                                color: (theme) =>
+                                  theme.palette.onSurfaceVariant.main,
                               }}
                             >
-                              Primeiro dia
+                              Local:{" "}
+                              {
+                                sessions.sessions[activeSessionDay][
+                                  activeSessionHour
+                                ].place
+                              }
                             </Typography>
-                            <Box
-                              display="flex"
-                              flexDirection="row"
-                              alignItems="center"
-                              sx={{}}
-                            >
-                              <Typography
-                                component="h1"
-                                variant="h6"
-                                sx={{
-                                  fontSize: 18,
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                10
-                              </Typography>
-                              <Typography
-                                component="h1"
-                                variant="h6"
-                                sx={{
-                                  fontSize: 10,
-                                  textTransform: "none",
-                                  fontWeight: "bold",
-                                  ml: 1,
-                                }}
-                              >
-                                nov, segunda
-                              </Typography>
-                            </Box>
-                          </Box>
-                        </>
-                      }
-                      id="0"
-                    />
-                    <Tab label="Primeiro dia" id="1" />
-                    <Tab label="Primeiro dia" id="2" />
-                  </Tabs>
-                  {activeSessionDay === 0 && (
-                    <Grid container mt={2}>
-                      <Grid item lg={4} sm={4} md={4} xs={12}>
-                        <Stepper
-                          activeStep={activeSessionHour}
-                          onChange={() => handleNextHour()}
-                          orientation="vertical"
-                        >
-                          {steps.map((step, index) => (
-                            <Step key={step.label}>
-                              <StepLabel optional={step.hour}>
-                                {step.label}
-                              </StepLabel>
-                            </Step>
-                          ))}
-                        </Stepper>
+                          </Grid>
+                        )}
                       </Grid>
-                      <Grid
-                        item
-                        lg={8}
-                        md={8}
-                        sx={{
-                          backgroundColor: "rgba(115, 119, 127, 0.08)",
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          flexDirection: "column",
-                          borderRadius: 1,
-                          p: 2,
-                        }}
-                      >
-                        <Box>
-                          <Typography
-                            component="h1"
-                            variant="h6"
-                            sx={{
-                              fontSize: 16,
-                              fontWeight: "bold",
-                            }}
-                          >
-                            Credenciamento
-                          </Typography>
-                          <Typography
-                            component="h1"
-                            variant="h6"
-                            sx={{
-                              fontSize: 14,
-                              mt: 1,
-                              color: (theme) =>
-                                theme.palette.onSurfaceVariant.main,
-                            }}
-                          >
-                            Realize o seu credenciamento no evento
-                          </Typography>
-                        </Box>
-                        <Typography
-                          component="h1"
-                          variant="h6"
-                          sx={{
-                            fontSize: 14,
-                            color: (theme) =>
-                              theme.palette.onSurfaceVariant.main,
-                          }}
-                        >
-                          Local: Sala 1
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  )}
-                </Grid>
+                    )}
+                  </Grid>
+                )}
               </Grid>
             </Container>
           </Box>

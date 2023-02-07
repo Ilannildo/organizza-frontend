@@ -43,6 +43,20 @@ export interface ISessionForm {
   dates: ISessionDatesForm[];
 }
 
+export interface IEventPageSessions {
+  days: string[];
+  sessions: {
+    start_date: Date;
+    end_date: Date;
+    is_finished: boolean;
+    place: string;
+    responsible_name?: string;
+    session_id: string;
+    summary: string;
+    title: string;
+  }[][];
+}
+
 export interface IGetAllSessionBySessionTypeResponse {
   id: string;
   code_ref?: string;
