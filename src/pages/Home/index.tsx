@@ -8,8 +8,12 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { Carousel } from "react-responsive-carousel";
 
 import ImgHome from "../../assets/images/img-homeome.png";
+import { HomeCategoryEventCard } from "../../components/HomeCategoryEventCard";
+import { HomeEventCard } from "../../components/HomeEventCard";
+import { HomeInformatiosEventCard } from "../../components/HomeInformatiosEventCard";
 import { Footer } from "../Event/components/Footer";
 import { HomeNavbar } from "./components/HomeNavbar";
 
@@ -94,6 +98,87 @@ const Home = () => {
           </Box>
         </Container>
       </Box>
+
+      <Box
+        sx={{
+          pt: 3,
+          pb: 5,
+          backgroundColor: (theme) => theme.palette.onSecondary.main,
+        }}
+      >
+        <Container maxWidth="xl">
+          <Grid container mt={4}>
+            <Grid item lg={12} md={12} sm={12} xs={12} textAlign="center">
+              <Typography
+                component="h1"
+                variant="h3"
+                sx={{
+                  color: (theme) => theme.palette.onSurfaceVariant.main,
+                  fontWeight: (theme) => theme.typography.fontWeightBold,
+                  fontSize: 28,
+                  mb: 2,
+                }}
+              >
+                Eventos em destaque
+              </Typography>
+              <Typography
+                component="h1"
+                variant="h3"
+                sx={{
+                  color: (theme) => theme.palette.onSurfaceVariant.main,
+                  fontSize: 14,
+                  mb: 4,
+                }}
+              >
+                Veja quais eventos estão com destaque nesse momento
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Grid mt={2} container>
+            <Grid item lg={12} md={12} sm={12} xl={12}>
+              <Carousel
+                autoPlay={true}
+                interval={5000}
+                showArrows={true}
+                showStatus={false}
+                swipeable={true}
+                showThumbs={false}
+                infiniteLoop={true}
+                emulateTouch={true}
+              >
+                <HomeEventCard />
+                <HomeEventCard />
+              </Carousel>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+
+      <Box>
+        <Container maxWidth="xl">
+          <Grid container>
+            <Grid container mt={2}>
+              <Grid item lg={12} md={12} sm={12} xl={12}>
+                <HomeInformatiosEventCard />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+
+      <Box>
+        <Container maxWidth="xl">
+          <Grid container>
+            <Grid container mt={2}>
+              <Grid item lg={12} md={12} sm={12} xl={12}>
+                <HomeCategoryEventCard />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+
       <Box
         id="sobre"
         component="section"
@@ -213,87 +298,6 @@ const Home = () => {
         </Container>
       </Box>
 
-      {/* <Box
-        sx={{
-          pt: 3,
-          pb: 5,
-          backgroundColor: (theme) => theme.palette.onSecondary.main,
-        }}
-      >
-        <Container maxWidth="xl">
-          <Grid container mt={4}>
-            <Grid item lg={12} md={12} sm={12} xs={12} textAlign="center">
-              <Typography
-                component="h1"
-                variant="h3"
-                sx={{
-                  color: (theme) => theme.palette.onSurfaceVariant.main,
-                  fontWeight: (theme) => theme.typography.fontWeightBold,
-                  fontSize: 28,
-                  mb: 2,
-                }}
-              >
-                Eventos em destaque
-              </Typography>
-              <Typography
-                component="h1"
-                variant="h3"
-                sx={{
-                  color: (theme) => theme.palette.onSurfaceVariant.main,
-                  fontSize: 14,
-                  mb: 4,
-                }}
-              >
-                Veja quais eventos estão com destaque nesse momento
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid mt={2} container>
-            <Grid item lg={12} md={12} sm={12} xl={12}>
-              <Carousel
-                autoPlay={true}
-                interval={5000}
-                showArrows={true}
-                showStatus={false}
-                swipeable={true}
-                showThumbs={false}
-                infiniteLoop={true}
-                emulateTouch={true}
-                showIndicators={true}
-              >
-                <HomeEventCard />
-                <HomeEventCard />
-              </Carousel>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box> */}
-
-      {/* <Box>
-        <Container maxWidth="xl">
-          <Grid container>
-            <Grid container mt={2}>
-              <Grid item lg={12} md={12} sm={12} xl={12}>
-                <HomeInformatiosEventCard />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box> */}
-
-      {/* <Box>
-        <Container maxWidth="xl">
-          <Grid container>
-            
-            <Grid container mt={2}>
-              <Grid item lg={12} md={12} sm={12} xl={12}>
-                <HomeCategoryEventCard />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box> */}
       <Footer />
     </>
   );
