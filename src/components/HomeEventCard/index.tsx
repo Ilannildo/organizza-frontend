@@ -8,12 +8,25 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { format } from "date-fns";
 import { Calendar, MapPinLine, UsersFour } from "phosphor-react";
+import { useNavigate } from "react-router-dom";
 import Cover from "../../assets/images/cover.jpg";
+import { IRelevanceEventResponse } from "../../models/event";
 
-export const HomeEventCard = () => {
+interface IHomeEventCard {
+  event: IRelevanceEventResponse;
+}
+
+export const HomeEventCard = ({ event }: IHomeEventCard) => {
   const theme = useTheme();
   const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
+
+  const navigate = useNavigate();
+
+  const goToEventPage = (slug: string) => {
+    return navigate(`/evento/${slug}`);
+  };
 
   return (
     <Card
@@ -21,20 +34,18 @@ export const HomeEventCard = () => {
       sx={{
         position: "relative",
         "&:hover": {
-          "& .cardOverlay": { height: matchUpMd ? 350 : 200, p: 3, opacity: 1 },
+          "& .cardOverlay": { p: 3, opacity: 1 },
         },
         m: 1,
       }}
     >
       <Grid
         className="cardOverlay"
-        // minHeight={matchUpMd ? 350 : 200}
-        height="0"
-        width="100%"
+        height={matchUpMd ? 350 : 200}
         sx={{
           zIndex: 1,
           opacity: 0,
-          transition: "all 0.3s ease-in-out",
+          transition: "all 0.5s ease-in-out",
           position: "absolute",
           t: 0,
           background: "rgba(20, 33, 61, 0.45)",
@@ -72,7 +83,7 @@ export const HomeEventCard = () => {
               WebkitBoxOrient: "vertical",
             }}
           >
-            III Congresso da computação no Baixo tocantins
+            {event.title}
           </Typography>
 
           <Typography
@@ -82,13 +93,11 @@ export const HomeEventCard = () => {
               fontSize: { lg: 15, md: 15, sm: 13, xs: 11 },
               overflow: "hidden",
               textOverflow: "ellipsis",
-              // display: "-webkit-box",
               WebkitLineClamp: "3",
               WebkitBoxOrient: "vertical",
             }}
           >
-            Mais uma noite como todas as anteriores. Pego minha caneca de café
-            cheia, acendo meu ultimo cigarro e corro pra velha janela do quarto.
+            {event.description}
           </Typography>
           <Grid
             container
@@ -100,7 +109,12 @@ export const HomeEventCard = () => {
             }}
           >
             <Grid item lg={4} md={4} sm={6} xs={12}>
-              <Button variant="contained" color="secondary" fullWidth>
+              <Button
+                variant="contained"
+                color="secondary"
+                fullWidth
+                onClick={() => goToEventPage(event.slug)}
+              >
                 SAIBA MAIS
               </Button>
             </Grid>
@@ -116,7 +130,9 @@ export const HomeEventCard = () => {
                     fontSize: 12,
                   }}
                 >
-                  Evento presencial
+                  {event.type === "presential"
+                    ? `Evento presencial`
+                    : "Evento online"}
                 </Typography>
               </Stack>
             </Grid>
@@ -141,7 +157,7 @@ export const HomeEventCard = () => {
                     fontSize: 12,
                   }}
                 >
-                  Cametá/PA
+                  {event.location}
                 </Typography>
               </Stack>
             </Grid>
@@ -161,7 +177,7 @@ export const HomeEventCard = () => {
                     fontSize: 12,
                   }}
                 >
-                  12 de dezembro
+                  {format(new Date(event.start_date), "dd 'de' MMMM")}
                 </Typography>
               </Stack>
             </Grid>
@@ -174,7 +190,9 @@ export const HomeEventCard = () => {
         height="100%"
         width="100%"
         sx={{
-          background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 57.29%, rgba(0, 0, 0, 0.7) 70.83%), url(${Cover})`,
+          background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 57.29%, rgba(0, 0, 0, 0.8) 70.83%), url(${
+            event.cover_url || Cover
+          })`,
           display: "flex",
           justifyContent: "end",
           flexDirection: "column",
@@ -199,7 +217,7 @@ export const HomeEventCard = () => {
                 WebkitBoxOrient: "vertical",
               }}
             >
-              III Congresso da computação no Baixo tocantins
+              {event.title}
             </Typography>
             <Box
               sx={{
@@ -229,7 +247,9 @@ export const HomeEventCard = () => {
                       fontSize: 12,
                     }}
                   >
-                    Evento presencial
+                    {event.type === "presential"
+                      ? `Evento presencial`
+                      : "Evento online"}
                   </Typography>
                 </Stack>
               </Grid>
@@ -254,7 +274,7 @@ export const HomeEventCard = () => {
                       fontSize: 12,
                     }}
                   >
-                    Cametá/PA
+                    {event.location}
                   </Typography>
                 </Stack>
               </Grid>
@@ -279,7 +299,7 @@ export const HomeEventCard = () => {
                       fontSize: 12,
                     }}
                   >
-                    12 de dezembro
+                    {format(new Date(event.start_date), "dd 'de' MMMM")}
                   </Typography>
                 </Stack>
               </Grid>

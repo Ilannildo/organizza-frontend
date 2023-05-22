@@ -82,3 +82,17 @@ export interface IGetEventInformationByUserIdResponse {
   available: number;
 }
 
+export interface IRelevanceEventResponse {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  topic: string;
+  start_date: Date;
+  end_date: Date;
+  attendees: number;
+  location: string;
+  relevance_score: number;
+  type: string;
+  cover_url?: string;
+}

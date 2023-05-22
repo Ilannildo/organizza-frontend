@@ -8,18 +8,56 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { Carousel } from "react-responsive-carousel";
+// import { Carousel } from "react-responsive-carousel";
+import Carousel from "react-multi-carousel";
 
-import ImgHome from "../../assets/images/img-homeome.png";
+import ImgHome from "../../assets/images/background.jpg";
 import { HomeCategoryEventCard } from "../../components/HomeCategoryEventCard";
 import { HomeEventCard } from "../../components/HomeEventCard";
+import { HomeEventCardLoading } from "../../components/HomeEventCardLoading";
 import { HomeInformatiosEventCard } from "../../components/HomeInformatiosEventCard";
+import { useRelevanceEvents } from "../../stores/home";
 import { Footer } from "../Event/components/Footer";
 import { HomeNavbar } from "./components/HomeNavbar";
+
+const responsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+    partialVisibilityGutter: 40,
+  },
+  desktop: {
+    breakpoint: {
+      max: 3000,
+      min: 1024,
+    },
+    items: 2,
+    partialVisibilityGutter: 40,
+  },
+  mobile: {
+    breakpoint: {
+      max: 464,
+      min: 0,
+    },
+    items: 1,
+    partialVisibilityGutter: 30,
+  },
+  tablet: {
+    breakpoint: {
+      max: 1024,
+      min: 464,
+    },
+    items: 2,
+    partialVisibilityGutter: 30,
+  },
+};
 
 const Home = () => {
   const theme = useTheme();
   const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
+
+  const { data: relevanceEvents, isLoading: isLoadingRelevanceEvents } =
+    useRelevanceEvents();
 
   return (
     <>
@@ -28,10 +66,9 @@ const Home = () => {
         sx={{
           background: `url(${ImgHome})`,
           backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
+          backgroundSize: "100%",
           backgroundPositionX: "center",
-          backgroundPositionY: "center",
-          clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+          backgroundPositionY: "top",
           overflow: "hidden",
         }}
       >
@@ -98,6 +135,7 @@ const Home = () => {
           </Box>
         </Container>
       </Box>
+      {isLoadingRelevanceEvents}
 
       <Box
         sx={{
@@ -134,24 +172,51 @@ const Home = () => {
               </Typography>
             </Grid>
           </Grid>
+          {isLoadingRelevanceEvents && (
+            <Carousel
+              arrows
+              autoPlaySpeed={5000}
+              centerMode={false}
+              autoPlay
+              draggable
+              infinite
+              keyBoardControl
+              minimumTouchDrag={80}
+              pauseOnHover
+              responsive={responsive}
+              shouldResetAutoplay
+              showDots={true}
+              slidesToSlide={1}
+              swipeable
+            >
+              <HomeEventCardLoading />
+              <HomeEventCardLoading />
+              <HomeEventCardLoading />
+            </Carousel>
+          )}
 
-          <Grid mt={2} container>
-            <Grid item lg={12} md={12} sm={12} xl={12}>
-              <Carousel
-                autoPlay={true}
-                interval={5000}
-                showArrows={true}
-                showStatus={false}
-                swipeable={true}
-                showThumbs={false}
-                infiniteLoop={true}
-                emulateTouch={true}
-              >
-                <HomeEventCard />
-                <HomeEventCard />
-              </Carousel>
-            </Grid>
-          </Grid>
+          {!isLoadingRelevanceEvents && relevanceEvents && (
+            <Carousel
+              arrows
+              autoPlaySpeed={5000}
+              centerMode={false}
+              autoPlay
+              draggable
+              infinite
+              keyBoardControl
+              minimumTouchDrag={80}
+              pauseOnHover
+              responsive={responsive}
+              shouldResetAutoplay
+              showDots={true}
+              slidesToSlide={1}
+              swipeable
+            >
+              {relevanceEvents.map((event) => (
+                <HomeEventCard key={event.id} event={event} />
+              ))}
+            </Carousel>
+          )}
         </Container>
       </Box>
 

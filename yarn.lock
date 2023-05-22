@@ -10027,6 +10027,7 @@ __metadata:
     react-device-detect: ^2.2.2
     react-dom: ^18.2.0
     react-dropzone: ^14.2.3
+    react-multi-carousel: ^2.8.2
     react-perfect-scrollbar: ^1.5.8
     react-responsive-carousel: ^3.2.23
     react-router-dom: 6
@@ -11482,6 +11483,13 @@ __metadata:
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
   checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
+  languageName: node
+  linkType: hard
+
+"react-multi-carousel@npm:^2.8.2":
+  version: 2.8.2
+  resolution: "react-multi-carousel@npm:2.8.2"
+  checksum: 95a77120ec11e0f0c33609617b873a56c639b30a3b186e0d00323fff03889b2761b62ca3f2734e04f6c1fe00866bf759939a62b4f4a847211ad6da8224c46274
   languageName: node
   linkType: hard
 
